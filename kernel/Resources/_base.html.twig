@@ -1,6 +1,6 @@
 {% set staticFiles = page.files %}
 <!DOCTYPE html>
-<html lang="{{ locale }}">
+<html lang="{{ locale() }}">
 <head>
 	{% include "_head.html.twig" with {'page':page} %}
     {% block head %}{% endblock %}
@@ -11,6 +11,8 @@
 	{{js}}
 {% endfor %}
 
+
+{#inclusion de Google Analytics en fin de page #}
 {% if page.getSite().getGoogleAnalytics() != '' %}
 <script type="text/javascript">
 var _gaq = _gaq || [];

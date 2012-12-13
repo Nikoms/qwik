@@ -89,7 +89,11 @@ class AppManager {
 	
 	//Initialise le moteur de template
 	private function initTemplateEngine(){
-        TemplateProxy::init($this->getSite());
+        TemplateProxy::init($this);
+        //Si dans le GET il y a un clear, alors on clear le cache du template engine
+        if(!empty($_GET['clear'])){
+        	TemplateProxy::getInstance()->clearCache();
+        }
 	}
 
 	//Ajoute les routes des modules
@@ -112,14 +116,15 @@ class AppManager {
 		$site = $this->getSite();
 
 
-
-        $this->getRouteManager()->get('base', '/', function() use ($site){
+		//Arrivée sur le site
+        $this->getRouterManager()->get('base', '/', function() use ($site){
             $response = new \Qwik\Kernel\App\Routing\Response();
             $response->setTargetUrl(Language::get() . '/' . $site->getFirstPage()->getUrl());
             return $response;
         });
-
-        $this->getRouteManager()->get('base', '/{_locale}', function($_locale) use($site){
+        
+        //J'ai choisi une langue, mais pas de page
+        $this->getRouterManager()->get('base', '/{_locale}', function($_locale) use($site){
             $response = new \Qwik\Kernel\App\Routing\Response();
 
             //Si on gère la langue, alors on va sur la première page
@@ -131,10 +136,8 @@ class AppManager {
             return $response;
         });
 
-
-
-
-        $this->getRouteManager()->get('base', '/{_locale}/{pageName}', function($_locale, $pageName) use($site){
+        //J'ai une langue et une page :)
+        $this->getRouterManager()->get('base', '/{_locale}/{pageName}', function($_locale, $pageName) use($site){
             //Changement de la langue quand c'est possible...
             Language::changeIfPossible($_locale);
             $page = $site->getPage($pageName);
@@ -144,10 +147,12 @@ class AppManager {
             }
             return \Qwik\Kernel\App\TemplateProxy::getInstance()->renderPage($page);
         });
+        
+        //On va voir si les modules on des routes
 		$this->addModulesRoutes();
 	}
 
-    public function getRouteManager(){
+    public function getRouterManager(){
         return $this->routerManager;
     }
 

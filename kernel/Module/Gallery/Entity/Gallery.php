@@ -31,7 +31,7 @@ class Gallery extends Module{
         //return ;
 		//Ajout de l'url pour les thumbnails
         //../cache/gallery/120/80/85/images/bureau/Desert.jpg
-        $appManager->getRouteManager()->get('gallery', '/' . $site->getVirtualUploadPath() . Gallery::wwwThumbnailPath . '/{url}', function($width, $height, $quality, $url) use ($site) {
+        $appManager->getRouterManager()->get('gallery', '/' . $site->getVirtualUploadPath() . Gallery::wwwThumbnailPath . '/{url}', function($width, $height, $quality, $url) use ($site) {
 
         	//Si j'ai pas imagick, alors je prends GD
 			if (TRUE !== extension_loaded('imagick')){

@@ -67,7 +67,10 @@ class RouterManager {
             $path = str_replace($this->getBaseUrl(), '', $path);
         }
 
-		
+        //On prend pas ce qu'il y a après ? ou #
+        $path = substr($path, 0, strcspn($path, '?#'));
+        
+        //On trouve (peut-être) la route
 		$route = $this->findRoute($path);
 
 
