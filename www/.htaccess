@@ -1,7 +1,12 @@
-
+#
 #Use utf8!
+#
 AddDefaultCharset utf-8
 
+
+#
+# Pour avoir une variable d'environnement QWIK_ENV
+#
 
 #Si l'url commence par dev, alors c'est du dev
 SetEnvIfNoCase Host ^dev\.(.*)$ QWIK_ENV=dev
@@ -12,23 +17,30 @@ SetEnvIfNoCase Host ^www\.(.*)$ QWIK_ENV=prod
 
 RewriteEngine On
 
+#
+# Rewrite url pour les fichiers statiques (/q/...)
+#
+
 #En mode dev, si on a un dev devant, on l'enlève de l'url rewriting
 RewriteCond %{HTTP_HOST} ^dev.(.*)$ [NC]
 RewriteRule ^q/(.*)$ pissette/%1/$1 [L]
 
-#Pour tester l'url rewriting
-#RewriteRule ^q/(.*)$ test.php?ok[]=$1&ok[]=$2&ok[]=%1&ok[]=%2 [L]
-
-
-
+#En mode prod, on redirige sur pissette tout simplement
 RewriteCond %{HTTP_HOST} (.+)
 RewriteRule ^q/(.+)    pissette/%1/$1 [L]
 
-#Pour tester l'url rewriting
-#RewriteRule ^q/(.+)    test.php?ok=$1&ok2=%1 [L]
-
-
+#
+# Rewrite url pour les pages
+#
 
 RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [L]
+
+
+
+
+#
+#Pour tester l'url rewriting
+#RewriteRule ^q/(.*)$ test.php?ok[]=$1&ok[]=$2&ok[]=%1&ok[]=%2 [L]
+#
