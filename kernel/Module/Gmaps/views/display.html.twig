@@ -1,0 +1,36 @@
+<div class="qwik-gmaps qwik-gmaps-map-position-{{map.position}}">
+	
+	{%if map.position != "hide" and map.position != "bottom" %}<div class= "qwik-gmaps-map" style="width:{{ map.width }};height:{{ map.height }};"></div> {% endif %}
+	
+	
+	{#Si on positionne sur la droite, alors les adresses ont besoin d'un gros margin-left pour etre joliement affichés#}
+	<ul class="qwik-gmaps-addresses"{%if map.position == "left" %} style="margin-left:{{ map.width }};"{% endif %}>
+		{% for address in addresses %}
+			<li class="qwik-gmaps-address">
+				{% if (map.position != "hide" and address.icon is defined) %}
+					<img src="{{ address.icon }}" class="qwik-gmaps-address-icon"/>
+				{% endif %}
+				{% if address.title is defined %}
+				<span class="qwik-gmaps-address-title">{{ address.title | translate }}</span><br />
+				{% endif %}
+				{% if address.street is defined %}
+				<span class="qwik-gmaps-address-street">{{ address.street | translate }}</span>, 
+				{% endif %}
+				{% if address.number is defined %}
+				<span class="qwik-gmaps-address-number">{{ address.number }}</span>
+				{% endif %}
+				<br />
+				{% if address.zip is defined %}
+				<span class="qwik-gmaps-address-zip">{{ address.zip | translate }}</span>
+				{% endif %}
+				{% if address.city is defined %}
+				<span class="qwik-gmaps-address-city">{{ address.city | translate }}</span>
+				{% endif %}
+				{% if address.country is defined %}
+				<br /><span class="qwik-gmaps-address-country">{{ address.country | translate }}</span>
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+	{%if map.position == "bottom" %}<div class= "qwik-gmaps-map" style="width:{{ map.width }};height:{{ map.height }};"></div> {% endif %}
+</div>

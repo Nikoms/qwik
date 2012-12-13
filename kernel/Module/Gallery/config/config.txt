@@ -1,0 +1,18 @@
+attributes:
+  path: -
+  position: - #center, #right (float), #left (float)
+  perLine: - #Nombre d'images par ligne
+  subTitle: 0 #affiche les sous titre de l'image ou pas
+  thumbnail:
+    width: 120
+    height: 80
+    quality: 85
+files:
+  javascript: 
+    fancybox:
+      path: ../qwik/module/gallery/fancybox/jquery.fancybox.pack.js
+    init:
+      path: ../qwik/module/gallery/init.js
+  css:
+   - ../qwik/module/gallery/fancybox/jquery.fancybox.css
+   - ../qwik/module/gallery/gallery.css

@@ -1,0 +1,11 @@
+<meta charset="utf-8" />
+<title>{% block title %}{{ page.getSite().getTitle() ~ ' - ' ~ page.getTitle() }}{% endblock %}</title>
+<meta name="Description" content="{{ page.getDescription() | translate }}">
+<meta name="Keywords" content="{{ page.getKeywords() | translate }}">
+<meta name="viewport" content="width=device-width">
+<meta name="author" content="Qwik">
+
+<script src="{{ site.getBaseUrl() }}qwik/js/jquery.js"></script>
+{% for css in staticFiles['css'] %}
+	{{css}}
+{% endfor %}

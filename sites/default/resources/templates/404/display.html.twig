@@ -1,0 +1,11 @@
+{% extends "_base.html.twig" %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+	{{page.getZone('content')}}
+{% endblock %}
+
+

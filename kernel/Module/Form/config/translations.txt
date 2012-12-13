@@ -1,0 +1,29 @@
+form:
+  unexpectedError:
+    fr: "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
+    nl: "Er is een onverwachte fout opgetreden. Probeer het later opnieuw."
+    en: "An unexpected error has occurred. Please try again later."
+  emailSent:
+    fr: "E-mail envoyé."
+    nl: "E-mail envoyé."
+    en: "E-mail verstuurd."
+  mandatory:
+    fr: "Ce champ est obligatoire."
+    nl: "Dit is een verplicht veld."
+    en: "This field is mandatory."
+  send:
+    fr: "Envoyer"
+    nl: "Sturen"
+    en: "Send"
+  error:
+    fr: "Une erreur est survenue lors de la soumission du formulaire. Veuillez vérifier les champs en rouge."
+    nl: "Er is een fout opgetreden bij het verzenden van het bericht. Gelieve de rode velden na te kijken."
+    en: "An error has occured while sending the message. Please check the red fields."
+  subject:
+    fr: "E-mail provenant de vote site internet"
+    nl: "E-mail verstuurd via uw website"
+    en: "Email coming from your website"
+  body:
+    fr: "Bonjour, \n\nUn visiteur vient de poster ce formulaire:\n\n\n\n"
+    nl: "Een bezoeker stuurde u her volgende bericht:\n\n\n\n"
+    en: "Hello, \n\nA visitor just posted this form:\n\n\n\n"

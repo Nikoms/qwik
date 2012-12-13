@@ -1,0 +1,8 @@
+attributes:
+  key: keyOfGoogleForMaps
+  addresses: []
+files:
+  javascript: 
+    main: ../qwik/module/gmaps/gmaps.js
+  css: 
+    main: ../qwik/module/gmaps/gmaps.css
