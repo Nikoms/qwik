@@ -11,6 +11,7 @@ class AppManager {
 
 	private $site;
 	private $routerManager;
+	private $isDebug;
 	
 	public static function getInstance(){
 		if(is_null(self::$instance)){
@@ -25,7 +26,23 @@ class AppManager {
 		return self::$instance;
 	}
 	
+	private function initDebug($domain){
+		//On est en debug si notre domaine commence par dev.
+		$this->isDebug = strpos($domain, 'dev.') === 0;	
+	}
+	public function isDebug(){
+		return $this->isDebug;
+	}
+	//Si on est en mode dev, on enleve dev. devant :)
+	private function getProperDomain($domain){
+		return $this->isDebug() ? substr($domain, 4) : $domain;
+	}
+	
 	private function __construct($www, $domain){
+		
+		$this->initDebug($domain);
+		$domain = $this->getProperDomain($domain);
+		
 		$siteManager = new \Qwik\Kernel\App\Site\SiteManager();
 		$this->site = $siteManager->getByPath($www, $domain);
         //Si c'est un alias, alors on va rediriger  via un header
