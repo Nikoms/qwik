@@ -1,0 +1,16 @@
+
+    #Use utf8!
+    AddDefaultCharset utf-8
+
+
+    RewriteEngine On
+
+    RewriteCond %{HTTP_HOST} (.+)
+    RewriteRule ^q/(.+)    pissette/%1/$1 [L]
+#    RewriteRule ^q/(.+)    index.php?ok=$1&ok2=%1 [L]
+
+
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+#	RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]

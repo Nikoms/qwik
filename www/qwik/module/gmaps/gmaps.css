@@ -1,0 +1,29 @@
+/*On affiche pas l'icone d'une adresse dans sa window*/
+.qwik-gmaps-address-window .qwik-gmaps-address-icon{
+	display:none;
+}
+
+/*Lorsqu'on a des float, ca simplifie tout :)*/
+.qwik-gmaps{
+	overflow:hidden;
+}
+/*Lorsque la map est positionn�e sur la gauche, tout le monde se met sur la gauche :)*/
+.qwik-gmaps-map-position-left .qwik-gmaps-map{
+    float: left;
+}
+
+
+
+/*La map est � droite*/
+.qwik-gmaps-map-position-right .qwik-gmaps-map {
+    float: right;
+}
+
+/*Lorsqu'on passe sa souris sur une adresse ou sur l'infoWindow correspondante*/
+.qwik-gmaps-address-over{
+	background-color: #F5F5F5;
+}
+
+.qwik-gmaps img{
+    max-width: none;
+}

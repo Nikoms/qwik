@@ -1,0 +1,6 @@
+.qwik-form-spinner{
+    display:none;
+}
+.qwik-form-loading .qwik-form-spinner{
+    display:inline;
+}
