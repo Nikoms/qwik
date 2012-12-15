@@ -2,16 +2,10 @@
 
 namespace Qwik\Kernel\App\Module\File;
 
-abstract class File {
+class File {
 	
 	private $config;
-	
-	
-	public static function get($type, $config){
-		$className = '\Qwik\Kernel\App\Module\File\\'.ucfirst($type);
-		return new $className($config);
-	}
-	
+
 	public function __construct($config){
 		//Si c'est juste une string alors c'est le path 
 		if(!is_array($config)){
@@ -29,8 +23,17 @@ abstract class File {
 	public function getConfig(){
 		return $this->config;
 	}
-	
 
-	abstract public function __toString();
-	
+    public function getPath(){
+        $config = $this->getConfig();
+        return $config['path'];
+    }
+
+    /**
+     * Utile pour le array_unique
+     */
+    public function __toString(){
+        return $this->getPath();
+    }
+
 }

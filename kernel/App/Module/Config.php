@@ -21,7 +21,7 @@ class Config {
 		
 		$return = array();
 		foreach($this->config['config']['files'][$type] as $fileConfig){
-			$return[] = File::get($type, $fileConfig);
+			$return[] = new File($fileConfig);
 		}
 		
 		return $return;

@@ -10,9 +10,9 @@ attributes:
 files:
   javascript: 
     fancybox:
-      path: ../qwik/module/gallery/fancybox/jquery.fancybox.pack.js
+      path: qwik/module/gallery/fancybox/jquery.fancybox.pack.js
     init:
-      path: ../qwik/module/gallery/init.js
+      path: qwik/module/gallery/init.js
   css:
-   - ../qwik/module/gallery/fancybox/jquery.fancybox.css
-   - ../qwik/module/gallery/gallery.css
+   - qwik/module/gallery/fancybox/jquery.fancybox.css
+   - qwik/module/gallery/gallery.css

@@ -12,6 +12,7 @@ class AppManager {
 	private $site;
 	private $routerManager;
 	private $isDebug;
+    private $baseUrl;
 	
 	public static function getInstance(){
 		if(is_null(self::$instance)){
@@ -66,11 +67,20 @@ class AppManager {
 		}
 
 
-		$this->site->setBaseUrl($baseUrl);
+
+		$this->setBaseUrl($baseUrl);
 		//Initialisation de la langue en cours
 		Language::init($this->getSite()->getLanguages());
 		$this->initApp();
 	}
+
+    private function setBaseUrl($baseUrl){
+        $this->baseUrl = $baseUrl;
+    }
+
+    public function getBaseUrl(){
+        return $this->baseUrl;
+    }
 
 	public function getSite(){
 		return $this->site;

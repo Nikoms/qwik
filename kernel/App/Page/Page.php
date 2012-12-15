@@ -12,9 +12,11 @@ class Page {
 	private $site;
 	private $url;
 	private $isHidden;
+    private $cachedFiles;
 	
 	public function __construct(){
 		$this->config = array();
+        $this->cachedFiles = array();
 	}
 	
 	public function setConfig($config){
@@ -65,23 +67,28 @@ class Page {
 		//Si on a pas de zone avec ce nom, on fait une zone avec une config vide
 		return $this->getBuildedZone($zoneName, isset($config['zones'][$zoneName])? $config['zones'][$zoneName] : array());
 	}
-	
-	public function getFiles(){
-		$files = array();
-		$files['javascript'] = array();
-		$files['css'] = array();
+
+    /**
+     * @param $type (css|javascript)
+     * @return array
+     */
+    public function getFiles($type){
+        $this->cachedFiles = array();
+        $this->cachedFiles['javascript'] = array();
+        $this->cachedFiles['css'] = array();
 		$config = $this->getConfig();
 		if(!empty($config['zones'])){
 			foreach($config['zones'] as $zoneName => $zoneConfig){
 				$filesOfZone = $this->getBuildedZone($zoneName, $zoneConfig)->getFiles();
-				$files['javascript'] = array_merge($files['javascript'], $filesOfZone['javascript']);
-				$files['css'] = array_merge($files['css'], $filesOfZone['css']);
+                $this->cachedFiles['javascript'] = array_merge($this->cachedFiles['javascript'], $filesOfZone['javascript']);
+                $this->cachedFiles['css'] = array_merge($this->cachedFiles['css'], $filesOfZone['css']);
 			}
-			$files['javascript'] = array_unique($files['javascript']);
-			$files['css'] = array_unique($files['css']);
-		}		
+            $this->cachedFiles['javascript'] = array_unique($this->cachedFiles['javascript']);
+            $this->cachedFiles['css'] = array_unique($this->cachedFiles['css']);
+		}
+
 		
-		return $files;
+		return isset($this->cachedFiles[$type]) ? $this->cachedFiles[$type] : array();
 	}
 
 	private function getBuildedZone($name, $config){

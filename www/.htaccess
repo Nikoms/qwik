@@ -21,7 +21,7 @@ RewriteEngine On
 # Rewrite url pour les fichiers statiques (/q/...)
 #
 
-#En mode dev, si on a un dev devant, on l'enlève de l'url rewriting
+#En mode dev, si on a un dev devant, on l'enlÃ¨ve de l'url rewriting
 RewriteCond %{HTTP_HOST} ^dev.(.*)$ [NC]
 RewriteRule ^q/(.*)$ pissette/%1/$1 [L]
 

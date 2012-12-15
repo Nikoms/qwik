@@ -78,7 +78,7 @@ class Zone {
 		return implode('', $this->getModules());
 	}
 	
-	//Renvoit les fichiers statiques (js,css) n�cessaire pour le bon affichage de la page. On demande simplement aux de la zone modules de la zone de bien vouloir donner leur fichiers et on fait le r�cap :)
+	//Renvoit les fichiers statiques (js,css) nécessaire pour le bon affichage de la page. On demande simplement aux de la zone modules de la zone de bien vouloir donner leur fichiers et on fait le récap :)
 	public function getFiles(){
 		$files = array();
 		$files['javascript'] = array();

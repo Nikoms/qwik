@@ -3,6 +3,6 @@ attributes:
   addresses: []
 files:
   javascript: 
-    main: ../qwik/module/gmaps/gmaps.js
+    main: qwik/module/gmaps/gmaps.js
   css: 
-    main: ../qwik/module/gmaps/gmaps.css
+    main: qwik/module/gmaps/gmaps.css

@@ -16,7 +16,6 @@ class Site {
 	private $domain;
 	private $path;
 	private $www;
-	private $baseUrl;
 	
 	public function __construct(){
 	}
@@ -41,12 +40,6 @@ class Site {
 	}
 	public function setWww($www){
 		$this->www = $www;
-	}
-	public function getbaseUrl(){
-		return $this->baseUrl;
-	}
-	public function setbaseUrl($baseUrl){
-		$this->baseUrl = $baseUrl;
 	}
     //Path utiliser pour rediriger vers getRealUploadPath (voir htaccess)
     public function getVirtualUploadPath(){

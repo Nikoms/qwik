@@ -15,7 +15,7 @@ class Form extends Module{
     //Pour l'ajout de route pour le post du formulaire
     public static function injectInApp($appManager, $site){
 
-        $appManager->getRouterManager()->post('form', $site->getBaseUrl() . Form::PATH,
+        $appManager->getRouterManager()->post('form', $appManager->getBaseUrl() . Form::PATH,
             function($_locale) use ($site, $appManager) {
 
                 //Changement de la langue quand c'est possible...

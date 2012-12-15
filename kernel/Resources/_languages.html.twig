@@ -1,7 +1,7 @@
 <ul>
     {% for lang in page.getSite().getLanguages() %}
         {% if locale() != lang %}
-            <li><a href="{{ page.getSite().getbaseUrl() }}{{ lang }}/{{ page.getUrl() }}">{{ lang }}</a></li>
+            <li><a href="{{ app.getbaseUrl() }}{{ lang }}/{{ page.getUrl() }}">{{ lang }}</a></li>
         {% endif %}
     {% endfor %}
 </ul>

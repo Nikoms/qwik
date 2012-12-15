@@ -1,4 +1,3 @@
-{% set staticFiles = page.files %}
 <!DOCTYPE html>
 <html lang="{{ locale() }}">
 <head>
@@ -7,8 +6,8 @@
 </head>
 <body>
 {% block body %}{% endblock %}
-{% for js in staticFiles['javascript'] %}
-	{{js}}
+{% for file in page.getFiles('javascript') %}
+    <script src="{{ app.getBaseUrl() }}{{file.getPath()}}"></script>
 {% endfor %}
 
 

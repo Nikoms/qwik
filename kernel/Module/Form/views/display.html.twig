@@ -1,4 +1,4 @@
-<form method="post" data-id="{{ module.getUniqId() }}" novalidate="novalidate" class="form-horizontal qwik-form" action="{{ module.getZone().getPage().getSite().getBaseUrl() }}{{ action }}">
+<form method="post" data-id="{{ module.getUniqId() }}" novalidate="novalidate" class="form-horizontal qwik-form" action="{{ app.getBaseUrl() }}{{ action }}">
     {% for field in fields %}
         <div id="{{ module.getUniqId() }}_{{ field.getName() }}" class="control-group qwik-form-form-field">
             <label class="control-label">{{ field.getLabel() | translate }} {% if field.isRequired() %}*{% endif %}</label>
@@ -23,7 +23,7 @@
             <input type="hidden" value="{{ module.getUniqId() }}" name="_uniqId" />
             <input type="hidden" value="{{ module.getZone().getName() }}" name="_zone" />
             <input type="hidden" value="{{ module.getZone().getPage().getUrl() }}" name="_page" />
-            <button>{{ module.translate('form.send') | translate }} <img class="qwik-form-spinner" src="{{ site.getBaseUrl() }}/qwik/module/form/images/spinner.gif" alt="..." /></button>
+            <button>{{ module.translate('form.send') | translate }} <img class="qwik-form-spinner" src="{{ app.getBaseUrl() }}/qwik/module/form/images/spinner.gif" alt="..." /></button>
         </div>
     </div>
 

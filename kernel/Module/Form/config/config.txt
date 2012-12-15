@@ -6,11 +6,11 @@ attributes:
 files:
   javascript:
     jquery-ui:
-      path: ../qwik/lib/jquery-ui/js/jquery-ui-1.9.1.custom.min.js  #si j'ai un champs date :(
+      path: qwik/lib/jquery-ui/js/jquery-ui-1.9.1.custom.min.js  #si j'ai un champs date :(
     jquery-datepicker-locale:
-      path: ../qwik/lib/jquery-ui/js/jquery.ui.datepicker-%%locale%%.js  #si j'ai un champs date :(
+      path: qwik/lib/jquery-ui/js/jquery.ui.datepicker-%%locale%%.js  #si j'ai un champs date :(
     init:
-      path: ../qwik/module/form/init.js
+      path: qwik/module/form/init.js
   css:
-    - ../qwik/lib/jquery-ui/css/eggplant/jquery-ui-1.9.1.custom.min.css #si j'ai un champs date :(
-    - ../qwik/module/form/form.css
+    - qwik/lib/jquery-ui/css/eggplant/jquery-ui-1.9.1.custom.min.css #si j'ai un champs date :(
+    - qwik/module/form/form.css
