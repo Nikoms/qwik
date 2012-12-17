@@ -1,3 +1,65 @@
-<ul>
-{% include module.getName() ~ "/views/tree.html.twig" with {'children' : menu, 'level':1}%}
-</ul>
+<style>
+
+.qwik-restaurant-level{
+    font-weight: bold;
+    margin: 10px 0px;
+    line-height: 40px;
+}
+
+.qwik-restaurant-level1{
+    font-size: 38.5px;
+}
+.qwik-restaurant-level2{
+    font-size: 31.5px;
+    margin: 10px 15px;
+
+}
+
+.qwik-restaurant ul{
+    list-style: none;
+
+}
+
+ul.qwik-restaurant-plats {
+   /* max-width: 40em;*/
+    padding: 0;
+    overflow-x: hidden;
+    list-style: none;
+}
+ul.qwik-restaurant-plats li:after {
+    float: left;
+    width: 0;
+    white-space: nowrap;
+    content:
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . ";
+}
+.qwik-restaurant-title {
+    padding-right: 0.33em;
+}
+.qwik-restaurant-price {
+    float: right;
+    padding-left: 0.33em;
+    position: relative;
+    z-index: 1;
+}
+/* a réécrire pour que la carte soit jolie (texte avec background blanc par défaut) */
+.qwik-restaurant-background{
+    background: white;
+}
+
+
+</style>
+<div class="qwik-restaurant">
+{% include module.getName() ~ "/views/tree.html.twig" with {'children' : menu, 'level': 0}%}
+</div>
