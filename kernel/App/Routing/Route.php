@@ -77,6 +77,9 @@ class Route {
         echo '#^'.$this->getRegex().'$#';
         echo ' VS ';
         echo $path;
+        $found = preg_match('#^'.$this->getRegex().'$#', $path, $matches);
+        var_dump($found);
+        var_dump($matches);
         echo '<hr >';*/
 
         return preg_match('#^'.$this->getRegex().'$#', $path, $matches);

@@ -33,13 +33,16 @@ class Gallery extends Module{
         //../cache/gallery/120/80/85/images/bureau/Desert.jpg
         $appManager->getRouterManager()->get('gallery', '/' . $site->getVirtualUploadPath() . Gallery::wwwThumbnailPath . '/{url}', function($width, $height, $quality, $url) use ($site) {
 
+            //Pour les espaces, et autres caractères bizarres (ex: photo (2).jpg posait problème car les espaces étaient remplacés par des %20)
+            $url = urldecode($url);
+
         	//Si j'ai pas imagick, alors je prends GD
 			if (TRUE !== extension_loaded('imagick')){
         		$imagine = new \Imagine\Gd\Imagine();
     		}else{
     			$imagine = new \Imagine\Imagick\Imagine();
     		}
-				
+
 			//Récupération du nom du fichier
 			$pathOfFile = pathinfo($url, PATHINFO_DIRNAME);
 			

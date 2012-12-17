@@ -43,10 +43,7 @@ class Zone {
 		$config = $this->getConfig();
 		return $config['url'];
 	}
-	
-	public function getModuleClass($moduleName){
-		return \Qwik\Kernel\App\Module\Module::get($moduleName);
-	}
+
 	
 	public function getModules(){
 		if(is_null($this->modules)){
@@ -66,12 +63,7 @@ class Zone {
 	}
 	
 	private function getBuildedModule($key, $config){
-		$module = $this->getModuleClass($config['module']);
-		$module->setConfig($config['config']);
-		$module->setName($config['module']);
-		$module->setZone($this);
-		$module->setUniqId($this->getName() . '_' . $key);
-		return $module;
+        return \Qwik\Kernel\App\Module\Module::get($config, $this, $this->getName() . '_' . $key);
 	}
 	
 	public function __toString(){

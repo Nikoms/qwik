@@ -56,8 +56,9 @@ class Page {
 	
 	public function getTitle(){
 		$config = $this->getConfig();
-		return Language::getValue($config['title']);
+		return isset($config['title']) ? Language::getValue($config['title']) : '';
 	}
+
 	
 	public function getZone($zoneName){
 	

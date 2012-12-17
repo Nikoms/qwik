@@ -46,13 +46,13 @@ class AutoLoader {
 		
 		//Combien on a d'autoloader? Pcq si y'en a d'autres, peut-être que eux savent comment la classe se load?!
 		$nbAutoloaders = count(spl_autoload_functions());
-		//Si on en a plusieurs, alors... On laisse faire les autres :)
-		if($nbAutoloaders > 1){
+		//Si on appelle du twig, alors on by pass
+		if(strpos($className, 'Twig_') === 0){
 			return;
 		}
 		
 		//Si on est ici, c'est qu'on avait qu'un seul autoloader et qu'on a rien trouvé...
-		
+
 		echo '<hr/><h1>AutoLoader</h1>
 		<ul>
 			<li>Class name: ' . $className . '</li>
@@ -80,7 +80,17 @@ class AutoLoader {
 	 * @return bool|string
 	 */
 	private static function getFilePath($className) {
-		return strtr($className,self::$namespaces);
+        foreach(self::$namespaces as $nameSpace => $path){
+            //Si on se trouve au début de la string, hop on remplace!
+            //Si on trouve le namespace dans le nom de la classe au début
+            if(strpos($className, $nameSpace) === 0){
+                //Remplacement de $nameSpace par path via substr_replace (si on fait un str_replace, ca remplacement toutes les occurences, et c'est pas ca qu'on veut)
+                return substr_replace($className, $path, 0, strlen($nameSpace));
+            }
+        }
+        return '';
+        //Ceci ne fonctionne pas pour Imagine
+		//return strtr($className,self::$namespaces);
 	}
 	
 	private function getRootDir(){

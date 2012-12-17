@@ -78,10 +78,10 @@ class Site {
 	}
     public function getTitle(){
         $config = $this->getConfig();
-        return Language::getValue($config['general']['title']);
+        return isset($config['general']['title']) ? Language::getValue($config['general']['title']) : '';
     }
-	
-	
+
+
 	public function getFirstPage(){
 		return $this->getPage(key($this->getConfigPages()));
 	}
