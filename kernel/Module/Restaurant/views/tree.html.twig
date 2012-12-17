@@ -1,0 +1,17 @@
+{% set level = level + 1 %}
+{% for item in children %}
+    <li>
+    {% if item.children is defined %}
+        {# On est une catégorie #}
+        <h{{ level }}>{{ item.title | translate }}</h{{ level }}>
+        <ul>
+        {% include module.getName() ~ "/views/tree.html.twig" with {'children' : item.children, 'level' : level}%}
+        </ul>
+    {% else %}
+        {# On est un plat #}
+        <span>{{ item.title| translate }}</span>
+        <i>{{ item.description | translate }}</i>
+        <strong>{{ item.price }} {{ money }}</strong>
+    {% endif %}
+    </li>
+{% endfor %}

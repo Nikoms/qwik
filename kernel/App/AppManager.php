@@ -23,8 +23,12 @@ class AppManager {
 	
 	
 	public static function init($www, $domain){
-		self::$instance = new AppManager($www, $domain);
-		return self::$instance;
+//        try{
+            self::$instance = new AppManager($www, $domain);
+            return self::$instance;
+//        }catch(\Exception $ex){
+//            echo 'error';
+//        }
 	}
 	
 	private function initDebug($domain){
