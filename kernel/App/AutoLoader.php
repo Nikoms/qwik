@@ -93,7 +93,7 @@ class AutoLoader {
 		//return strtr($className,self::$namespaces);
 	}
 	
-	private function getRootDir(){
+	private static function getRootDir(){
 		return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 	}
 

@@ -23,6 +23,7 @@ class AppManager {
 	
 	
 	public static function init($www, $domain){
+        \Qwik\Kernel\Log\Logger::getInstance();
 //        try{
             self::$instance = new AppManager($www, $domain);
             return self::$instance;

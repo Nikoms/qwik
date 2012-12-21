@@ -35,7 +35,7 @@ abstract class Module {
      * @return Module
      * @throws \Exception
      */
-    private function getWithArray(array $config, $zone, $uniqId){
+    static private function getWithArray(array $config, $zone, $uniqId){
         $name = isset($config['module']) ? $config['module'] : '';
 
         $className = self::getClassName($name);
@@ -60,7 +60,7 @@ abstract class Module {
      * @return Module
      * @throws \Exception
      */
-    private function getWithFile($filePath, $zone, $uniqId){
+    static private function getWithFile($filePath, $zone, $uniqId){
         $file = $zone->getPage()->getSite()->getPath() . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $filePath);
         if(!file_exists($file)){
             throw new \Exception('File ' . $file . ' not found (for module creation)');
