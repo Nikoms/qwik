@@ -1,13 +1,14 @@
 <style>
 
 .qwik-restaurant-level{
-    font-weight: bold;
+    /*font-weight: bold;*/
     margin: 10px 0px;
     line-height: 40px;
 }
 
 .qwik-restaurant-level1{
     font-size: 38.5px;
+    border-bottom: 1px solid #000;
 }
 .qwik-restaurant-level2{
     font-size: 31.5px;
@@ -61,5 +62,5 @@ ul.qwik-restaurant-plats li:after {
 
 </style>
 <div class="qwik-restaurant">
-{% include module.getName() ~ "/views/tree.html.twig" with {'children' : menu, 'level': 0}%}
+{% include module.getName() ~ "/views/tree.html.twig" with {'children' : children, 'level': 0}%}
 </div>

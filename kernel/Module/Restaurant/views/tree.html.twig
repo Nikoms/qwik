@@ -1,18 +1,24 @@
 {% set level = level + 1 %}
 
-{#Si le premier enfant a des enfants, alors on fait comme si tout le monde était un menu #}
-{% if children[0].children is defined %}
-    {% for item in children %}
-        <p class="qwik-restaurant-level qwik-restaurant-level{{ level }}">{{ item.title | translate }}</p>
-        {% include module.getName() ~ "/views/tree.html.twig" with {'children' : item.children, 'level' : level}%}
-    {% endfor %}
-{% else %}
-    <ul class="qwik-restaurant-plats">
-    {% for item in children %}
-        <li>
-            <span class="qwik-restaurant-title qwik-restaurant-background">{{ item.title| translate }} <i>{{ item.description | translate }}</i></span>
-            <span class="qwik-restaurant-price qwik-restaurant-background">{{ item.price }} {{ money }}</span>
-        </li>
-    {% endfor %}
-    </ul>
+
+{% if children.plats|length > 0 %}
+	<ul class="qwik-restaurant-plats">
+	{% for plat in children.plats %}
+		<li>
+            <span class="qwik-restaurant-title qwik-restaurant-background">{{ plat.title| translate }} <i>{{ plat.description | translate }}</i></span>
+            <span class="qwik-restaurant-price qwik-restaurant-background">{{ plat.price }} {{ money }}</span>
+		</li>
+	{% endfor %}
+	</ul>
+{% endif %}
+
+{% if children.menu|length > 0 %}
+	<ul class="qwik-restaurant-menu">
+	{% for m in children.menu %}
+		<li>
+		 	<p class="qwik-restaurant-level qwik-restaurant-level{{ level }}">{{ m.title | translate }}</p>
+		    {% include module.getName() ~ "/views/tree.html.twig" with {'children' : m.children, 'level' : level}%}
+	    </li>
+	{% endfor %}
+	</ul>
 {% endif %}
