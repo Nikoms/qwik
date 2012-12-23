@@ -26,9 +26,7 @@ take:
   title: Take Away
   zones:
     zone1:
-     - module: file
-       config:
-         file: upload/takeAway.html
+      txt: menu/takeAway.txt
 business:
   template: basic
   title: Business lunch
