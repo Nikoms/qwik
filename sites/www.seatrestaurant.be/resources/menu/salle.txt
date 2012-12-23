@@ -1,0 +1,310 @@
+
+module: restaurant
+config:
+  money : €
+  sprintf: %.2f #todo + structure?
+  menu:         
+   - title: Les Petits-Déjeuners
+     description: (les petits-déjeuners sont servis de 8:30 à 11:30)
+     children:
+      - title: Le petit-déjeuner
+        description: Une boisson chaude & une viennoiserie au choix.
+        price: 3.50
+      - title: Le « grand » petit-déjeuner 
+        description: Une boisson chaude, une viennoiserie au choix, jus d’oranges pressées, pain, beurre & confiture.
+        price: 7.00
+      - title: Le petit déjeuner « Bien Etre »
+        description: Une boisson chaude ou un jus d’oranges pressées, salade de fruits frais, pain complet, beurre & confiture.
+        price: 8.00
+      - title: Le petit-déjeuner « au choix »
+        description: 
+        children:
+         - title: Viennoiserie (croissant ou pain au chocolat)
+           price: 1.40
+         - title: Pain, beurre & confitures
+           price: 1.8
+         - title: Salade de fruits frais 
+           price: 5
+         - title: Salade de fruits frais
+           price: 3
+         - title: Jambon ou Fromage 
+           price: 0.5
+         - title: Jambon ou Fromage 
+           price: 1.2
+         - title: Œuf sur le plat 
+           price: 1.5
+           
+           
+   - title: Les Soupes & Tartes salées
+     children:
+      - title: La soupe du jour 
+        price: 4.8
+      - title: La tarte salée du jour & sa salade de saison
+        price: 8
+      - title: Le DUO
+        description: La soupe, la tarte salée & leurs accompagnements.
+        price: 12
+        
+        
+   - title: Les Salades
+     children:
+      - title: Scampis Thaï
+        price: 12.50
+        description: Scampis, soja, carottes râpées, dés de tomates, concombres, cacahuètes, graines germées, coriandre, vinaigrette thaï.
+      - title: Poulet à l’italienne
+        price: 12.80
+        description: Poulet au vinaigre balsamique, légumes grillés, pignons de pin, tomates fraîches et confites, parmesan, roquette, vinaigrette balsamique.
+      - title: Chèvre
+        price: 12.50
+        description: Chèvre chaud, lardons, pommes, raisins secs, noix, croûtons, miel, salade de blé, tomates, concombres, mesclun, vinaigrette framboisée.
+      - title: Saumon
+        price: 12.80
+        description: Saumon fumé, roulades de courgettes au fromage frais, pommes, tomates fraiches et confites, mange-tout, mesclun, vinaigrette miel-moutarde.
+      - title: Di Manzo
+        price: 12.80
+        description: Carpaccio de bœuf, aubergines et courgettes grillées, dés de tomates, roquette, mesclun, pignons de pin, parmesan, pesto.
+      - title: Quinoa
+        price: 11.30
+        description: Mesclun, quinoa, lentilles, mange-tout, carottes, courgettes, concombres, dés de tomates, coriandre, amandes grillées, vinaigrette miel-moutarde.
+      - title: César
+        price: 11.80
+        description: Poulet, dés de tomates, œufs, croûtons, parmesan,  salade romaine, mesclun, vinaigrette césar.
+      - title: Bœuf sauté
+        price: 12.80
+        description: Bœuf sauté, dés de tomates, concombres, soja, gingembre confit, oignons frits, coriandre, sauce soja.
+        
+        
+   - title: Les Tartines
+     description: (les tartines sont accompagnées d’une salade de saison)
+     children:
+      - title: Bœuf & Basilic
+        price: 7.80
+        description: Tartare de bœuf, huile basilic, roquette, pignons de pin, parmesan.
+      - title: Saumon fumé
+        price: 8.30
+        description: Saumon fumé, fromage frais, ciboulette, sauce citronnée.
+      - title: Scampis & Avocat
+        price: 8.30
+        description: Scampis, guacamole, cheddar, graines germées.
+      - title: Légumes grillés
+        price: 6.80
+        description: Aubergines & courgettes grillées, tomates fraîches, pignons de pin, roquette, tapenade de tomates, parmesan.
+      - title: Brie
+        price: 6.80
+        description: Brie, poires, miel, noisettes.
+      - title: Poulet & Chutney
+        price: 7.80
+        description: Poulet, fromage frais, chutney de mangue, amandes grillées, graines germées.
+
+
+   - title: Les Burgers
+     description: (les burgers sont accompagnés d’une salade de saison et de chips artisanales)
+     children:
+      - title: Chavignol
+        price: 9.80
+        description: Bœuf, chiffonnade de courgette, chavignol, dés  de tomates, sauce miel-moutarde maison.
+      - title: Classique  - Double Classique
+        price: 9.30 - 10.80
+        description: Bœuf, cheddar, salade, dés de tomates, émincés d’oignons, sauce cocktail maison. 
+      - title: Poulet
+        price: 9.50
+        description: Aiguillettes de poulet, roquette, dés de tomates, cheddar, sauce miel-moutarde maison.
+      - title: Végétarien
+        price: 9.50
+        description: Burger de pois chiche, carottes & courgettes, oignons frits, fromage frais, concombres.
+      - title: Provençal
+        price: 9.80
+        description: Bœuf, aubergines grillées, dés de tomates fraîches, roquette, tapenade de tomates, tapenade d’olives  vertes.
+      - title: Saumon fumé
+        price: 9.80
+        description: Saumon fumé, fromage frais, œufs, pommes, salade de blé.
+        
+        
+
+   - title: Special S’EAT
+     children:
+      - title: Carpaccio
+        price: 9.80
+        description: Carpaccio de bœuf, huile d’olive au basilic, pignons de pin, parmesan, mesclun, roquette, dés de tomates.
+      - title: Tartare à l’italienne
+        price: 12.00
+        description: Tartare de bœuf, huile d’olive au basilic, pignons de pin, parmesan, tomates séchées, tomates confites,  roquette.
+      - title: Linguine au bœuf sauté
+        price: 12.50
+        description: Bœuf sauté, tomates confites, roquette, parmesan.
+      - title: Farfalle aux scampis & curry jaune
+        price: 12.50
+        description: Scampis, dés de tomates, courgettes croquantes, roquette, parmesan.
+      - title: Bruschetta Jambon
+        price: 8.30
+        description: Jambon italien, mozzarella, tomates séchées, pesto.
+      - title: Bruschetta Chèvre
+        price: 7.80
+        description: Chèvre frais, lardons, pommes caramélisées.
+        
+        
+
+   - title: Les KIDS
+     children:
+      - title: Le Kids’ Burger
+        price: 7.50
+        description: Steak de bœuf, tomates, salade, fromage et ketchup.
+      - title: Les petites pâtes jambon-fromage
+        price: 6.50
+      - title: Le croque façon bruschetta
+        price: 5.50
+        description: Bruschette jambon-fromage & ketchup.
+
+   - title: Les Desserts
+     children:
+      - title: Le moelleux au chocolat
+        price: 5.00
+      - title: La tarte Tatin et glace vanille
+        price: 6.50
+      - title: La Dame Blanche au véritable chocolat chaud
+        price: 5.00
+      - title: Le café bruxellois
+        price: 5.00
+      - title: Le café liégeois
+        price: 5.00
+      - title: La boule, le duo ou le trio de glace artisanale
+        price: 1.50 - 3.00 - 4.50
+        description: Vanille – Chocolat – Moka – Spéculoos – Framboise 
+      - title: La salade de fruits frais de saison
+        price: 5.00
+      - title: Le fromage blanc aux fruits frais de saison
+        price: 5.00
+      - title: Les 3 Gourmandises du jour
+        price: 4.50
+      - title: Le Café Gourmand
+        price: 6.50
+        description: Un café accompagné des 3 petits desserts du jour 
+      - title: Le Thé Gourmand
+        price: 7.00
+        description: Un thé au choix accompagné des 3 petits desserts du jour 
+
+
+   - title: Les Boissons Froides
+     children:
+      - title: Eaux et Limonades
+        children:
+         - title: Eau plate - Eau pétillante ¼
+           price: 1.80
+         - title: Eau plate - Eau pétillante ½
+           price: 3.60
+         - title: Coca Cola
+           price: 1.80
+         - title: Coca Light - Coca Zero
+           price: 1.80
+         - title: Spa Orange - Spa Citron
+           price: 1.80
+         - title: Ice Tea
+           price: 2.00
+         - title: Schweppes Tonic – Schweppes Agrum’
+           price: 2.00
+         - title: Supplément menthe ou grenadine
+           price: 0.20
+      - title: Jus de fruits & Boissons « Bien Etre »
+        children:
+         - title: Jus d’oranges pressées
+           price: 3.00
+         - title: Jus de pommes Bio
+           price: 2.50
+         - title: Jus de tomates
+           price: 2.00
+         - title: TAO Hydration : cassis, ginseng & acerola
+           price: 2.50
+         - title: TAO Energy : guarana & kombucha
+           price: 2.50
+         - title: TAO Serenity : gingembre & cardemome
+           price: 2.50
+         - title: TAO Vitality : thé vert & gingko biloba
+           price: 2.50
+         - title: Feel Good Orange & Mango
+           price: 3.20
+         - title: Feel Good Cloudy Lemon
+           price: 3.20
+         - title: Feel Good Apple & Blueberry
+           price: 3.20
+
+
+
+   - title: Les Vins
+     children:
+      - title: Les Vins Maison
+        description: « Mas la Chevalière » - Languedoc, Rouge Merlot & Grenache, Blanc Chardonnay & Terret, Rosé de la Chevalière
+        children: 
+         - title: Verre
+           price: 3.00
+         - title: ¼
+           price: 5.00
+         - title: ½
+           price: 10.00
+         - title: Bouteille
+           price: 16.00
+      - title: Notre sélection
+        children:
+         - title: Les Caprices d’Antoine (Rouge)
+           price: 20.00
+           description: A. Ogier & Fils – Côtes du Rhône
+         - title: Tarrango (Rouge frais)
+           price: 25.00
+           description: Brown Brothers – Australie 
+         - title: Cristal Buisse (Blanc)
+           price: 20.00
+           description: Paul Buisse – Touraine Sauvignon
+
+
+   - title: Les Bières
+     children:
+      - title: Vedett (33cl)
+        price: 2.20
+      - title: Vedett White (33 cl)
+        price: 2.20
+      - title: La Chouffe
+        price: 3.00
+      - title: Duvel
+        price: 3.00
+      - title: Maredsous Blonde - Brune
+        price: 3.00
+      - title: Liefmans (kriek)
+        price: 3.00
+      - title: Tourtel (sans alcool)
+        price: 1.80
+        
+
+   - title: Les Boissons chaudes
+     children:
+      - title: Espresso
+        price: 2.30
+      - title: Doppio
+        price: 2.60
+      - title: Lungo
+        price: 2.30
+      - title: Décaféiné
+        price: 2.30
+      - title: Cappuccino à la véritable mousse de lait
+        price: 2.60
+      - title: Cappuccino viennois (à la chantilly)
+        price: 2.60
+      - title: Latte Macchiato (caffe latte)
+        price: 2.80
+      - title: Thé (demandez notre assortiment)
+        price: 3.00
+      - title: Thé à la menthe fraîche
+        price: 3.50
+      - title: Chocolat chaud
+        price: 2.80
+      - title: Jus de pommes chaud à la cannelle
+        price: 3.00
+      - title: Le Café Gourmand
+        price: 6.50
+        description: Un café accompagné des 3 petits desserts du jour 
+      - title: Le Thé Gourmand
+        price: 7.00
+        description: Un thé accompagné des 3 petits desserts du jour 
+
+
+
+
+

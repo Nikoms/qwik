@@ -1,0 +1,78 @@
+
+home:
+  template: basic
+  title: Home
+  zones:
+    zone1:
+     - module: html
+       config:
+         content: home
+presentation:
+  template: basic
+  title: Présentation
+  zones:
+    zone1:
+     - module: file
+       config:
+         file: upload/presentation.html
+carte:
+  template: basic
+  title: La carte
+  zones:
+    zone1:
+      intro: menu/salle.txt
+take:
+  template: basic
+  title: Take Away
+  zones:
+    zone1:
+     - module: file
+       config:
+         file: upload/takeAway.html
+business:
+  template: basic
+  title: Business lunch
+  zones:
+    zone1:
+     - module: html
+       config:
+         content: Business lunch
+traiteur:
+  template: basic
+  title: Traiteur
+  zones:
+    zone1:
+     - module: html
+       config:
+         content: Traiteur
+event:
+  template: basic
+  title: Evenements
+  zones:
+    zone1:
+     - module: html
+       config:
+         content: Evenements
+gallery:
+  template: basic
+  title: Galerie
+  zones:
+    zone1:
+     - module: gallery
+       config:
+         perLine: 6
+         position: center
+         path: images/gallery
+         thumbnail:
+           width: 120
+           height: 80
+           quality: 85
+contact:
+  template: basic
+  title: Contact
+  zones:
+    zone1:
+     - module: html
+       config:
+         content: Contact
+

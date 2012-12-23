@@ -1,0 +1,9 @@
+url: www.bbsalve.be
+languages: 
+  available: [fr, nl, en]
+title:
+  fr: Bed &amp; Breakfast Salve
+  nl: Bed &amp; Breakfast Salve
+  en: Bed &amp; Breakfast Salve
+google:
+  analytics: UA-36976567-1

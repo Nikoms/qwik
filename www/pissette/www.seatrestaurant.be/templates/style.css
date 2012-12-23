@@ -1,0 +1,52 @@
+
+span.qwik-restaurant-background{
+    background: #FFFFFF;
+}
+
+body{
+    background-color: #FFFFFF;
+    color:#55544B;
+	font-family: Calibri, "Helvetica Neue", Arial, Helvetica,sans-serif;
+}
+
+#header{
+    /*background-color:#7B7B7B;*/
+    background-color: #FFFFFF;
+}
+
+#menu{
+    background-color:#44A729;
+    padding: 10px 0px;
+    margin-bottom:20px;
+}
+
+#menu ul {
+    margin: 0 ;
+    padding: 0 ;
+    list-style: none ;
+}
+#menu li {
+    /*color: #DAFA03;*/
+    color:#FFFFFF;
+    display: inline;
+    margin-right: 1px;
+    padding-top:3px;
+}
+#menu li a {
+    /*color: #DAFA03;*/
+    color:white;
+    margin: 4px 20px 4px 0px;
+    text-decoration: none ;
+}
+#menu li a:hover {
+    text-decoration:underline;
+}
+#menu .changeLanguage{
+    text-align:right;
+}
+#menu .changeLanguage li a {
+    color: #FFFFFF;
+    padding: 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
