@@ -4,9 +4,9 @@ home:
   title: Home
   zones:
     zone1:
-     - module: html
+     - module: file
        config:
-         content: home
+         file: upload/home.html
 presentation:
   template: basic
   title: Présentation
@@ -26,6 +26,10 @@ take:
   title: Take Away
   zones:
     zone1:
+      todo:
+        module: html
+        config:
+          content: <pre>Take away (word & pdf): prévoir une version imprimable (utiliser la version pdf)</pre>
       txt: menu/takeAway.txt
 business:
   template: basic
@@ -34,7 +38,7 @@ business:
     zone1:
      - module: html
        config:
-         content: Business lunch
+         content: Business Lunch (word & pdf): il serait probablement plus simple et plus clair que ce soit la version pdf qui s’ouvre directement lorsqu’on arrive sur la page comme sur www.louiselahulpe.be.on réalise bien que ces pages seraient différentes (idem traiteur) des 2 autres mais cela nous semble plus logique à “l’utilisation” et surtout tu ne devras pas tout recopier! et aussi prévoir une version imprimable
 traiteur:
   template: basic
   title: Traiteur
@@ -42,15 +46,7 @@ traiteur:
     zone1:
      - module: html
        config:
-         content: Traiteur
-event:
-  template: basic
-  title: Evenements
-  zones:
-    zone1:
-     - module: html
-       config:
-         content: Evenements
+         content: il nous manque 1 prix, on te l’envoie rapidement
 gallery:
   template: basic
   title: Galerie
@@ -70,7 +66,7 @@ contact:
   title: Contact
   zones:
     zone1:
-     - module: html
+     - module: file
        config:
-         content: Contact
+         file: upload/contact.html
 
