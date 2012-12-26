@@ -1,12 +1,8 @@
 
 home:
-  template: basic
-  title: Home
-  zones:
-    zone1:
-     - module: file
-       config:
-         file: upload/home.html
+  template: home
+  title: Accueil
+  hidden: true
 presentation:
   template: basic
   title: Présentation
@@ -17,7 +13,7 @@ presentation:
          file: upload/presentation.html
 carte:
   template: basic
-  title: La carte
+  title: Menu
   zones:
     zone1:
       intro: menu/salle.txt
@@ -26,19 +22,20 @@ take:
   title: Take Away
   zones:
     zone1:
-      todo:
-        module: html
+      download:
+        module: file
         config:
-          content: <pre>Take away (word & pdf): prévoir une version imprimable (utiliser la version pdf)</pre>
+          file: upload/takeAway.html
       txt: menu/takeAway.txt
 business:
   template: basic
   title: Business lunch
   zones:
     zone1:
-     - module: html
-       config:
-         content: Business Lunch (word & pdf): il serait probablement plus simple et plus clair que ce soit la version pdf qui s’ouvre directement lorsqu’on arrive sur la page comme sur www.louiselahulpe.be.on réalise bien que ces pages seraient différentes (idem traiteur) des 2 autres mais cela nous semble plus logique à “l’utilisation” et surtout tu ne devras pas tout recopier! et aussi prévoir une version imprimable
+      download:
+        module: file
+        config:
+          file: upload/business.html
 traiteur:
   template: basic
   title: Traiteur
@@ -66,7 +63,22 @@ contact:
   title: Contact
   zones:
     zone1:
-     - module: file
-       config:
-         file: upload/contact.html
+      infos:
+        module: file
+        config:
+          file: upload/contact.html
+      maps:
+        module: gmaps
+        config:
+          map:
+            position: bottom #hide, top, bottom, left, right
+            width: 100%
+            height: 400px
+          addresses:
+            - street: Avenue Albert 1er
+              title: Centre commercial "La Mazerine"
+              number: 2-28
+              zip: 1310
+              city: Rixensart
+              country: Belgique
 

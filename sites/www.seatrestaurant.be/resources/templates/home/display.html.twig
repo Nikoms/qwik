@@ -9,22 +9,61 @@
     <!-- Site -->
     <link rel="stylesheet" href="{{ app.getBaseUrl() }}q/templates/style.css" type="text/css" media="screen, projection">
 
+    <style>
+        .span4{
+            margin-top:20px;
+            height: 300px;
+            text-align: center;
+        }
+        .lastBlock{
+            background-color: #44A729;
+            color: #FFFFFF;
+        }
+        .address{
+            padding-top:122px;
+        }
+        .carre{
+            font-size: 30px;
+            line-height: 300px;
+        }
+        .logo{
+            background-color: #FFFFFF;
+        }
+
+
+    </style>
 {% endblock %}
 
 {% block body %}
 
-	
-	{% include "templates/top.html.twig" %}
+<div class="container carres">
+    <div class="row">
+        <div class="span4 carre logo"><img src="../q/templates/images/logo_small.png" /></div>
+        <div class="span4 carre"><a href="/fr/presentation">Présentation</a></div>
+        <div class="span4 carre">Galerie</div>
+    </div>
 
-	<div class="container">
-	    <div class="row">
-		    <div class="span8">
-		    	{{page.getZone('zone1')}}
-		    </div>
-		    <div class="span4"><div id="pratik">{{ page.getZone('zone2') }}</div></div>
-	    </div>
-	</div>
+    <div class="row">
+        <div class="span4 carre">Menu</div>
+        <div class="span4 carre">Take Away</div>
+        <div class="span4 carre">Business Lunch</div>
+    </div>
 
+    <div class="row">
+        <div class="span4 carre">Traiteur</div>
+        <div class="span4 carre">Contact</div>
+        <div class="span4 lastBlock">
+            <div class="address">
+                Centre commercial "La Mazerine"<br />
+                Avenue Albert Ier – 1332 Genval<br />
+                02/653.10.33
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
 	{% include "templates/bottom.html.twig" %}
 
 {% endblock %}
