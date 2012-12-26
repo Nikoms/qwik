@@ -12,7 +12,7 @@
     <style>
         .span4{
             margin-top:20px;
-            height: 300px;
+            height: 200px;
             text-align: center;
         }
         .lastBlock{
@@ -20,38 +20,95 @@
             color: #FFFFFF;
         }
         .address{
-            padding-top:122px;
+            padding-top:72px;
         }
         .carre{
             font-size: 30px;
-            line-height: 300px;
+            position:relative;
         }
-        .logo{
+        .carre a {
+            display:block;
+        }
+        .carre-logo{
             background-color: #FFFFFF;
+            line-height: 200px;
         }
 
+        .carre-image{
+            background:url('{{ app.getBaseUrl() }}q/templates/images/home/1.jpg') no-repeat scroll center 0 transparent;
+        }
+        .carre-image2{
+            background-image: url('{{ app.getBaseUrl() }}q/templates/images/home/2.jpg');
+        }
+        .carre-image3{
+            background-image: url('{{ app.getBaseUrl() }}q/templates/images/home/3.jpg');
+        }
+        .carre-image4{
+            background-image: url('{{ app.getBaseUrl() }}q/templates/images/home/4.jpg');
+        }
+        .carre-image5{
+            background-image: url('{{ app.getBaseUrl() }}q/templates/images/home/5.jpg');
+        }
+        .carre-image6{
+            background-image: url('{{ app.getBaseUrl() }}q/templates/images/home/6.jpg');
+        }
+        .carre-image7{
+            background-image: url('{{ app.getBaseUrl() }}q/templates/images/home/7.jpg');
+        }
+        .carre-line{
+            position:absolute;
+            background-color: rgb(255, 255, 255); /* alternative solide */
+            /*CSS3*/
+            background-color: rgba(255, 255, 255, 0.8);
+            top:75px;
+            width:100%;
+            height: 50px;
+            line-height: 50px;
+        }
 
+        .container{
+            width:640px;
+        }
+        .span4{
+            width:200px;
+        }
     </style>
+
+    <!--[if lte IE 8]>
+    <style type="text/css">
+        /*http://www.alsacreations.com/tuto/lire/909-CSS-transparence-couleur-rgba.html*/
+        .carre-line {
+            background:transparent;
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0ffffff,endColorstr=#C0ffffff);
+            zoom: 1;
+        }
+    </style>
+    <![endif]-->
+
 {% endblock %}
 
 {% block body %}
 
 <div class="container carres">
     <div class="row">
-        <div class="span4 carre logo"><img src="../q/templates/images/logo_small.png" /></div>
-        <div class="span4 carre"><a href="/fr/presentation">Présentation</a></div>
-        <div class="span4 carre">Galerie</div>
+        <div class="span4 carre carre-logo"><img src="{{ app.getBaseUrl() }}q/templates/images/logo_small.png" /></div>
+        <div class="span4 carre carre-image carre-image1">
+            <div class="carre-line"><a href="{{ app.getBaseUrl() }}fr/presentation">Présentation</a></div>
+        </div>
+        <div class="span4 carre carre-image carre-image2">
+            <div class="carre-line"><a href="{{ app.getBaseUrl() }}fr/gallery">Galerie</a></div>
+        </div>
     </div>
 
     <div class="row">
-        <div class="span4 carre">Menu</div>
-        <div class="span4 carre">Take Away</div>
-        <div class="span4 carre">Business Lunch</div>
+        <div class="span4 carre carre-image carre-image3"><div class="carre-line"><a href="{{ app.getBaseUrl() }}fr/menu">Menu</a></div></div>
+        <div class="span4 carre carre-image carre-image4"><div class="carre-line"><a href="{{ app.getBaseUrl() }}fr/take">Take Away</a></div></div>
+        <div class="span4 carre carre-image carre-image5"><div class="carre-line"><a href="{{ app.getBaseUrl() }}fr/business">Business Lunch</a></div></div>
     </div>
 
     <div class="row">
-        <div class="span4 carre">Traiteur</div>
-        <div class="span4 carre">Contact</div>
+        <div class="span4 carre carre-image carre-image6"><div class="carre-line"><a href="{{ app.getBaseUrl() }}fr/traiteur">Traiteur</a></div></div>
+        <div class="span4 carre carre-image carre-image7"><div class="carre-line"><a href="{{ app.getBaseUrl() }}fr/contact">Contact</a></div></div>
         <div class="span4 lastBlock">
             <div class="address">
                 Centre commercial "La Mazerine"<br />

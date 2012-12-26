@@ -2,7 +2,8 @@
 module: restaurant
 config:
   money : €
-  sprintf: %.2f #todo + structure?
+  format:
+    price: %.2f
   menu:         
    - title: Les Petits-Déjeuners
      description: (les petits-déjeuners sont servis de 8:30 à 11:30)

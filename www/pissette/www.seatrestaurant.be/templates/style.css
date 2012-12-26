@@ -1,4 +1,11 @@
 
+/*
+vert foncé: 44A729
+vert clair: 91BD10
+jaune: C8D200
+gris: 55544B
+*/
+
 span.qwik-restaurant-background{
     background: #FFFFFF;
 }
@@ -15,7 +22,7 @@ body{
 }
 
 #menu{
-    background-color:#44A729;
+    background-color:#91BD10;
     padding: 10px 0px;
     margin-bottom:20px;
 }
@@ -49,4 +56,12 @@ body{
     padding: 4px;
     text-decoration: none;
     text-transform: uppercase;
+}
+
+a{
+    color: #44A729;
+}
+a:hover{
+    color: #55544B;
+    text-decoration: underline;
 }
