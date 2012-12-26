@@ -10,12 +10,10 @@
     <link rel="stylesheet" href="{{ app.getBaseUrl() }}q/templates/style.css" type="text/css" media="screen, projection">
 
     <style>
-        .span4{
-            margin-top:20px;
-            height: 200px;
-            text-align: center;
+        body{
+            background-color: #FFFFFF;
         }
-        .lastBlock{
+        .carre-last{
             background-color: #44A729;
             color: #FFFFFF;
         }
@@ -23,8 +21,11 @@
             padding-top:72px;
         }
         .carre{
-            font-size: 30px;
             position:relative;
+            margin-top:20px;
+            height: 200px;
+            text-align: center;
+            width:200px;
         }
         .carre a {
             display:block;
@@ -56,6 +57,7 @@
             background-image: url('{{ app.getBaseUrl() }}q/templates/images/home/7.jpg');
         }
         .carre-line{
+            font-size: 30px;
             position:absolute;
             background-color: rgb(255, 255, 255); /* alternative solide */
             /*CSS3*/
@@ -68,9 +70,6 @@
 
         .container{
             width:640px;
-        }
-        .span4{
-            width:200px;
         }
     </style>
 
@@ -91,7 +90,7 @@
 
 <div class="container carres">
     <div class="row">
-        <div class="span4 carre carre-logo"><img src="{{ app.getBaseUrl() }}q/templates/images/logo_small.png" /></div>
+        <div class="span4 carre carre-logo"><img src="{{ app.getBaseUrl() }}q/templates/images/logo_small.png" width="200"/></div>
         <div class="span4 carre carre-image carre-image1">
             <div class="carre-line"><a href="{{ app.getBaseUrl() }}fr/presentation">Présentation</a></div>
         </div>
@@ -109,7 +108,7 @@
     <div class="row">
         <div class="span4 carre carre-image carre-image6"><div class="carre-line"><a href="{{ app.getBaseUrl() }}fr/traiteur">Traiteur</a></div></div>
         <div class="span4 carre carre-image carre-image7"><div class="carre-line"><a href="{{ app.getBaseUrl() }}fr/contact">Contact</a></div></div>
-        <div class="span4 lastBlock">
+        <div class="span4 carre carre-last">
             <div class="address">
                 Centre commercial "La Mazerine"<br />
                 Avenue Albert Ier – 1332 Genval<br />

@@ -1,9 +1,13 @@
 <style>
+/* a réécrire pour que la carte soit jolie (texte avec background blanc par défaut) */
+.qwik-restaurant-background{
+    background: #FFFFFF;
+}
+
 
 .qwik-restaurant-level{
-    /*font-weight: bold;*/
-    margin: 10px 0px;
     line-height: 40px;
+    margin:0 0 5px;
 }
 
 .qwik-restaurant-level1{
@@ -12,53 +16,55 @@
 }
 .qwik-restaurant-level2{
     font-size: 31.5px;
-    margin: 10px 15px;
-
 }
 
 .qwik-restaurant ul{
     list-style: none;
-
+    margin: 0 0 0 10px;
 }
 
-ul.qwik-restaurant-plats {
-   /* max-width: 40em;*/
-    padding: 0;
-    overflow-x: hidden;
-    list-style: none;
+.qwik-restaurant-plats {
+    padding-bottom:20px;
 }
-ul.qwik-restaurant-plats li:after {
-    float: left;
-    width: 0;
-    white-space: nowrap;
-    content:
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . "
-        ". . . . . . . . . . . . . . . . . . . . ";
-}
-.qwik-restaurant-title {
-    padding-right: 0.33em;
+.qwik-restaurant-plat {
+    line-height:1.2;
+    margin:-.9em 0 0 0;
+    position:relative;
+    float:left;
+    /* Pour que ca prenne bien toute la largeur, et donc que le prix soit à droite*/
+    width:100%;
+    text-align:left;
+    border-bottom:1px dotted #000;
+    clear:both;
 }
 .qwik-restaurant-price {
-    float: right;
-    padding-left: 0.33em;
-    position: relative;
-    z-index: 1;
+    padding:1px 0 1px 5px;
+    position:relative;
+    /* pour que le texte soit bien aligné sur les points*/
+    top:.4em;
+    left:1px;/* ie rounding error*/
+    float:right;
 }
-/* a réécrire pour que la carte soit jolie (texte avec background blanc par défaut) */
-.qwik-restaurant-background{
-    background: white;
+.qwik-restaurant-title {
+    margin:0;
+    position:relative;
+    top:1.6em;
+    padding:0 5px 0 0;
+    font-weight: bold;
 }
-
+.qwik-restaurant-description{
+    font-weight: normal;
+    font-style: italic;
+}
+.qwik-restaurant-text {
+    /* 40 px à droite pour laisser la place au prix*/
+    padding:0 40px 0 0;
+    margin:0;
+}
+.qwik-restaurant-plats-after{
+    clear:both;
+    margin-bottom: 20px;;
+}
 
 </style>
 <div class="qwik-restaurant">

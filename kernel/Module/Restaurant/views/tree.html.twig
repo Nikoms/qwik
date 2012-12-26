@@ -4,12 +4,19 @@
 {% if children.plats|length > 0 %}
 	<ul class="qwik-restaurant-plats">
 	{% for plat in children.plats %}
-		<li>
-            <span class="qwik-restaurant-title qwik-restaurant-background">{{ plat.title| translate }} <i>{{ plat.description | translate }}</i></span>
+		<li class="qwik-restaurant-plat">
+            <p class="qwik-restaurant-text">
+                <span class="qwik-restaurant-title qwik-restaurant-background">
+                    {{ plat.title| translate }}
+                    {% if plat.description is not empty %}<br /> <span class="qwik-restaurant-description">{{ plat.description | translate }}</span>{% endif %}
+                </span>
+
+            </p>
             <span class="qwik-restaurant-price qwik-restaurant-background">{{ plat.price }} {{ money }}</span>
 		</li>
 	{% endfor %}
 	</ul>
+    <div class="qwik-restaurant-plats-after"></div>
 {% endif %}
 
 {% if children.menu|length > 0 %}
@@ -22,3 +29,5 @@
 	{% endfor %}
 	</ul>
 {% endif %}
+
+

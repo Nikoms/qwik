@@ -7,14 +7,14 @@
 .qwik-gmaps{
 	overflow:hidden;
 }
-/*Lorsque la map est positionn�e sur la gauche, tout le monde se met sur la gauche :)*/
+/*Lorsque la map est positionnée sur la gauche, tout le monde se met sur la gauche :)*/
 .qwik-gmaps-map-position-left .qwik-gmaps-map{
     float: left;
 }
 
 
 
-/*La map est � droite*/
+/*La map est à droite*/
 .qwik-gmaps-map-position-right .qwik-gmaps-map {
     float: right;
 }
@@ -26,4 +26,16 @@
 
 .qwik-gmaps img{
     max-width: none;
+}
+
+/*Si la map est en bas, on met un espace pour pas que ce soit collé*/
+.qwik-gmaps-map-position-bottom .qwik-gmaps-map{
+    margin-top:10px;
+}
+
+.qwik-gmaps-map-position-bottom .qwik-gmaps-addresses,
+.qwik-gmaps-map-position-top .qwik-gmaps-addresses{
+    list-style: none;
+    margin:0;
+    padding:0;
 }
