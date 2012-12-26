@@ -46,8 +46,8 @@ class AutoLoader {
 		
 		//Combien on a d'autoloader? Pcq si y'en a d'autres, peut-être que eux savent comment la classe se load?!
 		$nbAutoloaders = count(spl_autoload_functions());
-		//Si on appelle du twig, alors on by pass
-		if(strpos($className, 'Twig_') === 0){
+		//Si on appelle du twig ou swift, alors on by pass
+		if(stripos($className, 'Twig_') === 0 || stripos($className, 'Swift_') === 0){
 			return;
 		}
 		
@@ -85,7 +85,7 @@ class AutoLoader {
             //Si on trouve le namespace dans le nom de la classe au début
             if(strpos($className, $nameSpace) === 0){
                 //Remplacement de $nameSpace par path via substr_replace (si on fait un str_replace, ca remplacement toutes les occurences, et c'est pas ca qu'on veut)
-                return substr_replace($className, $path, 0, strlen($nameSpace));
+                return str_replace('\\', DIRECTORY_SEPARATOR ,substr_replace($className, $path, 0, strlen($nameSpace)));
             }
         }
         return '';

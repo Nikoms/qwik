@@ -29,7 +29,7 @@ class TemplateProxy {
         	//Mode debug ou pas (voir doc), pour avoir un __toString
             'debug' => $appManager->isDebug(),
         	//On est strict quand on debug, sinon pas
-        	'strict_variables' => !$appManager->isDebug(),
+        	'strict_variables' => $appManager->isDebug(),
         	//On auto escape pas les vars, on le fera quand on en aura besoin
             'autoescape' => false,
         ));

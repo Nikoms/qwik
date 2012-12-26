@@ -36,7 +36,7 @@ abstract class Module {
      * @throws \Exception
      */
     static private function getWithArray(array $config, $zone, $uniqId){
-        $name = isset($config['module']) ? $config['module'] : '';
+        $name = isset($config['module']) ? ucfirst($config['module']) : '';
 
         $className = self::getClassName($name);
 

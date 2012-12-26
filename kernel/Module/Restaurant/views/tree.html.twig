@@ -8,7 +8,7 @@
             <p class="qwik-restaurant-text">
                 <span class="qwik-restaurant-title qwik-restaurant-background">
                     {{ plat.title| translate }}
-                    {% if plat.description is not empty %}<br /> <span class="qwik-restaurant-description">{{ plat.description | translate }}</span>{% endif %}
+                    {% if plat.description is defined %}<br /> <span class="qwik-restaurant-description">{{ plat.description | translate }}</span>{% endif %}
                 </span>
 
             </p>
