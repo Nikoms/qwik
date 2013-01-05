@@ -1,0 +1,6 @@
+default:
+  template: home
+  title:
+    fr: Erreur
+    nl: Probleem
+    en: Mistake
