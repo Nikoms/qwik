@@ -13,7 +13,21 @@ function googleMapsLoaded(){
 		//var gmap = getMap(gmapContainer.get(0));
 		$this.find('.qwik-gmaps-address').each(function(){
 			var $address = $(this);
-			
+
+            //On met aussi l'icone
+            var icon = '';
+            if($address.find('.qwik-gmaps-address-icon').length > 0){
+                icon = $address.find('.qwik-gmaps-address-icon').attr('src');
+            }
+            $address.data('icon', icon);
+
+            if($address.data('latitude') && $address.data('latitude')){
+                var location = new google.maps.LatLng($address.data('latitude'), $address.data('longitude'));
+                addLocationToGMap($gmapContainer, $address, location);
+                return;
+            }
+
+            //On a pas de latitude/longitude, on va se débrouiller avec l'adresse
 			//On fait une jolie adresse pour que google comprenne au mieux...
 			var address = '';
 			if($address.find('.qwik-gmaps-address-street').length > 0){
@@ -33,17 +47,11 @@ function googleMapsLoaded(){
 			}
 			
 			//On met l'adresse dans les datas
-			$address.data('address', address);
-			
-			//On met aussi l'icone
-			var icon = '';
-			if($address.find('.qwik-gmaps-address-icon').length > 0){
-				icon = $address.find('.qwik-gmaps-address-icon').attr('src');
-			}
-			$address.data('icon', icon);
+			//$address.data('address', address);
+
 			
 			//On ajoute l'addresse à la carte gmaps
-			addToGmap($gmapContainer, $address);
+			addAddressToGmap($gmapContainer, $address, address);
 		});
 	});
 }
@@ -65,60 +73,62 @@ $('.qwik-gmaps-address').on('mouseenter',function(){
 	$this.removeClass('qwik-gmaps-address-over');
 });
 
+function addLocationToGMap($gmapContainer, $address, myLatLng){
+    gmap = $gmapContainer.data('gmap');
+    //instanciation si premier "pin"
+    if(gmap == null){
+        gmap = getMap($gmapContainer.get(0), myLatLng);
+        $gmapContainer.data('gmap', gmap);
+        $gmapContainer.data('bounds', new google.maps.LatLngBounds());
 
-//Ajout de l'adresse dans la map. Center permet de savoir si on centre la carte sur l'adresse donn�e
-function addToGmap($gmapContainer, $address){
+        //Max zoom à 14 (TODO: à mettre dans la config) + tester avec plusieurs adresses
+        var listener = google.maps.event.addListener(gmap, "idle", function() {
+            if (gmap.getZoom() > 14){
+                gmap.setZoom(14);
+            }
+            google.maps.event.removeListener(listener);
+        });
+    }
+    //Nouveau marker
+    var marker = new google.maps.Marker({
+        map: gmap,
+        icon: $address.data('icon'),
+        position: myLatLng,
+        html : '<div class="qwik-gmaps-address-window">' + $address.html() + '</div>'
+    });
+
+    //Si c'est centré on met le marker, sinon on attend le "onclick"
+    var infoWindow = new google.maps.InfoWindow({
+        content: marker.html
+    });
+
+    $address.data('marker', marker);
+    $address.data('infoWindow', infoWindow);
+    $address.data('map', gmap);
+
+    google.maps.event.addListener(marker, "mouseover", function () {
+        $address.addClass('qwik-gmaps-address-over');
+        infoWindow.open(gmap, marker);
+    });
+    google.maps.event.addListener(marker, "mouseout", function () {
+        $address.removeClass('qwik-gmaps-address-over');
+        infoWindow.close();
+    });
+    $gmapContainer.data('bounds').extend(myLatLng);
+
+    //Hop, on fait en sorte que tout le monde rentre
+    $gmapContainer.data('gmap').fitBounds($gmapContainer.data('bounds'));
+}
+
+//Ajout de l'adresse dans la map. Center permet de savoir si on centre la carte sur l'adresse donnée
+function addAddressToGmap($gmapContainer, $address, address){
 	var geocoder = new google.maps.Geocoder(); 
 
 	//On trouve l'adresse, grace à google...
-	geocoder.geocode( { 'address': $address.data('address')}, function(results, status) {
+	geocoder.geocode( { 'address': address}, function(results, status) {
 		//Si on a trouvé une adresse
 		if (status == google.maps.GeocoderStatus.OK) {
-			var myLatLng = results[0].geometry.location;
-			gmap = $gmapContainer.data('gmap');
-			if(gmap == null){
-				gmap = getMap($gmapContainer.get(0), myLatLng);
-				$gmapContainer.data('gmap', gmap);
-				$gmapContainer.data('bounds', new google.maps.LatLngBounds());
-
-				//Max zoom à 14 (TODO: à mettre dans la config) + tester avec plusieurs adresses
-				var listener = google.maps.event.addListener(gmap, "idle", function() {
-					if (gmap.getZoom() > 14){
-						gmap.setZoom(14); 
-					}
-					google.maps.event.removeListener(listener); 
-				});
-			}
-			//Nouveau marker
-			var marker = new google.maps.Marker({
-				map: gmap,
-				icon: $address.data('icon'),
-				position: myLatLng,
-				html : '<div class="qwik-gmaps-address-window">' + $address.html() + '</div>'
-			});
-
-			//Si c'est centré on met le marker, sinon on attend le "onclick"
-			var infoWindow = new google.maps.InfoWindow({
-			    content: marker.html
-			});
-
-			$address.data('marker', marker);
-			$address.data('infoWindow', infoWindow);
-			$address.data('map', gmap);
-
-			google.maps.event.addListener(marker, "mouseover", function () {
-				$address.addClass('qwik-gmaps-address-over');
-				infoWindow.open(gmap, marker);
-	        });
-			google.maps.event.addListener(marker, "mouseout", function () {
-				$address.removeClass('qwik-gmaps-address-over');
-				infoWindow.close();
-	        });
-			$gmapContainer.data('bounds').extend(myLatLng);
-
-			//Hop, on fait en sorte que tout le monde rentre
-			$gmapContainer.data('gmap').fitBounds($gmapContainer.data('bounds'));
-
+            addLocationToGMap($gmapContainer, $address, results[0].geometry.location);
 		}
 	});
 }

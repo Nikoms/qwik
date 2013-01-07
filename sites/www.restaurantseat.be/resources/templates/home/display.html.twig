@@ -5,7 +5,7 @@
 {% block head %}
 	 <!-- Bootstrap -->
 	<link href="{{ app.getBaseUrl() }}qwik/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-	
+
     <!-- Site -->
     <link rel="stylesheet" href="{{ app.getBaseUrl() }}q/templates/style.css" type="text/css" media="screen, projection">
 
@@ -77,6 +77,11 @@
         .container{
             width:640px;
         }
+
+        .seat-home-phone{
+            font-size: 17px;
+            font-weight: bold;
+        }
     </style>
 
     <!--[if lte IE 8]>
@@ -87,6 +92,7 @@
             filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0ffffff,endColorstr=#C0ffffff);
             zoom: 1;
         }
+
     </style>
     <![endif]-->
 
@@ -116,7 +122,7 @@
             <div class="address">
                 Centre commercial "La Mazerine"<br />
                 Avenue Albert Ier – 1332 Genval<br />
-                02/653.10.33
+                <span class="seat-home-phone">02/653.10.33</span>
             </div>
 
         </div>

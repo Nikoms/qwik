@@ -22,7 +22,7 @@ take:
   title: Take Away
   zones:
     zone1:
-      download:
+      intro:
         module: file
         config:
           file: upload/takeAway.html
@@ -41,9 +41,10 @@ traiteur:
   title: Traiteur
   zones:
     zone1:
-     - module: html
-       config:
-         content: il nous manque 1 prix, on te l’envoie rapidement
+      download:
+        module: file
+        config:
+          file: upload/traiteur.html
 gallery:
   template: basic
   title: Galerie
@@ -51,12 +52,12 @@ gallery:
     zone1:
      - module: gallery
        config:
-         perLine: 6
+         perLine: 4
          position: center
          path: images/gallery
          thumbnail:
-           width: 120
-           height: 80
+           width: 200
+           height: 150
            quality: 85
 contact:
   template: basic
@@ -75,10 +76,6 @@ contact:
             width: 100%
             height: 400px
           addresses:
-            - street: Avenue Albert 1er
-              title: Centre commercial "La Mazerine"
-              number: 2-28
-              zip: 1310
-              city: Rixensart
-              country: Belgique
-
+            - title: Centre commercial "La Mazerine"<br />Avenue Albert Ier – 1332 Genval
+              latitude: "50.727262"
+              longitude: "4.487579"

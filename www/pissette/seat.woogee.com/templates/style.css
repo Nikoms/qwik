@@ -87,3 +87,11 @@ p.qwik-restaurant-level1{
 li.qwik-restaurant-plat {
     border-bottom:1px dotted #55544B;
 }
+
+p.seat-petit-dej{
+    font-size:14px;
+    text-transform:none;
+    font-weight: bold;
+    line-height:inherit;
+    color:#55544B;
+}

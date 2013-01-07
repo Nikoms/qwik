@@ -7,8 +7,9 @@
 		<li class="qwik-restaurant-plat">
             <p class="qwik-restaurant-text">
                 <span class="qwik-restaurant-title qwik-restaurant-background">
-                    {{ plat.title| translate }}
-                    {% if plat.description is defined %}<br /> <span class="qwik-restaurant-description">{{ plat.description | translate }}</span>{% endif %}
+                    {% if plat.title is defined %}{{ plat.title| translate }}{% endif %}
+                    {% if (plat.title is defined and plat.description is defined) %}<br />{% endif %}
+                    {% if plat.description is defined %}<span class="qwik-restaurant-description">{{ plat.description | translate }}</span>{% endif %}
                 </span>
 
             </p>
@@ -23,7 +24,8 @@
 	<ul class="qwik-restaurant-menu">
 	{% for m in children.menu %}
 		<li>
-		 	<p class="qwik-restaurant-level qwik-restaurant-level{{ level }}">{{ m.title | translate }}</p>
+		 	<p class="qwik-restaurant-level qwik-restaurant-level{{ level }}{% if m.class is defined %} {{ m.class }}{% endif %}">{{ m.title | translate }}</p>
+            <p class="qwik-restaurant-level-description">{% if m.description is defined %} {{ m.description }}{% endif %}</p>
 		    {% include module.getName() ~ "/views/tree.html.twig" with {'children' : m.children, 'level' : level}%}
 	    </li>
 	{% endfor %}
