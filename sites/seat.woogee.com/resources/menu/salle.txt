@@ -1,4 +1,4 @@
-
+﻿
 module: restaurant
 config:
   money : €
@@ -77,7 +77,7 @@ config:
         
         
    - title: Les Tartines
-     description: (les tartines sont accompagnées d’une salade de saison)
+     description: Les tartines sont accompagnées d’une salade de saison
      children:
       - title: Bœuf & Basilic
         price: 7.80
@@ -100,7 +100,7 @@ config:
 
 
    - title: Les Burgers
-     description: (les burgers sont accompagnés d’une salade de saison et de chips artisanales)
+     description: Les burgers sont accompagnés d’une salade de saison et de chips artisanales
      children:
       - title: Chavignol
         price: 9.80
