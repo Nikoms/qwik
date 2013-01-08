@@ -1,4 +1,4 @@
-﻿
+
 module: restaurant
 config:
   money : €

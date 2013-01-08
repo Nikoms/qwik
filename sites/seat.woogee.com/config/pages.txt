@@ -16,7 +16,7 @@ menu:
   title: Menu
   zones:
     zone1:
-      intro: menu/salle.txt
+      intro: menu/salle2.txt
 take:
   template: basic
   title: Take Away
