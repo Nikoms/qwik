@@ -1,7 +1,7 @@
 <ul class="qwik-menu">
 {% for menuPage in page.getSite().pages %}
 	{% if menuPage.isHidden() == false %}
-		<li><a href="{{ app.getBaseUrl() }}{{ locale() }}/{{ menuPage.url }}">{{ menuPage.title }}</a></li>
+		<li><a href="{{ app.getBaseUrl() }}{{ locale() }}/{{ menuPage.url }}"{% if page.url == menuPage.url %} class="selected"{% endif %}>{{ menuPage.title }}</a></li>
 	{% endif %}
 {% endfor %}
 

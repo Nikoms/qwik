@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block body %}
-
+    <img src="{{ app.getBaseUrl() }}q/templates/images/background1.jpg" class="superbg" />
 	{% include "templates/top.html.twig" %}
 
 	<div class="container main">
@@ -22,5 +22,6 @@
 	</div>
 
 	{% include "templates/bottom.html.twig" %}
+    <script src="{{ app.getBaseUrl() }}q/templates/background.js" type="text/javascript"></script>
 
 {% endblock %}

@@ -1,18 +1,6 @@
-    <div id="header">
-        <div class="container">
-            <img src="{{ app.getBaseUrl }}q/templates/images/logo_small.png" />
+    <div class="container">
+        <div class="row">
+            <div class="span4"><a href="/"><img src="{{ app.getBaseUrl }}q/templates/images/logo_small.png" /></a></div>
+            <div class="span7" id="menu">{% include "_menu.html.twig" %}</div>
         </div>
     </div>
-
-	<div id="menu">
-	    <div class="container">
-		    <div class="row">
-		        <div class="span10">{% include "_menu.html.twig" %}</div>
-		        <div class="span2 pull-right">
-		            <div class="changeLanguage">
-		                {% include "_languages.html.twig" %}
-		            </div>
-		        </div>
-		    </div>
-	    </div>
-	</div>

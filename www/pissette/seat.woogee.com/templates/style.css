@@ -13,19 +13,20 @@ span.qwik-restaurant-background{
 body{
     color:#55544B;
 	font-family: Calibri, "Helvetica Neue", Arial, Helvetica,sans-serif;
-    background-color:#E0E670;
+    /*background-color:#E0E670;
 }
 
 #header{
     /*background-color:#7B7B7B;*/
-    background-color: #FFFFFF;
+    /*background-color: #FFFFFF;*/
 }
 
 #menu{
     background-color:#44A729;
-    padding: 10px 0px;
-    margin-bottom:20px;
+    margin-top: 50px;
     border-bottom: 5px solid #91BD10;
+    padding:10px 0px 10px 20px;
+    border-radius: 3px;
 }
 
 #menu ul {
@@ -37,7 +38,7 @@ body{
     /*color: #DAFA03;*/
     color:#FFFFFF;
     display: inline;
-    margin-right: 1px;
+    /*margin-right: 1px;*/
     padding-top:3px;
 }
 #menu li a {
@@ -49,14 +50,9 @@ body{
 #menu li a:hover {
     text-decoration:underline;
 }
-#menu .changeLanguage{
-    text-align:right;
-}
-#menu .changeLanguage li a {
-    color: #FFFFFF;
-    padding: 4px;
-    text-decoration: none;
-    text-transform: uppercase;
+
+#menu .selected{
+    text-decoration:underline;
 }
 
 a{
@@ -74,14 +70,19 @@ a:hover{
     margin-top:20px;
     border: 5px solid #91BD10;
     min-height: 500px;
+    border-radius: 3px;
 }
 
 .qwik-restaurant-level{
     color:#44A729;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
 p.qwik-restaurant-level1{
     border-bottom:#44A729 1px solid;
+    font-size: 30px;
+}
+p.qwik-restaurant-level2{
+    font-size: 22px;
 }
 
 li.qwik-restaurant-plat {
@@ -94,4 +95,16 @@ p.seat-petit-dej{
     font-weight: bold;
     line-height:inherit;
     color:#55544B;
+}
+
+img.superbg {
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+.title{
+    font-size: 30px;
+    color:#44A729;
+    font-weight: normal;
 }

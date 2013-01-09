@@ -5,7 +5,7 @@ config:
   format:
     price: %.2f
   menu:
-   - title: LES SOUPES ET TARTES SALEES
+   - title: Les Soupes & Tartes salées
      children:
       - title: La soupe du jour
         price: 350ml : 2.90  – 500ml : 4.00
@@ -14,7 +14,7 @@ config:
       - title: Accompagnement pain
         price: 0.50
 
-   - title: LES SANDWICHES
+   - title: Les Sandwiches
      description: Baguette blanche ou baguette multi-céréales au choix. Nos pains sont 100% naturels, sans additifs ni conservateurs.
      children:
       - title: Paris
@@ -66,7 +66,7 @@ config:
         price: 3.80
         description: Mozzarella, dés de tomates, tomates semi-séchées, crème balsamique, huile d’olive au basilic.
 
-   - title: LES SALADES
+   - title: Les Salades
      children:
       - title: Scampis Thaï
         price: 7.00
@@ -93,7 +93,7 @@ config:
         price: 6.50
         description: Mesclun, lentilles, quinoa, carottes, tomates fraiches, concombres, mange-tout, oignons frits, vinaigrette miel-moutarde.
 
-   - title: LES SALADES DE PATES
+   - title: Les Salades de Pates
      children:
       - title: Pâtes Tomates & Chèvre
         price: 6.50
@@ -111,7 +111,7 @@ config:
 
 
 
-   - title: DESSERTS MAISON & VIENNOISERIES
+   - title: Desserts Maison & Viennoiseries
      description: Chaque jour, des desserts maison différents à emporter ! Demandez  les disponibilités parmi les desserts ci-dessous
      children:
       - title: Moelleux au chocolat
@@ -127,7 +127,7 @@ config:
       - title: Pain au chocolat – Croissant
         price: 1.00
 
-   - title: BOISSONS FROIDES
+   - title: Boissons Froides
      children:
       - title: Eau plate - Eau pétillante (50cl)
         price: 1.50
@@ -155,7 +155,7 @@ config:
         price: 3.00
 
 
-   - title: BOISSONS CHAUDES
+   - title: Boissons Chaudes
      children:
       - title: Espresso
         price: 1.80

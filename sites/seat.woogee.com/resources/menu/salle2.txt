@@ -15,7 +15,7 @@ config:
         description: Une boisson chaude, une viennoiserie au choix, jus d’oranges pressées, pain, beurre & confiture.
         price: 7.00
       - title: Le petit déjeuner « Bien Etre »
-        description: Une boisson chaude ou un jus d’oranges pressées, salade de fruits frais, pain complet, beurre & confiture.
+        description: Une boisson chaude, salade de fruits frais, pain complet, beurre & confiture.
         price: 8.00
       - title: Le petit-déjeuner « au choix »
         class: seat-petit-dej
@@ -89,7 +89,7 @@ config:
         price: 8.30
         description: Scampis, guacamole, cheddar, graines germées.
       - title: Légumes grillés
-        price: 6.80
+        price: 7.00
         description: Aubergines & courgettes grillées, tomates fraîches, pignons de pin, roquette, tapenade de tomates, parmesan.
       - title: Brie
         price: 6.80
@@ -164,7 +164,7 @@ config:
       - title: La tarte Tatin et glace vanille
         price: 6.50
       - title: La Dame Blanche au véritable chocolat chaud
-        price: 5.00
+        price: 5.50
       - title: Le café bruxellois
         price: 5.00
       - title: Le café liégeois
