@@ -26,6 +26,8 @@ body{
     margin-top: 50px;
     border-bottom: 5px solid #91BD10;
     padding:10px 0px 10px 20px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
     border-radius: 3px;
 }
 
@@ -70,6 +72,8 @@ a:hover{
     margin-top:20px;
     border: 5px solid #91BD10;
     min-height: 500px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
     border-radius: 3px;
 }
 
