@@ -1,15 +1,24 @@
 <?php
 namespace Qwik\Kernel\App;
 
+/**
+ * Autoloader des classes
+ */
 class AutoLoader {
 
-	private static $namespaces = array(
+    /**
+     * @var array Tableaux des namespaces gérés, avec leur chemin vers le bon dossier
+     */
+    private static $namespaces = array(
 		'Symfony\Component\Yaml' 				=> 'kernel/vendor/Yaml',
 		'Qwik\Kernel'							=> 'kernel',
 		'Imagine' 								=> 'kernel/vendor/Imagine/lib/Imagine',
 	);
 
-	private static function getDebugBackTraceLight(){
+    /**
+     * @return array Debug backtrace light pour pas exploser la mémoire
+     */
+    private static function getDebugBackTraceLight(){
 		$debugs = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 		foreach ($debugs as &$debug) {
 			unset($debug['object']);
@@ -23,37 +32,54 @@ class AutoLoader {
 	}
 	
 	/**
+     * Loading de la classe
 	 * @static
-	 * @param $className
+	 * @param string $className
 	 */
-	public static function autoload($className) {
+	public static function autoLoad($className) {
 
+
+        //Exception: si on appelle du twig ou swift, alors on by pass car ils ont leur propre auto loader
+        if(stripos($className, 'Twig_') === 0 || stripos($className, 'Swift_') === 0){
+            return true;
+        }
+
+        $className = (string) $className;
+        //Récupération du path du fichier de la classe
 		$filePath = self::getFilePath($className);
-		$path = self::getRootDir() . $filePath . '.php';
-		
-		if($filePath === $className){
+
+        //Si le path n'est pas géré, on recoit false, donc on log
+		if($filePath === false){
 			self::errorDebug($className);
+            return false;
 		}
-		
+
+        $path = self::getRootDir() . $filePath . '.php';
+
+        //Si le fichier existe on l'include, sinon on log l'erreur
 		if (file_exists($path)) {
 			include($path);
+            return true;
 		} else {
 			self::errorDebug($className, $path);
+            return false;
 		}
 	}
-	
-	private static function errorDebug($className, $path = ''){
-		
+
+    /**
+     * Log d'un message d'erreur
+     * @param $className
+     * @param string $path
+     */
+    private static function errorDebug($className, $path = ''){
+
+        //TODO: logger quand on ne trouve pas de classe
+
 		//Combien on a d'autoloader? Pcq si y'en a d'autres, peut-être que eux savent comment la classe se load?!
-		$nbAutoloaders = count(spl_autoload_functions());
-		//Si on appelle du twig ou swift, alors on by pass
-		if(stripos($className, 'Twig_') === 0 || stripos($className, 'Swift_') === 0){
-			return;
-		}
+		//$nbAutoloaders = count(spl_autoload_functions());
 		
 		//Si on est ici, c'est qu'on avait qu'un seul autoloader et qu'on a rien trouvé...
-
-		echo '<hr/><h1>AutoLoader</h1>
+		/*echo '<hr/><h1>AutoLoader</h1>
 		<ul>
 			<li>Class name: ' . $className . '</li>
 			<li>';
@@ -71,10 +97,12 @@ class AutoLoader {
 		$backtrace = self::getDebugBackTraceLight();		
 		echo 'Called by file ' . $backtrace[2]['file'] . ', line ' . $backtrace[2]['line'] . '<hr/>';
 		echo '<h2>Backtrace</h2><pre>' . print_r($backtrace, true) . '</pre>';		
-		exit();
+		exit();*/
+
 	}
 
 	/**
+     * Récupération du path présumé du fichier de la classe
 	 * @static
 	 * @param $className
 	 * @return bool|string
@@ -88,20 +116,26 @@ class AutoLoader {
                 return str_replace('\\', DIRECTORY_SEPARATOR ,substr_replace($className, $path, 0, strlen($nameSpace)));
             }
         }
-        return '';
-        //Ceci ne fonctionne pas pour Imagine
+        return false;
+        //Ceci ne fonctionne pas pour Imagine, sinon c'aurait été cool
 		//return strtr($className,self::$namespaces);
 	}
-	
-	private static function getRootDir(){
+
+    /**
+     * @return string Le "root" où se trouve les classes
+     */
+    private static function getRootDir(){
 		return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 	}
 
-	public static function register() {
-		spl_autoload_register(array(new AutoLoader(), 'autoload'));
+    /**
+     * Register de l'autoload
+     */
+    public static function register() {
+		spl_autoload_register(array(new AutoLoader(), 'autoLoad'));
 	}
 
 }
-
+//On registre l'autoload
 AutoLoader::register();
 

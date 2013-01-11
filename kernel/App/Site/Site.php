@@ -10,141 +10,177 @@ use Qwik\Kernel\App\Page\Page;
 
 use Qwik\Kernel\App\Language;
 
+/**
+ * Classe qui représente un site
+ */
 class Site {
 
-	private $config;
-	private $domain;
-	private $path;
-	private $www;
-	
-	public function __construct(){
+    /**
+     * @var array Tableau de config
+     */
+    private $config;
+    /**
+     * @var string domaine représenté
+     */
+    private $domain;
+    /**
+     * @var string Chemin vers le dossier non-atteignable du site. Là où l'on va retrouver la config, les templates twig, etc...
+     */
+    private $path;
+    /**
+     * @var string path du www, c'est-à-dire là où se trouve l'index.php
+     */
+    private $www;
+
+    /**
+     *
+     */
+    public function __construct(){
 	}
-	
-	
-	public function getConfig(){
+
+
+    /**
+     * @return array Tableau de la config
+     */
+    public function getConfig(){
 		if(is_null($this->config)){
 			$this->initConfig();
 		}
 		return $this->config;
 	}
-	
-	
-	public function getDomain(){
+
+    /**
+     * @return string
+     */
+    public function getDomain(){
 		return $this->domain;
 	}
-	public function setDomain($domain){
-		$this->domain = $domain;
-	}
-	public function getWww(){
-		return $this->www;
-	}
-	public function setWww($www){
-		$this->www = $www;
-	}
-    //Path utiliser pour rediriger vers getRealUploadPath (voir htaccess)
-    public function getVirtualUploadPath(){
-        return 'q/';
-    }
-    //Le dossier public pour le site
-    public function getRealUploadPath(){
-        return 'pissette/'. $this->getDomain();
-    }
-	
-	public function getPath(){
-		return $this->path;
-	}
-	public function setPath($path){
-		$this->path = $path;
+
+    /**
+     * @param $domain
+     */
+    public function setDomain($domain){
+		$this->domain = (string) $domain;
 	}
 
-    public function getConfigErrors(){
-        $config = $this->getConfig();
-        return isset($config['errors']) ? $config['errors'] : array();
+    /**
+     * @return string
+     */
+    public function getWww(){
+		return $this->www;
+	}
+
+    /**
+     * @param $www string
+     */
+    public function setWww($www){
+		$this->www = (string) $www;
+	}
+
+    /**
+     * @return string Chemin virtuel vers "getRealUploadPath". Ceci juste afin d'avoir un path plus beau qu'un path avec "denouveau" le nom de domaine
+     */
+    public function getVirtualUploadPath(){
+        //TODO: Donner la possibilité de mettre ceci dans la config
+        //q comme qwik!
+        return 'q/';
     }
-	
-	public function getConfigPages(){
-		$config = $this->getConfig();
-		return $config['pages'];
+
+    /**
+     * @return string Chemin où se trouve les fichiers publiques du site (upload, fichier css/js, etc...)
+     */
+    public function getRealUploadPath(){
+        //TODO: Donner la possibilité de mettre ceci dans la config
+        return 'pissette/'. $this->getDomain();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath(){
+		return $this->path;
 	}
-	
-	public function getDefaultLanguage(){
+
+    /**
+     * @param $path
+     */
+    public function setPath($path){
+		$this->path = (string) $path;
+	}
+
+    /**
+     * @return string Langue du site par défaut. Si rien n'est trouvé, on utilise le francais
+     */
+    public function getDefaultLanguage(){
 		$languages = $this->getLanguages();
-		return (count($languages) > 0) ? $languages[0] : false;
+		return (count($languages) > 0) ? $languages[0] : 'fr';
 	}
-	
-	public function getLanguages(){
+
+    /**
+     * @return array Tableau des langues disponibles sur le site
+     */
+    public function getLanguages(){
 		$config = $this->getConfig();
 		return isset($config['general']['languages']['available']) ? $config['general']['languages']['available'] : array();
 	}
+
+    /**
+     * @return string Récupère le titre du site dans la config du site. Vide si aucun titre n'a été trouvé
+     */
     public function getTitle(){
         $config = $this->getConfig();
         return isset($config['general']['title']) ? Language::getValue($config['general']['title']) : '';
     }
 
 
-	public function getFirstPage(){
-		return $this->getPage(key($this->getConfigPages()));
-	}
-
-	public function getPage($url){
-		$url = (string) $url;
-		
-		foreach($this->getConfigPages() as $name => $config){
-			if($name === $url){
-				return $this->getBuildedPage($name, $config);
-			}
-		}
-		return null;
-	}
-    public function getError(\Exception $exception, $uri){
-        $code = $exception->getCode();
-        $errors = $this->getConfigErrors();
-        //Si on trouve pas le code, on prend default
-        if(!isset($errors[$code])){
-            $code = 'default';
+    /**
+     * @return \Qwik\Kernel\App\Page\Page[] Les pages du sites
+     */
+    public function getPages(){
+        if(empty($this->pages)){
+            $pageManager = new \Qwik\Kernel\App\Page\PageManager();
+            $this->pages = $pageManager->findAll($this);
         }
-        if(isset($errors[$code])){
-            return $this->getBuildedPage('error_' . $code, $errors[$code]);
-        }
-        return null;
-    }
-	
-	public function getPages(){
-		$pages = array();
-		foreach($this->getConfigPages() as $name => $config){
-			$pages[] = $this->getBuildedPage($name, $config);
-		}
-		return $pages;
+		return $this->pages;
 	}
 
-	private function getBuildedPage($name, $config){
-		$page = new Page();
-		$page->setConfig($config);
-		$page->setSite($this);
-		$page->setUrl($name);
-		$page->setIsHidden(!empty($config['hidden']));
-		return $page;
-	}
-	
-	public function exists(){
-		$config = $this->getConfig();
-		return isset($config['general']);
+    /**
+     * @return bool Indique si le site existe. Il faut pour cela que le fichier "general" dans config existe
+     */
+    public function exists(){
+		return isset($this->getConfig()['general']);
 	}
 
+    /**
+     * @return bool Indique si le site est un alias d'un autre. Pour cela on vérifie juste si on a une redirection de prévue dans la config générale du site
+     */
     public function isAlias(){
         return $this->getRedirect() !== '';
     }
+
+    /**
+     * @return string Renvoi quel est l'alias (redirection) du site. Renvoi vide si le site n'est pas un alias
+     */
     public function getRedirect(){
         $config = $this->getConfig();
         return isset($config['general']['redirect']) ? $config['general']['redirect'] : '';
     }
-	
-	private function initConfig(){
+
+    /**
+     * Initialise la config
+     * @return Site
+     */
+    private function initConfig(){
 		$this->config = \Qwik\Kernel\App\Config::getInstance()->getConfig($this->getPath().'/config');
+        return $this;
 	}
-	
-	
-	public function getGoogleAnalytics(){
+
+
+    /**
+     * @return string Renvoi quel est le code pour google analytics. Renvoi vide si aucun code n'est prévu
+     */
+    //TODO: devrait être ailleurs (utiliser le pattern Decorator? :))
+    public function getGoogleAnalytics(){
 		$config = $this->getConfig();
 		return (isset($config['general']['google']) && isset($config['general']['google']['analytics'])) ? (string) $config['general']['google']['analytics'] : '';
 	}

@@ -5,7 +5,9 @@ use Qwik\Kernel\App\Module\Module;
 use Qwik\Kernel\App\Language;
 
 
-
+/**
+ * Module "File" qui permet des gérer l'affichage de fichier(s)
+ */
 class File extends Module{
 
     public function getTemplateVars(){
@@ -98,6 +100,7 @@ class File extends Module{
                 return nl2br(file_get_contents($file));
                 break;
             case 'php':
+                //TODO: faire ca dans une fonction anonyme comme ca on a pas accès à "$this"
                 ob_start();
                 include $file;
                 return ob_get_clean();

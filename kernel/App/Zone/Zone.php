@@ -2,84 +2,116 @@
 
 namespace Qwik\Kernel\App\Zone;
 
-use Qwik\Kernel\App\Module;
+use Qwik\Kernel\App\Module\Module;
+use Qwik\Kernel\App\Page\Page;
 
+/**
+ * Une zone dans une page qui contient des modules
+ */
 class Zone {
 
-	private $config;
-	private $page;
-	private $modules;
-	private $name;
-	
-	public function __construct(){
+    /**
+     * @var array Tableau de la config de la zone
+     */
+    private $config;
+    /**
+     * @var Page Page à laquelle appartient la zone
+     */
+    private $page;
+    /**
+     * @var Module[] Tableau de module se retrouvant dans la zone
+     */
+    private $modules;
+
+    /**
+     * @var string Nom de la zone
+     */
+    private $name;
+
+    /**
+     *
+     */
+    public function __construct(){
 		$this->config = array();
 	}
-	
-	public function setConfig($config){
+
+    /**
+     * @param array $config
+     */
+    public function setConfig(array $config){
 		$this->config = $config;
 	}
-	
-	public function getConfig(){
+
+    /**
+     * @return array
+     */
+    public function getConfig(){
 		return $this->config;
 	}
-	public function setPage($page){
+
+    /**
+     * @param \Qwik\Kernel\App\Page\Page $page
+     */
+    public function setPage(Page $page){
 		$this->page = $page;
 	}
-	
-	public function getPage(){
+
+    /**
+     * @return \Qwik\Kernel\App\Page\Page
+     */
+    public function getPage(){
 		return $this->page;
 	}
-	
 
-	public function setName($name){
-		$this->name = $name;
+    /**
+     * @param $name string
+     */
+    public function setName($name){
+		$this->name = (string) $name;
 	}
-	public function getName(){
+
+    /**
+     * @return string
+     */
+    public function getName(){
 		return $this->name;
 	}
-	
-	
-	public function getUrl(){
-		$config = $this->getConfig();
-		return $config['url'];
-	}
 
-	
-	public function getModules(){
+    /**
+     * @return array|\Qwik\Kernel\App\Module\Module[] Tableau des modules
+     */
+    public function getModules(){
 		if(is_null($this->modules)){
-			$configs = $this->getConfig();
-		
-			$this->modules = array();
-			foreach($configs as $key => $config){
-				try{
-					$this->modules[] = $this->getBuildedModule($key, $config);
-				}catch(\Exception $ex){
-					continue;
-				}
-			}
+            $moduleManager = new \Qwik\Kernel\App\Module\ModuleManager();
+            $this->modules = $moduleManager->getByZone($this);
 		}
-		
 		return $this->modules;
 	}
-	
-	private function getBuildedModule($key, $config){
-        return \Qwik\Kernel\App\Module\Module::get($config, $this, $this->getName() . '_' . $key);
-	}
-	
-	public function __toString(){
+
+    /**
+     * @return string Concaténation de tous les modules
+     */
+    public function __toString(){
 		return implode('', $this->getModules());
 	}
-	
-	//Renvoit les fichiers statiques (js,css) nécessaire pour le bon affichage de la page. On demande simplement aux de la zone modules de la zone de bien vouloir donner leur fichiers et on fait le récap :)
-	public function getFiles(){
+
+    /**
+     * Renvoi les fichiers statiques (js,css) nécessaires pour le bon affichage de la page.
+     * On demande simplement aux modules de la zone de bien vouloir donner leur fichiers et on fait le récap :)
+     * @return array
+     */
+    public function getFiles(){
 		$files = array();
 		$files['javascript'] = array();
 		$files['css'] = array();
+
+        //Modules, donnéez moi vos fichiers statiques
 		foreach ($this->getModules() as $module){
 			$files['javascript'] = array_merge($files['javascript'], $module->getConfigObject()->getFiles('javascript'));
 			$files['css'] = array_merge($files['css'], $module->getConfigObject()->getFiles('css'));
 		}
-		
+
+        //On fait un array_unique, car si plusieurs modules utilisent le meme js/css, on ne le prend qu'une fois
 		$files['javascript'] = array_unique($files['javascript']);
 		$files['css'] = array_unique($files['css']);
 		return $files;

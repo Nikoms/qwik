@@ -13,7 +13,7 @@ class Form extends Module{
 
 
     //Pour l'ajout de route pour le post du formulaire
-    public static function injectInApp($appManager, $site){
+    public static function injectInApp(\Qwik\Kernel\App\AppManager $appManager, \Qwik\Kernel\App\Site\Site $site){
 
         $appManager->getRouterManager()->post('form', $appManager->getBaseUrl() . Form::PATH,
             function($_locale) use ($site, $appManager) {

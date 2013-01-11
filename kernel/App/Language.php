@@ -5,45 +5,56 @@ namespace Qwik\Kernel\App;
 use Symfony\Component\Yaml\Yaml;
 
 class Language {
-	
-	private static $current;
-	private static $languages;
-	
-	public static function init(array $languages){
+    /**
+     * @var string Langue en cours
+     */
+    private static $current;
+    /**
+     * @var array Liste des langues dispos
+     */
+    private static $languages;
+
+    /**
+     * Initialisation de la langue en cours en fonction d'un tableau de langue
+     * @param array $languages Langues dispos
+     */
+    public static function init(array $languages){
 		self::$languages = $languages;
 		self::$current = self::getPreferedLanguage();
 	}
-	
-	public static function get(){
+
+    /**
+     * @return string Langue en cours
+     */
+    public static function get(){
 		return self::$current;
 	}
-	
-	public static function getDefault(){
+
+    /**
+     * @return string Langue par défaut, c'est à dire la première de la liste
+     */
+    public static function getDefault(){
 		return self::$languages[0];
 	}
-	
-	public static function changeIfPossible($newLanguage){
+
+    /**
+     * @param string $newLanguage Change la langue en cours si c'est possible
+     */
+    public static function changeIfPossible($newLanguage){
+        $newLanguage = (string) $newLanguage;
 		if(in_array($newLanguage,self::$languages)){
 			self::$current = $newLanguage;
 		}
 	}
-	
-	/**
-	 * 
-	 * Renvoit la valeur selon la langue (il faut que la valeur soit soit string ou array avec fr,nl,en)
-	 * @author ndeboose
-	 * @version 
-	 * @project
-	 * @since 8 nov. 2012
-	 * @param mixed $value 
-	 * @return
-	 * @uses @ref 
-	 * @keyword 
-	 * @db
-	 */
-	public static function getValue($value){
 
-		//Si c'est pas un array, alors on renvoit directement la valeur car on a pas de choix � faire
+    /**
+     * Renvoit la valeur selon la langue (il faut que la valeur soit soit string ou array avec fr,nl,en,etc...)
+     * @param string|array $value
+     * @return mixed
+     */
+    public static function getValue($value){
+
+		//Si c'est pas un array, alors on renvoit directement la valeur car on a pas de choix à faire
 		if(!is_array($value)){
 			return $value;
 		}
@@ -52,26 +63,26 @@ class Language {
 			return $value[self::get()];
 		}
 		
-		//Si on est ici, c'est qu'on a pas trouvé dans la langue du mec... Snif!
+		//Si on est ici, c'est qu'on a pas trouvé dans la langue du visiteur... Snif!
 		
 		//On check si on a une valeur avec la langue principale...
 		if(isset($value[self::getDefault()])){
 			return $value[self::getDefault()];
 		}
 		
-		//Si on est ici, on a pas trouv� ni avec la langue du user, ni la langue par d�faut...
+		//Si on est ici, on a pas trouv& ni avec la langue du visiteur, ni la langue par défaut du site...
 		
-		//On se r�signe � envoyer la premi�re valeur de $value, ce sera donc une langue compl�tement inconnue
+		//On se résigne à envoyer la première valeur de $value, ce sera donc une langue complêtement inconnue
 		return array_shift($value);
 		
 	}
-	/*
-	 determine which language out of an available set the user prefers most
-	
-	$available_languages        array with language-tag-strings (must be lowercase) that are available
-	$http_accept_language    a HTTP_ACCEPT_LANGUAGE string (read from $_SERVER['HTTP_ACCEPT_LANGUAGE'] if left out)
-	*/
-	public static function getPreferedLanguage(/*$acceptedLanguages = "auto"*/) {
+
+    /**
+     * Determine which language out of an available set the user prefers most
+     * @author http://php.net/manual/en/function.http-negotiate-language.php
+     * @return string
+     */
+    public static function getPreferedLanguage(/*$acceptedLanguages = "auto"*/) {
 		// if $http_accept_language was left out, read it from the HTTP-Header
 		//if ($acceptedLanguages == "auto")
 		$acceptedLanguages = $_SERVER['HTTP_ACCEPT_LANGUAGE'];

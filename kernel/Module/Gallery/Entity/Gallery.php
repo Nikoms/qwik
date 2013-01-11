@@ -23,7 +23,7 @@ class Gallery extends Module{
 	}
 
 	//Pour l'ajout de route & autres (extend de twig?) pour les thumbnails
-	public static function injectInApp($appManager, $site){
+    public static function injectInApp(\Qwik\Kernel\App\AppManager $appManager, \Qwik\Kernel\App\Site\Site $site){
 		
 		//Ajout d'un helper pour le "titre" d'une image
 		\Qwik\Kernel\App\TemplateProxy::getInstance()->getTemplateEngine()->addFilter('toTitle', new \Twig_Filter_Function('Qwik\Kernel\Module\Gallery\Entity\Gallery::toTitle'));

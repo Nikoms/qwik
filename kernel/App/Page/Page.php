@@ -4,100 +4,183 @@ namespace Qwik\Kernel\App\Page;
 
 use Qwik\Kernel\App\Zone\Zone;
 use Qwik\Kernel\App\Language;
+use Qwik\Kernel\App\Site\Site;
 
 
+/**
+ * Classe représentant une page d'un site
+ */
 class Page {
 
-	private $config;
-	private $site;
-	private $url;
-	private $isHidden;
-    private $cachedFiles;
+    /**
+     * Configuration de la page
+     * @var array
+     */
+    private $config;
+    /**
+     * Site de la page
+     * @var Site
+     */
+    private $site;
+    /**
+     * Url de la page
+     * @var string
+     */
+    private $url;
+    /**
+     * Indique si la page est cachée ou non. Attention, cachée ne veut pas dire désactivée. La page sera encore accessible.
+     * @var bool
+     */
+    private $isHidden;
+    /**
+     * fichiers statiques (css, javascript) nécessaires au bon fonctionnement de la page (récupération dans les modules)
+     * @var array
+     */
+    private $staticFiles;
+
+
+    /**
+     * Tableau des zones de la page
+     * @var Zone[]
+     */
+    private $zones;
 	
 	public function __construct(){
 		$this->config = array();
-        $this->cachedFiles = array();
+        $this->staticFiles = array();
 	}
-	
-	public function setConfig($config){
+
+    /**
+     * @param array $config
+     */
+    public function setConfig(array $config){
 		$this->config = $config;
 	}
-	
-	public function getConfig(){
+
+    /**
+     * @return array
+     */
+    public function getConfig(){
 		return $this->config;
 	}
-	
-	public function setIsHidden($hidden){
-		$this->isHidden = $hidden;
+	/**
+     * @param $isHidden bool
+     */
+    public function setIsHidden($isHidden){
+		$this->isHidden = (bool) $isHidden;
 	}
-	public function isHidden(){
+
+    /**
+     * @return bool
+     */
+    public function isHidden(){
 		return $this->isHidden;
 	}
-	
-	public function setSite($site){
+
+    /**
+     * @param \Qwik\Kernel\App\Site\Site $site
+     */
+    public function setSite(Site $site){
 		$this->site = $site;
 	}
-	
-	public function getSite(){
+
+    /**
+     * @return \Qwik\Kernel\App\Site\Site
+     */
+    public function getSite(){
 		return $this->site;
 	}
-	
-	public function getUrl(){
+
+    /**
+     * @return string
+     */
+    public function getUrl(){
 		return $this->url;
 	}
-	public function setUrl($url){
-		$this->url = $url;
+
+    /**
+     * @param $url string
+     */
+    public function setUrl($url){
+		$this->url = trim((string) $url);
 	}
-	
-	public function getTemplate(){
-		$config = $this->getConfig();
-		return $config['template'];
+
+    /**
+     * Retourne le nom du template de la page.
+     * @return mixed
+     * @throws \Exception Si pas de template
+     */
+    public function getTemplate(){
+        if(empty($this->getConfig()['template'])){
+            throw new \Exception('Template non défini');
+        }
+		return $this->getConfig()['template'];
 	}
-	
-	public function getTitle(){
+
+    /**
+     * Renvoi le titre de la page
+     * @return string
+     */
+    public function getTitle(){
 		$config = $this->getConfig();
 		return isset($config['title']) ? Language::getValue($config['title']) : '';
 	}
 
-	
-	public function getZone($zoneName){
-	
-		//Get la config de la page
-		$config = $this->getConfig();
-		
-		//Si on a pas de zone avec ce nom, on fait une zone avec une config vide
-		return $this->getBuildedZone($zoneName, isset($config['zones'][$zoneName])? $config['zones'][$zoneName] : array());
+    /**
+     * Retourne la zone en fonction de son nom
+     * Cette méthode, en plus de récupérer la zone, la rajoute dans le tableau des zones de la page. Pourquoi? Car on appelle jamais getZones, sauf à la fin, et pendant le chargement de la page, on appelle individuellement chaque zone. Pas besoin de les recalculer donc :)
+     * @param string $zoneName
+     * @return \Qwik\Kernel\App\Zone\Zone
+     * @throws \Exception Si la zone n'a pas été trouvée
+     */
+    public function getZone($zoneName){
+
+        //Récup des zones
+        $zones = $this->getZones();
+
+        //Pas de zone trouvée
+        if(!isset($zones[$zoneName])){
+            throw new \Exception('Impossible de trouver la zone "'.$zoneName.'"');
+        }
+
+        return $zones[$zoneName];
 	}
+
+
+    /**
+     * @return \Qwik\Kernel\App\Zone\Zone[]
+     */
+    public function getZones(){
+
+        if(is_null($this->zones)){
+            $zoneManager = new \Qwik\Kernel\App\Zone\ZoneManager();
+            $this->zones = $zoneManager->getByPage($this);
+        }
+
+        return $this->zones;
+    }
 
     /**
      * @param $type (css|javascript)
      * @return array
      */
     public function getFiles($type){
-        $this->cachedFiles = array();
-        $this->cachedFiles['javascript'] = array();
-        $this->cachedFiles['css'] = array();
-		$config = $this->getConfig();
-		if(!empty($config['zones'])){
-			foreach($config['zones'] as $zoneName => $zoneConfig){
-				$filesOfZone = $this->getBuildedZone($zoneName, $zoneConfig)->getFiles();
-                $this->cachedFiles['javascript'] = array_merge($this->cachedFiles['javascript'], $filesOfZone['javascript']);
-                $this->cachedFiles['css'] = array_merge($this->cachedFiles['css'], $filesOfZone['css']);
-			}
-            $this->cachedFiles['javascript'] = array_unique($this->cachedFiles['javascript']);
-            $this->cachedFiles['css'] = array_unique($this->cachedFiles['css']);
-		}
 
+        if(empty($this->staticFiles)){
+            $this->staticFiles = array();
+            $this->staticFiles['javascript'] = array();
+            $this->staticFiles['css'] = array();
+
+            foreach($this->getZones() as $zone){
+                $filesOfZone = $zone->getFiles();
+                $this->staticFiles['javascript'] = array_merge($this->staticFiles['javascript'], $filesOfZone['javascript']);
+                $this->staticFiles['css'] = array_merge($this->staticFiles['css'], $filesOfZone['css']);
+            }
+            $this->staticFiles['javascript'] = array_unique($this->staticFiles['javascript']);
+            $this->staticFiles['css'] = array_unique($this->staticFiles['css']);
+        }
 		
-		return isset($this->cachedFiles[$type]) ? $this->cachedFiles[$type] : array();
-	}
-
-	private function getBuildedZone($name, $config){
-		$zone = new Zone();
-		$zone->setPage($this);
-		$zone->setConfig($config);
-		$zone->setName($name);
-		return $zone;
+		return isset($this->staticFiles[$type]) ? $this->staticFiles[$type] : array();
 	}
 
     public function getKeywords(){

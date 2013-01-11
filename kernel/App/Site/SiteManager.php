@@ -6,8 +6,14 @@ use Qwik\Kernel\App\Config;
 
 
 class SiteManager {
-	
-	public function getByPath($wwwPath, $domain){
+
+    /**
+     * Renvoi le site trouvé en fonction du domaine
+     * @param $wwwPath string là où se trouve notre fichier index.php
+     * @param $domain
+     * @return Site
+     */
+    public function getByPath($wwwPath, $domain){
 		$site = new Site();
 		$site->setDomain($domain);
 		$site->setWww($wwwPath);
