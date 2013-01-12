@@ -420,7 +420,7 @@ book:
       contact:
         module: form
         config:
-          email: nikoms@gmail.com
+          email: info@bbsalve.be
           language: fr
           fields:
             name:
