@@ -81,10 +81,10 @@ config:
         price: 6.70
         description: Mesclun, poulet, œufs, tomates fraiches, croûtons, parmesan, vinaigrette césar.
       - title: Madras
-        price: 7.30
+        price: 6.80
         description: Mesclun, poulet, lentilles, ananas, carottes, raisins secs, croûtons, vinaigrette curry.
       - title: Toscane
-        price: 6.70
+        price: 7.30
         description: Mesclun, jambon italien, tomates fraiches, mozzarella, pignons de pin, roquette, vinaigrette balsamique.
       - title: Saumon fumé
         price: 7.00
@@ -93,7 +93,7 @@ config:
         price: 6.50
         description: Mesclun, lentilles, quinoa, carottes, tomates fraiches, concombres, mange-tout, oignons frits, vinaigrette miel-moutarde.
 
-   - title: Les Salades de Pates
+   - title: Les Salades de Pâtes
      children:
       - title: Pâtes Tomates & Chèvre
         price: 6.50

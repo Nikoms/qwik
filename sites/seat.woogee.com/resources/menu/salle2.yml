@@ -86,7 +86,7 @@ config:
         price: 8.30
         description: Saumon fumé, fromage frais, ciboulette, sauce citronnée.
       - title: Scampis & Avocat
-        price: 8.30
+        price: 8.50
         description: Scampis, guacamole, cheddar, graines germées.
       - title: Légumes grillés
         price: 7.00
