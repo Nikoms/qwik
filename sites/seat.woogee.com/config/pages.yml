@@ -16,7 +16,7 @@ menu:
   title: Menu
   zones:
     zone1:
-      intro: menu/salle2.txt
+      intro: menu/salle2.yml
 take:
   template: basic
   title: Take Away
@@ -26,7 +26,7 @@ take:
         module: file
         config:
           file: upload/takeAway.html
-      txt: menu/takeAway.txt
+      txt: menu/takeAway.yml
 business:
   template: basic
   title: Business lunch

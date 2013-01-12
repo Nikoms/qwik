@@ -1,6 +1,8 @@
+/* Un peu d'espace entre chaque image */
 .qwik-gallery a{
     padding-right: 5px;
 }
+/*Les images sont alignées comme il faut*/
 .qwik-gallery img{
     vertical-align: baseline;
 }

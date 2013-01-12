@@ -2,47 +2,93 @@
 
 namespace Qwik\Kernel\Module\Form\Entity;
 
+/**
+ * Validateur de formulaire
+ */
 class Validator{
-	
-	private $postedData;	
-	private $module;
-	private $errors;
-	
-	public function __construct(){
+
+    /**
+     * @var array Champs postés via le formulaire
+     */
+    private $postedDatas;
+    /**
+     * @var Form Module "Formulaire" lié
+     */
+    private $module;
+    /**
+     * @var array Erreurs du formulaire
+     */
+    private $errors;
+
+    /**
+     *
+     */
+    public function __construct(){
 		$this->errors = array();
 	}
-	
-	public function setPostedDatas($postedDatas){
+
+    /**
+     * @param array $postedDatas
+     */
+    public function setPostedDatas(array $postedDatas){
 		$this->postedDatas = $postedDatas;
 	}
-	public function getPostedDatas(){
+
+    /**
+     * @return array
+     */
+    public function getPostedDatas(){
 		return $this->postedDatas;
 	}
-	
-	public function setModule(Form $module){
+
+    /**
+     * @param Form $module
+     */
+    public function setModule(Form $module){
 		$this->module = $module;
 	}
-	public function getModule(){
+
+    /**
+     * @return Form
+     */
+    public function getModule(){
 		return $this->module;
 	}
-	
-	public function addError($key, $message){
+
+    /**
+     * Ajout d'une erreur au formulaire
+     * @param $key
+     * @param $message
+     */
+    public function addError($key, $message){
 		$this->errors[$key] = $message;
 	}
-	public function getErrors(){
+
+    /**
+     * @return array
+     */
+    public function getErrors(){
 		return $this->errors;
 	}
-	
-	public function isValid(){
+
+    /**
+     * @return bool Check si le formulaire est valide
+     */
+    public function isValid(){
 		foreach($this->getFields() as $key => $field){
 			if(!$field->isValid()){
+                //Si le formulaire est pas bon --> on ajoute l'erreur
 				$this->addError($key, $field->getError());
 			}
 		}
+        //Si vide, on a pas de problème
 		return empty($this->errors);
 	}
-	
-	public function getFields(){
+
+    /**
+     * @return array Renvoi les champs avec leur valeur setté
+     */
+    public function getFields(){
 		$fields = array();
 		foreach($this->getModule()->getFields() as $key => $field){
 			$value = isset($this->postedDatas[$key]) ? $this->postedDatas[$key] : ''; 

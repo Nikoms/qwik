@@ -1,0 +1,19 @@
+contact:
+  template: basic
+  zones:
+    zone1:
+      lol:
+        module: html
+        config:
+          content:
+            fr: Bonjour monde
+            en: Hello world
+
+contact:
+  template: basic
+  zones:
+    zone1:
+      lol:
+        module: html
+        config:
+          content: Hello world

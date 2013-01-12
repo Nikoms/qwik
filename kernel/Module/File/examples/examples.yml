@@ -1,0 +1,43 @@
+test1:
+  template: basic
+  title: test
+  hidden: true
+  zones:
+    zone1:
+      - module: file
+        config:
+          file:
+            - upload/lol.php
+            - upload/lol.txt
+            - fr: upload/lol_fr.html
+              nl: upload/lol_nl.html
+            - upload/{language}/lol.html
+test2:
+  template: basic
+  title: test
+  hidden: true
+  zones:
+    zone1:
+      - module: file
+        config:
+          file: upload/lol.txt
+test3:
+  template: basic
+  title: test
+  hidden: true
+  zones:
+    zone1:
+      - module: file
+        config:
+          file: upload/{language}/lol.html
+test4:
+  template: basic
+  title: test
+  hidden: true
+  zones:
+    zone1:
+      - module: file
+        config:
+          file:
+            - fr: upload/lol_fr.html
+              nl: upload/lol_nl.html

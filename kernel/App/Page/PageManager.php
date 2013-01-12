@@ -83,7 +83,7 @@ class PageManager {
     public function findAll(\Qwik\Kernel\App\Site\Site $site){
         $pages = array();
         foreach($this->getPagesConfig($site) as $url => $config){
-            $pages[] =  $this->getBuildPage($site, $url, $config);
+            $pages[$url] =  $this->getBuildPage($site, $url, $config);
         }
         return $pages;
     }

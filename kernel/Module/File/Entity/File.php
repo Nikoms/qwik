@@ -10,19 +10,27 @@ use Qwik\Kernel\App\Language;
  */
 class File extends Module{
 
+    /**
+     * @return array Renvoi des variables pour le moteur de template
+     */
     public function getTemplateVars(){
 
         $fileContent = '';
+        //Récupération du contenu de(s) fichier(s)
         foreach($this->getFiles() as $file){
         	$fileContent .= $this->getFileContent($file);
         }
 
+        //Le retour est uniquement dans fileContent (concaténation des contenus de tous les fichiers)
         $config = array(
             'fileContent' => $fileContent,
         );
         return $config;
     }
 
+    /**
+     * @return array Tableau des fichiers à afficher
+     */
     private function getFiles(){
         $config = $this->getConfig();
         //si pas de fichier on renvoit un array vide
@@ -33,14 +41,15 @@ class File extends Module{
         //On fait en sorte d'avoir un array de fichiers, même si on a qu'un fichier
         $files = is_array($config['file']) ? $config['file'] : array((string) $config['file']);
         $return = array();
+
         //Pour chaque fichier, on va faire des choses pour que ca marche en multilangue :)
         foreach($files as $file){
-        	
+
         	//1. récup du nom du fichier (avec éventuellement des modifs suite à la langue)
         	$file = $this->getFile($file);
-        	
+
         	//2. si c'est pas false, alors le fichier existe et on le rajoute dans l'array de return
-        	if($file){
+        	if($file !== false){
         		$return[] = $file;
         	}
         }
@@ -48,22 +57,37 @@ class File extends Module{
         return $return;
 
     }
-    
+
+    /**
+     * @param $file
+     * @return bool|string Renvoi le path absolu du fichier (peut changer en fonction de la langue) ou FALSE si on a pas trouvé de fichier
+     */
     private function getFile($file){
     	
     	//On essaye d'avoir le fichier de la langue en cours
-    	if($fullFileName = $this->getFileWithLangugage($file, Language::get())){
+    	if($fullFileName = $this->getFileWithLanguage($file, Language::get())){
     		return $fullFileName;
     	}
+
+        //Si on arrive ici, c'est que:
+        //  - soit on avait pas de fichier avec la langue en cours,
+        //  - soit on avait bien un fichier DANS LA CONFIG, mais on ne l'a pas trouvé à l'endroit spécifié. Dans ce cas là, on va essayer avec la langue par défaut du site...
+
+
     	//Sinon on essaye avec la langue par défaut
-    	if($fullFileName = $this->getFileWithLangugage($file, Language::getDefault())){
+    	if($fullFileName = $this->getFileWithLanguage($file, Language::getDefault())){
     		return $fullFileName;
     	}
     	
     	return false;
     }
-    
-    private function getFileWithLangugage($file, $language){
+
+    /**
+     * @param $file
+     * @param $language
+     * @return bool|string Renvoi le chemin vers le fichier selon la langue. Si le fichier n'existe pas, on renvoi false.
+     */
+    private function getFileWithLanguage($file, $language){
     	
     	$site = $this->getZone()->getPage()->getSite();
         //Path où on va chercher les fichiers 
@@ -94,16 +118,24 @@ class File extends Module{
         
     }
 
+    /**
+     * @param string $file Chemin du fichier
+     * @return string Renvoi le contenu du fichier
+     */
     private function getFileContent($file){
+        $file = (string) $file;
         switch(pathinfo($file, PATHINFO_EXTENSION)){
             case 'txt':
                 return nl2br(file_get_contents($file));
                 break;
             case 'php':
-                //TODO: faire ca dans une fonction anonyme comme ca on a pas accès à "$this"
-                ob_start();
-                include $file;
-                return ob_get_clean();
+                $phpToString = function($module) use ($file){
+                    ob_start();
+                    include $file;
+                    return ob_get_clean();
+                };
+                //On passe $this, même si je sais qu'on peut accéder à this dans la méthode anonyme. C'est plus clair dans le ".php" d'utilise $module plutot que $this
+                return $phpToString($this);
                 break;
             default:
                 return file_get_contents($file);

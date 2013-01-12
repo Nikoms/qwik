@@ -1,6 +1,9 @@
+/*Par défaut, pas de spinner*/
+
 .qwik-form-spinner{
     display:none;
 }
+/*Spinner affiché lorsque le formulaire est en "loading"*/
 .qwik-form-loading .qwik-form-spinner{
     display:inline;
 }

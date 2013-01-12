@@ -157,7 +157,7 @@ abstract class Module {
 	}
 
     /**
-     * Récupération d'une traduction du fichier "translations.txt" dans la config du module en cours
+     * Récupération d'une traduction du fichier "translations.yml" dans la config du module en cours
      * @param $key
      * @return mixed
      */

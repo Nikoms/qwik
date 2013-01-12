@@ -136,6 +136,7 @@ class TemplateProxy {
         $this->getTemplateEngine()->addFilter('translate', new \Twig_Filter_Function('\Qwik\Kernel\App\Language::getValue'));
         //Renvoi la langue en cours
         $this->getTemplateEngine()->addFunction('locale', new \Twig_Function_Function('\Qwik\Kernel\App\Language::get'));
+        //Récupération de l'app (notamment pour le baseUrl)
         $this->getTemplateEngine()->addGlobal('app', $appManager);
     }
 

@@ -73,32 +73,14 @@ class AutoLoader {
      */
     private static function errorDebug($className, $path = ''){
 
-        //TODO: logger quand on ne trouve pas de classe
-
-		//Combien on a d'autoloader? Pcq si y'en a d'autres, peut-être que eux savent comment la classe se load?!
-		//$nbAutoloaders = count(spl_autoload_functions());
-		
-		//Si on est ici, c'est qu'on avait qu'un seul autoloader et qu'on a rien trouvé...
-		/*echo '<hr/><h1>AutoLoader</h1>
-		<ul>
-			<li>Class name: ' . $className . '</li>
-			<li>';
-		
-		//Si on a pas de path c'est qu'on a meme pas trouvé de mappage avec un namespace
-		if(empty($path)){
-			echo 'No namespace has been mapped!';
-		}else{
-			echo 'No file found at ' . $path;
-		}
-		
-		echo '</li>
-		</ul>';
-		
-		$backtrace = self::getDebugBackTraceLight();		
-		echo 'Called by file ' . $backtrace[2]['file'] . ', line ' . $backtrace[2]['line'] . '<hr/>';
-		echo '<h2>Backtrace</h2><pre>' . print_r($backtrace, true) . '</pre>';		
-		exit();*/
-
+        $message = 'Class name: ' . $className . ' not found.';
+        if(empty($path)){
+            $message .= ' No namespace has been mapped!';
+        }else{
+            $message .= ' No file found at ' . $path . '!';
+        }
+        //Warning lorsqu'on trouve pas la classe
+        \Qwik\Kernel\Log\Logger::getInstance()->warning($message);
 	}
 
 	/**

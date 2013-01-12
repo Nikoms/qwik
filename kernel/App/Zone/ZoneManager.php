@@ -16,8 +16,10 @@ class ZoneManager {
     public function getByPage(Page $page){
         $zones =  array();
 
-        foreach($page->getConfig()['zones'] as $zoneName => $config){
-            $zones[$zoneName] = $this->getBuildZone($page, $zoneName, $config);
+        if(isset($page->getConfig()['zones']) && is_array($page->getConfig()['zones'])){
+            foreach($page->getConfig()['zones'] as $zoneName => $config){
+                $zones[$zoneName] = $this->getBuildZone($page, $zoneName, $config);
+            }
         }
 
         return $zones;

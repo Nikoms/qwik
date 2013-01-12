@@ -1,0 +1,51 @@
+contact:
+  template: basic
+  zones:
+    zone1:
+      contact:
+        module: form
+        config:
+          email: info@mymail.com
+          language: fr #reception du mail en francais
+          fields:
+            name:
+              label: Nom/Achernaam/Surname
+              required: 1
+              type: text
+              max: 50
+            firstName:
+              label:
+                fr: Prénom
+                nl: Naam
+                en: First name
+              required: 1
+              type: text
+            email:
+              label:
+                fr: E-mail
+                nl: E-mail
+                en: E-mail
+              required: 1
+              type: email
+            dateBegin:
+              label:
+                fr: Date d'arrivée
+                nl: Aankomstdatum
+                en: Arrival date
+              required: 1
+              type: date
+              range: begin
+              link: dateEnd
+            dateEnd:
+              label:Date de départ
+              required: 1
+              type: date
+              link: dateBegin
+              range: end
+
+            questions:
+              label:
+                fr: Questions
+                nl: Vragen
+                en: Questions
+              type: textarea

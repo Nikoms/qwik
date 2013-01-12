@@ -145,6 +145,15 @@ class Site {
 	}
 
     /**
+     * @param string$url
+     */
+    public function getPage($url){
+        $url = (string) $url;
+        $pages = $this->getPages();
+        return isset($pages[$url]) ? $pages[$url] : null;
+    }
+
+    /**
      * @return bool Indique si le site existe. Il faut pour cela que le fichier "general" dans config existe
      */
     public function exists(){

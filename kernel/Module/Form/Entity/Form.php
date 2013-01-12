@@ -4,56 +4,74 @@ namespace Qwik\Kernel\Module\Form\Entity;
 use Qwik\Kernel\App\Module\Module;
 use Qwik\Kernel\App\Language;
 
-
+/**
+ * Module "Formulaire"
+ */
 class Form extends Module{
 
 
-    //Attention, si on change aussi, changer la route plus bas
+    /**
+     * Chemin vers le POST
+     */
     const PATH = '{_locale}/module/form/post';
 
 
-    //Pour l'ajout de route pour le post du formulaire
+    /**
+     * Pour l'ajout de route pour le post du formulaire
+     * @param \Qwik\Kernel\App\AppManager $appManager
+     * @param \Qwik\Kernel\App\Site\Site $site
+     */
     public static function injectInApp(\Qwik\Kernel\App\AppManager $appManager, \Qwik\Kernel\App\Site\Site $site){
 
-        $appManager->getRouterManager()->post('form', $appManager->getBaseUrl() . Form::PATH,
-            function($_locale) use ($site, $appManager) {
+
+        $appManager->getRouterManager()->post('module_form', $appManager->getBaseUrl() . Form::PATH, function($_locale) use ($site, $appManager) {
 
                 //Changement de la langue quand c'est possible...
                 Language::changeIfPossible($_locale);
+
             	try{
+                    //TODO: Validator devrait être dans Form
+                    //On va validée le formulaire
 	                $validator = new Validator();
 	                $validator->setModule($appManager->findModule($_POST['_page'], $_POST['_zone'], $_POST['_uniqId']));
 	                $validator->setPostedDatas($_POST);
 	                
-	                
+	                //Message par défaut
 	               	$return = array(
 	               		'valid' => false,
-	               		'message' => "Problème de validation :)"
+	               		'message' => ""
 	               	);
-	                if($validator->isValid()){
+
+
+	                if($validator->isValid()){ //Formulaire valide
 	                	$return['valid'] = true;
 	                	$return['message'] = '';
+                        //On envoi le mail
 						if($validator->getModule()->sendMail($validator->getFields())){
 		                	$return['valid'] = true;
 		                	$return['message'] = '';
 						}else{
+                            //Erreur non prévue
 							$return['message'] = Language::getValue($validator->getModule()->translate('form.unexpectedError'));
 						}
 	                }else{
+                        //Erreur gérée
 	                	$return['errors'] = $validator->getErrors();
                         $return['message'] = Language::getValue($validator->getModule()->translate('form.error'));
-	                	//TODO
 	                }
+                    //On renvoi le resultat en json
 	                return json_encode($return);
             	}catch(\Exception $ex){
+                    //Erreur non prévue
             		return json_encode(array('message' => $ex->getMessage(), 'valid' => false));
             	}
             }
         );
     }
-    public function getPath(){
-        return Form::PATH;
-    }
+
+    /**
+     * @return array Variables pour le moteur de template
+     */
     public function getTemplateVars(){
         $return = array();
         $return['action'] =  str_replace('{_locale}', Language::get(), Form::PATH);
@@ -61,7 +79,10 @@ class Form extends Module{
 
         return $return;
     }
-    
+
+    /**
+     * @return array Liste des objets Field
+     */
     public function getFields(){
     	$return = array();
 
@@ -77,10 +98,18 @@ class Form extends Module{
             $field->setAttributes(isset($fieldConfig['attributes']) ? $fieldConfig['attributes'] : array());
             $return[$name] = $field;
         }
+
         return $return;
     }
-    
+
+    /**
+     * Envoi du mail. Méthode qui doit être publique (pour le moment), car appelé de la function anonyme
+     * @param array $fields
+     * @return int 0|1
+     */
     public function sendMail(array $fields){
+
+        //On intègre Swift
     	require_once __DIR__ . '/../../../vendor/Swift/swift_required.php';    	
 		\Swift::init(function(){});
 		
@@ -91,16 +120,19 @@ class Form extends Module{
 		if(isset($config['language'])){
 			Language::changeIfPossible($config['language']);
 		}
-		
+
+        //Début du mail
 		$body = Language::getValue($this->translate('form.body'));
 		
-		//Par défaut, le from est celui à qui on envoit (au cas où)
+		//Par défaut, le from est celui à qui on envoi (au cas où on ne trouve pas d'email dans le formulaire)
 		$emailFrom = $config['email'];
+
 		foreach($fields as $field){
-			//Si j'ai un nom qui s'appelle "email", alors on va dire que c'est le "from"
-			if($field->getName() == 'email'){
+			//Si j'ai un Field de dont le type est "Email", alors on va dire que c'est le "from" :)
+			if($field instanceof \Qwik\Kernel\Module\Form\Entity\Field\Email){
 				$emailFrom = $field->getValue();
 			}
+            //Rajout de l'info dans le body du mail
 			$body.= '- ' . Language::getValue($field->getLabel()).":\n";
 			$body.= $field->getValue()."\n\n";
 		}

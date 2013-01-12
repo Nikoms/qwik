@@ -25,7 +25,7 @@ class RouterManager {
      * Ajoute d'une route qui répond uniquement à une méthode POST
      * @param $name string Nom de la route
      * @param $path string chemin de la route
-     * @param $callable fonction callback à appeler
+     * @param callable $callable fonction callback à appeler
      * @return Route
      */
     public function post($name, $path, $callable){

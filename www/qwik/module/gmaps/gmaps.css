@@ -33,12 +33,14 @@
     margin-top:10px;
 }
 
+/*Si La map est en haut ou en bas, on enlève les puces des listes*/
 .qwik-gmaps-map-position-bottom .qwik-gmaps-addresses,
 .qwik-gmaps-map-position-top .qwik-gmaps-addresses{
     list-style: none;
     margin:0;
     padding:0;
 }
+/* On laisse les adresses respirer entre elles*/
 .qwik-gmaps-address{
     padding:5px;
 }
