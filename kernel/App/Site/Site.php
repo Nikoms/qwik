@@ -91,7 +91,7 @@ class Site {
      */
     public function getRealUploadPath(){
         //TODO: Donner la possibilité de mettre ceci dans la config
-        return 'pissette/'. $this->getDomain();
+        return 'pissette/' . $this->getDomain() . '/';
     }
 
     /**
@@ -161,14 +161,15 @@ class Site {
 	}
 
     /**
-     * @return bool Indique si le site est un alias d'un autre. Pour cela on vérifie juste si on a une redirection de prévue dans la config générale du site
+     * @return bool Indique si le site est un alias d'un autre. Un alias = on reste sur le meme domaine mais on accède aux infos de l'autre
      */
-    public function isAlias(){
-        return $this->getRedirect() !== '';
+    public function getAlias(){
+        $config = $this->getConfig();
+        return isset($config['general']['alias']) ? $config['general']['alias'] : '';
     }
 
     /**
-     * @return string Renvoi quel est l'alias (redirection) du site. Renvoi vide si le site n'est pas un alias
+     * @return string Renvoi quel est la redirectiondu site. Renvoi vide si le site n'a pas de redirection
      */
     public function getRedirect(){
         $config = $this->getConfig();
@@ -180,7 +181,7 @@ class Site {
      * @return Site
      */
     private function initConfig(){
-		$this->config = \Qwik\Kernel\App\Config::getInstance()->getConfig($this->getPath().'/config');
+		$this->config = \Qwik\Kernel\App\Config::getInstance()->getPathConfig($this->getPath().'/config');
         return $this;
 	}
 

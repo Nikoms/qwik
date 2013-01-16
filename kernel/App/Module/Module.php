@@ -3,6 +3,7 @@
 namespace Qwik\Kernel\App\Module;
 
 use Qwik\Kernel\App\Language;
+use Qwik\Kernel\Template\TemplateProxy;
 use Qwik\Kernel\App\Zone\Zone;
 
 
@@ -149,7 +150,7 @@ abstract class Module {
             //On va calculer le path de la config du module
             $pathOfConfig = self::getModulesPath() . DIRECTORY_SEPARATOR . $this->getName() . DIRECTORY_SEPARATOR . 'config';
             //Récupération de la config sous forme d'array
-			$config = \Qwik\Kernel\App\Config::getInstance()->getConfig($pathOfConfig);
+			$config = \Qwik\Kernel\App\Config::getInstance()->getPathConfig($pathOfConfig);
             //Transformation de l'array en objet
 			$this->configObject = new Config($config);
 		}
@@ -171,7 +172,7 @@ abstract class Module {
      */
     public function __toString(){
 		try{
-			return \Qwik\Kernel\App\TemplateProxy::getInstance()->renderModule($this);
+			return TemplateProxy::getInstance()->renderModule($this);
 		}catch(\Exception $ex){
 			return $ex->getMessage();
 		}

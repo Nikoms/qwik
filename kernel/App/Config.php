@@ -29,9 +29,22 @@ class Config {
      * @param string $path Chemin où se trouve les fichiers config
      * @return array Tableau de config (array)
      */
-    public function getConfig($path){
+    public function getPathConfig($path){
 		return $this->loadPath($path);
 	}
+
+    /**
+     * @param string $path chemin vers le fichier
+     * @return array
+     * @throws \Exception
+     */
+    public function getFileConfig($path){
+        if(!file_exists($path)){
+            throw new \Exception("File ".$path . " does not exists");
+        }
+        $config = $this->loadFile($path);
+        return is_null($config) ? array() : $config;
+    }
 
     /**
      * Rempli, dans $config,

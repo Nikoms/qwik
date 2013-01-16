@@ -91,7 +91,7 @@ class File extends Module{
     	
     	$site = $this->getZone()->getPage()->getSite();
         //Path où on va chercher les fichiers 
-    	$path = str_replace('/', DIRECTORY_SEPARATOR, $site->getWww() . DIRECTORY_SEPARATOR . $site->getRealUploadPath() . DIRECTORY_SEPARATOR);
+    	$path = str_replace('/', DIRECTORY_SEPARATOR, $site->getWww() . DIRECTORY_SEPARATOR . $site->getRealUploadPath());
 		
 		//On garde la langue en cours
 		$currentLanguage = Language::get();

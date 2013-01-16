@@ -2,7 +2,8 @@
 namespace Qwik\Kernel\App;
 
 use Qwik\Kernel\App\Language;
-use Qwik\Kernel\App\TemplateProxy;
+use Qwik\Kernel\Environment\Environment;
+use Qwik\Kernel\Template\TemplateProxy;
 
 class AppManager {
 
@@ -22,12 +23,17 @@ class AppManager {
     private $routerManager;
     /**
      * @var bool Mode debug ou pas
-     */
-    private $isDebug;
+     *//*
+    private $isDebug;*/
     /**
      * @var string url de base (Path relatif) du site. En général "/", mais parfois, il se peut qu'on ai mis le site bien plus bas.
      */
     private $baseUrl;
+
+    /**
+     * @var Environment
+     */
+    private $environment;
 
     /**
      * Récupération du singleton, avec un test, car il faut être passé par init
@@ -47,9 +53,8 @@ class AppManager {
      * @param $domain string nom de (sous) domaine
      * @return AppManager
      */
-    public static function init($www, $domain){
-        //TODO vérifier $domain (et $www?) pour éviter xss et sql injection
-
+    public static function init($www){
+        $domain = filter_var($_SERVER['HTTP_HOST'], FILTER_SANITIZE_URL);
         self::$instance = new AppManager($www, $domain);
         return self::$instance;
 	}
@@ -59,17 +64,17 @@ class AppManager {
      * @param $domain
      */
     //TODO: faire autrement, faire un array de config par env
-    private function initDebug($domain){
+    /*private function initDebug($domain){
 		//On est en debug si notre domaine commence par dev.
 		$this->isDebug = strpos($domain, 'dev.') === 0;	
-	}
+	}*/
 
     /**
      * @return bool
      */
-    public function isDebug(){
+/*    public function isDebug(){
 		return $this->isDebug;
-	}
+	}*/
 
     /**
      * Récupération du nom de domain cleané (sans dev. s'il y en avait un)
@@ -77,30 +82,44 @@ class AppManager {
      * @return string
      */
     private function getProperDomain($domain){
-		return $this->isDebug() ? substr($domain, 4) : $domain;
+
+		return (strpos($domain, 'dev.') === 0) ? substr($domain, 4) : $domain;
 	}
 
+    /**
+     * @param \Qwik\Kernel\Environment\Environment $environment
+     */
+    private function setEnvironment(Environment $environment){
+        $this->environment = $environment;
+    }
+
+    /**
+     * @return Environment
+     */
+    public function getEnvironment(){
+        return $this->environment;
+    }
     /**
      * @param $www string là où se trouve notre fichier index.php (path absolut)
      * @param $domain string
      */
     private function __construct($www, $domain){
 
-        $www = (string) $www;
-        $domain = (string) $domain;
 
-        //Initialise le mode débug en fonction du nom de domaine :)
-		$this->initDebug($domain);
+        //initialisation du path dans lequel on se trouve (le plus souvent "/")
+        $this->initBase();
+
+        $www = (string) $www;
 
         //On récupère le bon domaine
-		$domain = $this->getProperDomain($domain);
+		$domain = $this->getProperDomain((string) $domain);
 
         //Récupération du site
 		$siteManager = new \Qwik\Kernel\App\Site\SiteManager();
 		$this->site = $siteManager->getByPath($www, $domain);
 
         //Si c'est un alias, alors on va rediriger  via un header
-        if($this->getSite()->isAlias()){
+        if($this->getSite()->getRedirect() != ''){
             //TODO: Voir si on peut faire confiance à $_SERVER['REDIRECT_URL']
             header('Location: http://'.$this->getSite()->getRedirect() . $_SERVER['REDIRECT_URL']);
             exit();
@@ -114,19 +133,6 @@ class AppManager {
 			$this->site = $siteManager->getByPath($www, 'default');
 		}
 
-		//Pratique, on retient le baseUrl, pour pouvoir l'utiliser comme préfix. Du coup, on peut mettre l'appli où on veut!
-        //La différence avec $www, c'est qu'ici, il nous faut le path relatif
-        //TODO: vérifier si on peut faire confiance à script_name
-        $baseUrl = str_replace(DIRECTORY_SEPARATOR, '/', dirname($_SERVER['SCRIPT_NAME']));
-
-		//Si c'est pas juste un slash, alors c'est par exemple /monDossier/ok. Il faut donc rajouter un slash au bout
-		if($baseUrl !== '/'){
-			$baseUrl = $baseUrl . '/';
-		}
-
-
-        //On set le path de base (
-		$this->setBaseUrl($baseUrl);
 
 		//Initialisation de la langue en cours
 		Language::init($this->getSite()->getLanguages());
@@ -134,6 +140,18 @@ class AppManager {
         //Initialisation de l'app
 		$this->initApp();
 	}
+
+
+    private function initBase(){
+
+        //Init base url
+        $this->initBaseUrl();
+        //Set de l'environnement
+        $this->initEnvironment();
+
+    }
+
+
 
     /**
      * @param $baseUrl
@@ -209,7 +227,8 @@ class AppManager {
             }
 
             //TODO: faire un ResponseRedirect
-            header('Location: ' . Language::get() . '/' . $firstPage->getUrl());
+            //TODO: création d'une url avec un nom de route + variables (twig aussi)
+            header('Location: ' . $this->getBaseUrl() . Language::get() . '/' . $firstPage->getUrl());
             exit();
         });
         
@@ -228,7 +247,8 @@ class AppManager {
                 }
                 //Response redirect
                 //TODO: faire un ResponseRedirect
-                header('Location: ' . Language::get() . '/' . $firstPage->getUrl());
+                //TODO: création d'une url avec un nom de route + variables (twig aussi)
+                header('Location: ' . $this->getBaseUrl() . Language::get() . '/' . $firstPage->getUrl());
                 exit();
 
             }else{ //Sinon Exception :)
@@ -254,7 +274,7 @@ class AppManager {
             if(!$page){
                 throw new \Qwik\Kernel\App\Page\PageNotFoundException();
             }
-            return \Qwik\Kernel\App\TemplateProxy::getInstance()->renderPage($page);
+            return TemplateProxy::getInstance()->renderPage($page);
 
         })->assert('_locale','[a-z]{2}');
 
@@ -284,8 +304,6 @@ class AppManager {
             //Clear du template
             TemplateProxy::getInstance()->clearCache();
 
-            exit('');
-
             $pageManager = new \Qwik\Kernel\App\Page\PageManager();
             $page = $pageManager->findFirst($site);
 
@@ -293,7 +311,7 @@ class AppManager {
             if(!$page){
                 throw new \Qwik\Kernel\App\Page\PageNotFoundException();
             }
-            return \Qwik\Kernel\App\TemplateProxy::getInstance()->renderPage($page);
+            return TemplateProxy::getInstance()->renderPage($page);
         });
         
         //On va voir si les modules on des routes
@@ -309,35 +327,160 @@ class AppManager {
 
 
     /**
+     * Initialise la "base url", C'est à dire ce qui va être "prepend" aux urls de chaque lien
+     * Pratique, on retient le baseUrl, pour pouvoir l'utiliser comme préfix. Du coup, on peut mettre l'appli où on veut!
+     * La différence avec $www, c'est qu'ici, il nous faut le path relatif à la racine htdocs
+     */
+    //TODO: faire avec getEnv, une classe request
+    private function initBaseUrl(){
+
+        //Récupération de là où se trouve le script
+        $baseUrl = str_replace(DIRECTORY_SEPARATOR, '/', dirname($_SERVER['SCRIPT_NAME']));
+
+        //Si c'est pas juste un slash, alors c'est par exemple /monDossier/ok. Il faut donc rajouter un slash au bout
+        if($baseUrl !== '/'){
+            $baseUrl = $baseUrl . '/';
+        }
+
+        if(isset($_SERVER['PATH_INFO'])){ //Si path_info, alors on a fait un index.php/... ou dev.php/... du coup on prend le nom du fichier + slash à la fin
+            $baseUrl .= basename($_SERVER['SCRIPT_NAME']) .'/';
+        }else{
+            //Si on a juste demandé /index.php ou /dev.php, alors on dit que c'est /
+            if($_SERVER['REQUEST_URI'] === $_SERVER['SCRIPT_NAME']){
+                $baseUrl .= trim($_SERVER['SCRIPT_NAME'],'/') . '/';
+            }
+        }
+
+
+        $this->setBaseUrl($baseUrl);
+    }
+
+    /**
+     * Init l'environnement
+     */
+    //TODO: faire une classe request
+    private function initEnvironment(){
+        $env = pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_FILENAME);
+        if($env == 'index'){
+            $env = 'prod';
+        }
+
+        $this->setEnvironment(new \Qwik\Kernel\Environment\Environment($env, $this));
+    }
+
+    /**
+     * @return string retourne la string dont il faut trouvé la route
+     */
+    //TODO: faire avec getEnv, une classe request
+    private function getUri(){
+
+        //PATH_INFO, c'est quand on écrit par exemple dev.php/fr/home. On a /fr/home dans PATH_INFO.
+        if(isset($_SERVER['PATH_INFO'])){
+            return $_SERVER['PATH_INFO'];
+        }else{
+            //Si on a juste demandé /index.php ou /dev.php, alors on dit que c'est /
+            if($_SERVER['REQUEST_URI'] === $_SERVER['SCRIPT_NAME']){
+                return '/';
+            }
+        }
+        //REQUEST_URI, c'est quand on écrit directement /fr/home
+        return $_SERVER['REQUEST_URI'];
+    }
+    /**
      * Affiche la page demandée
      */
     public function render(){
-        $uri = $_SERVER['REQUEST_URI'];
+
+        $uri = $this->getUri();
+
         try{
             $response = $this->getRouterManager()->getResponseForUri($uri);
-        }catch (\Exception $ex){ //Si j'ai une exception, je la catch, pour joliment l'afficher
+        }catch(\Qwik\Kernel\App\Page\PageNotFoundException $ex){
 
-            $pageManager = new \Qwik\Kernel\App\Page\PageManager();
-            //Je vais donc chercher une page en fonction de l'erreur
-            $page = $pageManager->findErrorBySite($this->getSite(), $ex, $uri);
-
-            //Contenu "Error" par défaut
-            $content = 'Error ' . $ex->getCode();
-            //Si c'est pas null, alors on va renderer
-            if(!is_null($page)){
-                $content = \Qwik\Kernel\App\TemplateProxy::getInstance()->renderPage($page);
-            }else if($this->isDebug()){
-                //Le contenu, en debug, c'est le message d'erreur
-                $content = '<h1>Error '.$ex->getCode(). '</h1>' . $ex->getMessage().' ('.$ex->getFile().'. Line:'.$ex->getLine() .')';
+            //Récupère le fichier s'il existe. Ceci peut arriver lorsqu'on demande un fichier statitque (js, css, jpg, etc...) alors qu'on a le prefix dev.php par exemple
+            $response = $this->getResponseOfFile($uri);
+            //Si on a toujours pas de réponse
+            if($response === null){
+                $response = $this->getResponseForException($ex);
             }
-
-            //On fait une Response avec le contenu récupéré
-            $response = new \Qwik\Kernel\App\Routing\Response();
-            $response->setContent($content);
+        }catch (\Exception $ex){ //Si j'ai une exception, je la catch, pour joliment l'afficher
+            $response = $this->getResponseForException($ex);
         }
         //Affichage de la Response
-        echo $response->getContent();
+        $response->render();
 	}
+
+    /**
+     * @param \Exception $ex
+     * @return Routing\Response
+     */
+    private function getResponseForException(\Exception $ex){
+        $pageManager = new \Qwik\Kernel\App\Page\PageManager();
+        //Je vais donc chercher une page en fonction de l'erreur
+        $page = $pageManager->findErrorBySite($this->getSite(), $ex);
+
+        //Contenu "Error" par défaut
+        $content = 'Error ' . $ex->getCode();
+        //Si c'est pas null, alors on va renderer
+        if(!is_null($page)){
+            $content = TemplateProxy::getInstance()->renderPage($page);
+        }else{
+            //Log du message d'erreur
+            \Qwik\Kernel\Log\Logger::getInstance()->warning('<h1>Error '.$ex->getCode(). '</h1>' . $ex->getMessage().' ('.$ex->getFile().'. Line:'.$ex->getLine() .')');
+        }
+
+        //On fait une Response avec le contenu récupéré
+        $response = new \Qwik\Kernel\App\Routing\Response();
+        $response->setContent($content);
+
+        return $response;
+    }
+    /**
+     * @param $uri
+     * @return null|Routing\Response
+     */
+    private function getResponseOfFile($uri){
+
+        $virtualPath = '/' . $this->getSite()->getVirtualUploadPath();
+        //Si on est ici, on demande une ressource dans le dossier "public"
+        if(strpos($uri, $virtualPath) === 0){ // Le fichier demandé est "url rewrité"
+            $uri = DIRECTORY_SEPARATOR . $this->getSite()->getRealUploadPath() . substr($uri, strlen($virtualPath));
+        }
+        //On rajoute à l'url, le path vers www
+        $fullPathOfFile = $this->getSite()->getWww() . $uri ;
+        $fullPathOfFile = str_replace('/', DIRECTORY_SEPARATOR, $fullPathOfFile);
+
+        switch(strtolower(pathinfo($uri, PATHINFO_EXTENSION))){
+            //Liste des extensions autorisées à être lues (switch plus rapide que in_array)
+            case 'js':
+            case 'css':
+            case 'jpg':
+            case 'jpeg':
+            case 'gif':
+            case 'png':
+            case 'txt':
+            case 'html':
+            case 'htm':
+            case 'doc':
+            case 'docx':
+            case 'xls':
+            case 'xlsx':
+            case 'ppt':
+            case 'pptx':
+            case 'csv':
+            case 'pdf':
+                //Si le fichier existe, on va le chercher, sinon on passera au "default" qui renvoi null
+                if(file_exists($fullPathOfFile)){
+                    $response = new \Qwik\Kernel\App\Routing\Response();
+                    $response->setContent(file_get_contents($fullPathOfFile));
+                    $response->setFileName($fullPathOfFile);
+                    return $response;
+                }
+                //break; #nobreak!
+            default:
+                return null;
+        }
+    }
 
     /**
      * Renvoi un module en fonction des paramètres
@@ -360,7 +503,6 @@ class AppManager {
 		}
 		throw new \Exception('Impossible de trouver le module');
 	}
-	
-	
+
 	
 }

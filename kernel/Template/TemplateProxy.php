@@ -1,6 +1,6 @@
 <?php
 
-namespace Qwik\Kernel\App;
+namespace Qwik\Kernel\Template;
 
 use Qwik\Kernel\App\Language;
 
@@ -39,7 +39,7 @@ class TemplateProxy {
         return self::$singleton;
     }
 
-    public function __construct(AppManager $appManager){
+    public function __construct(\Qwik\Kernel\App\AppManager $appManager){
 
         //Autoloader de Twig
         require_once __DIR__ . '/../vendor/Twig/Autoloader.php';
@@ -56,11 +56,11 @@ class TemplateProxy {
         //Création du moteur de template
         $twig = new \Twig_Environment($loader, array(
             //Si debug, pas de cache, sinon, ca se trouve dans le path du site
-            'cache' => $appManager->isDebug() ? false : $appManager->getSite()->getPath() . '/cache',
+            'cache' => $appManager->getEnvironment()->get('template.cache', false),
             //Mode debug ou pas (voir doc), pour avoir un __toString
-            'debug' => $appManager->isDebug(),
+            'debug' => $appManager->getEnvironment()->get('template.debug', false),
             //On est strict quand on debug, sinon pas
-            'strict_variables' => $appManager->isDebug(),
+            'strict_variables' => $appManager->getEnvironment()->get('template.strict', false),
             //On auto escape pas les vars, on le fera quand on en aura besoin
             'autoescape' => false,
         ));
@@ -93,13 +93,13 @@ class TemplateProxy {
      * @return string
      */
     public function renderPage(\Qwik\Kernel\App\Page\Page $page){
-		return $this->getTemplateEngine()->render(
+        return $this->getTemplateEngine()->render(
             'templates/' . $page->getTemplate() . '/display.html.twig',
             array(
-			    'page' => $page
-		    )
+                'page' => $page
+            )
         );
-	}
+    }
 
     /**
      * Renvoi l'affichage d'un module
@@ -108,15 +108,15 @@ class TemplateProxy {
      */
     public function renderModule($module){
         //Dans les variables du template, on rajoute toujours "module"
-		return $this->getTemplateEngine()->render(
-			$module->getTemplatePath(), 
-			array_merge(
-				$module->getTemplateVars(),
-				array('module' => $module)
-			)
-				
-		);
-	}
+        return $this->getTemplateEngine()->render(
+            $module->getTemplatePath(),
+            array_merge(
+                $module->getTemplateVars(),
+                array('module' => $module)
+            )
+
+        );
+    }
 
 
 
@@ -131,7 +131,7 @@ class TemplateProxy {
      * Ajout des extension dans le moteur de template
      * @param AppManager $appManager
      */
-    private function addExtensions(AppManager $appManager){
+    private function addExtensions(\Qwik\Kernel\App\AppManager $appManager){
         //Ajout de la méthode pour traduire un truc dans le template
         $this->getTemplateEngine()->addFilter('translate', new \Twig_Filter_Function('\Qwik\Kernel\App\Language::getValue'));
         //Renvoi la langue en cours

@@ -1,0 +1,20 @@
+url:
+  prefix: ""
+
+logger:
+  active: true
+  display: false
+
+
+template:
+  cache: %site_path%/cache
+  debug: false
+  strict: false
+  path:
+   - %site_path%/resources
+   - %kernel_path%/Module
+   - %kernel_path%/Resources
+  extensions:
+   - \Qwik\Kernel\Template\Extension\Translate
+   - \Qwik\Kernel\Template\Extension\Locale
+   - \Qwik\Kernel\Template\Extension\App

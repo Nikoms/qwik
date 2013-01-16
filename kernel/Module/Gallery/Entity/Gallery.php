@@ -2,6 +2,7 @@
 namespace Qwik\Kernel\Module\Gallery\Entity;
 
 use Qwik\Kernel\App\Module\Module;
+use Qwik\Kernel\Template\TemplateProxy;
 
 
 /**
@@ -43,7 +44,7 @@ class Gallery extends Module{
     public static function injectInApp(\Qwik\Kernel\App\AppManager $appManager, \Qwik\Kernel\App\Site\Site $site){
 		
 		//Ajout d'un helper si on veut affichier le "titre" d'une image (en fonction de son nom)
-		\Qwik\Kernel\App\TemplateProxy::getInstance()->getTemplateEngine()->addFilter('toTitle', new \Twig_Filter_Function('Qwik\Kernel\Module\Gallery\Entity\Gallery::toTitle'));
+		TemplateProxy::getInstance()->getTemplateEngine()->addFilter('toTitle', new \Twig_Filter_Function('Qwik\Kernel\Module\Gallery\Entity\Gallery::toTitle'));
 
 
 		//Ajout de l'url pour les thumbnails
@@ -67,7 +68,7 @@ class Gallery extends Module{
 			$fileName = pathinfo($url, PATHINFO_BASENAME);
 			
 			//on Calcule le path www du cache (thumbnail)
-			$thumbPath = $site->getWww() . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $site->getRealUploadPath() . '/' . Gallery::getThumbnailPathFor($width, $height, $quality)) . DIRECTORY_SEPARATOR  . $pathOfFile;
+			$thumbPath = $site->getWww() . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $site->getRealUploadPath() . Gallery::getThumbnailPathFor($width, $height, $quality)) . DIRECTORY_SEPARATOR  . $pathOfFile;
 			
 			//Creation du path du thumbnail
 			if(!is_dir($thumbPath)){
@@ -85,9 +86,12 @@ class Gallery extends Module{
                 ->thumbnail(new \Imagine\Image\Box($width, $height), \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND)
                 ->save($to, array('quality' => $quality))
                 ;
-                //On met un header jpg
-                header("Content-type: image/jpeg");
-                return file_get_contents($to);
+
+                $response = new \Qwik\Kernel\App\Routing\Response();
+                $response->setContent(file_get_contents($to));
+                $response->setFileName($fileName);
+                return $response;
+
             }else{
                 throw new \Qwik\Kernel\App\Page\PageNotFoundException();
             }
@@ -153,7 +157,7 @@ class Gallery extends Module{
      * @return string Chemin vers le fichier original. Vrai chemin, pas celui de de l'url rewriting
      */
     public static function getOriginalWwwPath(\Qwik\Kernel\App\Site\Site $site, $path){
-        $fullPath = $site->getWww() . DIRECTORY_SEPARATOR .  $site->getRealUploadPath() . DIRECTORY_SEPARATOR . $path;
+        $fullPath = $site->getWww() . DIRECTORY_SEPARATOR .  $site->getRealUploadPath() . $path;
         return str_replace('/', DIRECTORY_SEPARATOR, $fullPath);
     }
 

@@ -12,10 +12,9 @@ class PageManager {
      * Récupération d'une page en fonction d'une erreur (ex: 404)
      * @param \Qwik\Kernel\App\Site\Site $site
      * @param \Exception $exception
-     * @param $uri
      * @return null|Page
      */
-    public function findErrorBySite(\Qwik\Kernel\App\Site\Site $site, \Exception $exception, $uri){
+    public function findErrorBySite(\Qwik\Kernel\App\Site\Site $site, \Exception $exception){
         $errors = $this->getPagesErrorConfig($site);
         $code = $exception->getCode();
         //Si on trouve pas d'erreur avec ce code, alors on met default
