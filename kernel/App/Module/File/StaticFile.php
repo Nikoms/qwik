@@ -33,7 +33,8 @@ class StaticFile {
      * @return string
      */
     public function getAttribute($key){
-		return isset($this->getConfig()[$key]) ? $this->$this->getConfig()[$key] : '';
+        $config = $this->getConfig();
+		return isset($config[$key]) ? $config[$key] : '';
 	}
 
     /**
@@ -49,7 +50,8 @@ class StaticFile {
      * @return string
      */
     public function getPath(){
-        return $this->getConfig()['path'];
+        $config = $this->getConfig();
+        return $config['path'];
     }
 
     /**

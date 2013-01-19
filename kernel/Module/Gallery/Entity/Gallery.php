@@ -2,6 +2,7 @@
 namespace Qwik\Kernel\Module\Gallery\Entity;
 
 use Qwik\Kernel\App\Module\Module;
+use Qwik\Kernel\Config\Config;
 use Qwik\Kernel\Template\TemplateProxy;
 
 
@@ -49,7 +50,7 @@ class Gallery extends Module{
 
 		//Ajout de l'url pour les thumbnails
         //Ex: /q/cache/gallery/120/80/85/images/bureau/Desert.jpg. {url} => images/bureau/Desert.jpg
-        $appManager->getRouterManager()->get('gallery', '/' . $site->getVirtualUploadPath() . Gallery::WWW_THUMBNAIL_PATH . '/{url}', function($width, $height, $quality, $url) use ($site) {
+        $appManager->getRouter()->get('gallery', '/' . $site->getVirtualUploadPath() . Gallery::WWW_THUMBNAIL_PATH . '/{url}', function($width, $height, $quality, $url) use ($appManager, $site) {
 
             //Pour les espaces, et autres caractères bizarres (ex: photo (2).jpg posait problème car les espaces étaient remplacés par des %20)
             $url = urldecode($url);
@@ -66,29 +67,37 @@ class Gallery extends Module{
 			
 			//Récupération du path
 			$fileName = pathinfo($url, PATHINFO_BASENAME);
-			
+
 			//on Calcule le path www du cache (thumbnail)
-			$thumbPath = $site->getWww() . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $site->getRealUploadPath() . Gallery::getThumbnailPathFor($width, $height, $quality)) . DIRECTORY_SEPARATOR  . $pathOfFile;
-			
-			//Creation du path du thumbnail
-			if(!is_dir($thumbPath)){
-				mkdir($thumbPath, 0777, true);
-			}
+			$thumbPath = $site->getWww() . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $site->getRealUploadPath() . Gallery::getThumbnailPathFor($width, $height, $quality) . '/'  . $pathOfFile);
+
 				
-			//On va copier l'originale... (si elle existe
+			//On va copier l'originale... (si elle existe)
             $from = Gallery::getOriginalWwwPath($site, $url);
             if(file_exists($from)){
 
-                //... en thumbnail
-                $to = $thumbPath. DIRECTORY_SEPARATOR . $fileName;
+                //Création de l'objet thumbnail via Imagine (pas encore de création de fichier jpg à cet endroit)
+                $thumbnail = $imagine->open($from)->thumbnail(new \Imagine\Image\Box($width, $height), \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND);
 
-                $imagine->open($from)
-                ->thumbnail(new \Imagine\Image\Box($width, $height), \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND)
-                ->save($to, array('quality' => $quality))
-                ;
+                //Si le cache est actif, alors on sauve, au bon endroit, en fichier physique
+                if($appManager->getEnvironment()->get('module.gallery.cache')){
 
+                    //Creation du path du thumbnail
+                    if(!is_dir($thumbPath)){
+                        mkdir($thumbPath, 0777, true);
+                    }
+
+                    //On sauve où les thumbnail ?!
+                    $to = $thumbPath. DIRECTORY_SEPARATOR . $fileName;
+
+                    //sauvegarde en fichier
+                    $thumbnail->save($to, array('quality' => $quality));
+                }
+
+
+                //On renvoi gentillement l'image pour l'afficher
                 $response = new \Qwik\Kernel\App\Routing\Response();
-                $response->setContent(file_get_contents($to));
+                $response->setContent($thumbnail->get(pathinfo($fileName, \PATHINFO_EXTENSION)));
                 $response->setFileName($fileName);
                 return $response;
 

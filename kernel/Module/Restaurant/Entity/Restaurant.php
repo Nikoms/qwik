@@ -16,7 +16,8 @@ class Restaurant extends Module{
         //On donne le contenu de la config
     	$return = parent::getTemplateVars();
         //On rajoute children qui est  la carte en mode "arbre"
-    	$return['children'] =  $this->toTree(parent::getTemplateVars()['menu']);
+        $vars = parent::getTemplateVars();
+    	$return['children'] =  $this->toTree($vars['menu']);
         return $return;
     }
 

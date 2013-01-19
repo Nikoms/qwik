@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width">
 <meta name="author" content="Qwik">
 
-<script src="{{ app.getBaseUrl() }}qwik/js/jquery.js"></script>
+<script src="{{ path('/qwik/js/jquery.js') }}"></script>
 {% for file in page.getFiles('css') %}
-    <link href="{{ app.getBaseUrl() }}{{ file.getPath() }}" rel="stylesheet" media="all">
+    <link href="{{ path(file.getPath()) }}" rel="stylesheet" media="all">
 {% endfor %}

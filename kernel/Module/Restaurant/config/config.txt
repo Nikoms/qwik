@@ -1,7 +1,0 @@
-attributes:
-  menu: -
-
-
-files:
-  css:
-    main: qwik/module/restaurant/carte.css

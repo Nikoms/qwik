@@ -1,6 +1,7 @@
 <?php 
 namespace Qwik\Kernel\Module\Form\Entity;
 
+use Qwik\Kernel\App\AppManager;
 use Qwik\Kernel\App\Module\Module;
 use Qwik\Kernel\App\Language;
 
@@ -11,12 +12,6 @@ class Form extends Module{
 
 
     /**
-     * Chemin vers le POST
-     */
-    const PATH = '{_locale}/module/form/post';
-
-
-    /**
      * Pour l'ajout de route pour le post du formulaire
      * @param \Qwik\Kernel\App\AppManager $appManager
      * @param \Qwik\Kernel\App\Site\Site $site
@@ -24,7 +19,7 @@ class Form extends Module{
     public static function injectInApp(\Qwik\Kernel\App\AppManager $appManager, \Qwik\Kernel\App\Site\Site $site){
 
 
-        $appManager->getRouterManager()->post('module_form', $appManager->getBaseUrl() . Form::PATH, function($_locale) use ($site, $appManager) {
+        $appManager->getRouter()->post('module_form_send', '/{_locale}/module/form/post', function($_locale) use ($site, $appManager) {
 
                 //Changement de la langue quand c'est possible...
                 Language::changeIfPossible($_locale);
@@ -74,7 +69,6 @@ class Form extends Module{
      */
     public function getTemplateVars(){
         $return = array();
-        $return['action'] =  str_replace('{_locale}', Language::get(), Form::PATH);
         $return['fields'] = $this->getFields();
 
         return $return;
@@ -136,7 +130,12 @@ class Form extends Module{
 			$body.= '- ' . Language::getValue($field->getLabel()).":\n";
 			$body.= $field->getValue()."\n\n";
 		}
-		
+
+        $to = $config['email'];
+        if(AppManager::getInstance()->getEnvironment()->get('module.form.mail.redirect')){
+            $to = AppManager::getInstance()->getEnvironment()->get('module.form.mail.redirect');
+        }
+
 		// Create the message
 		$message = \Swift_Message::newInstance()
 		
@@ -147,7 +146,7 @@ class Form extends Module{
 		    ->setFrom(array($emailFrom))
 		
 		// Set the To addresses with an associative array
-		    ->setTo(array($config['email']))
+		    ->setTo(array($to))
 		
 		// Give it a body
 		    ->setBody($body)

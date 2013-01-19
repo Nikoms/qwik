@@ -157,7 +157,8 @@ class Site {
      * @return bool Indique si le site existe. Il faut pour cela que le fichier "general" dans config existe
      */
     public function exists(){
-		return isset($this->getConfig()['general']);
+        $config = $this->getConfig();
+		return isset($config['general']);
 	}
 
     /**

@@ -16,12 +16,13 @@ class Config extends \Qwik\kernel\Config\Config{
      * @return array
      */
     public function getFiles($type){
-		if(empty($this->getConfig()['config']) || empty($this->getConfig()['config']['files']) || empty($this->getConfig()['config']['files'][$type])){
+        $config = $this->getConfig();
+		if(empty($config['config']) || empty($config['config']['files']) || empty($config['config']['files'][$type])){
 			return array();
 		}
 		
 		$return = array();
-		foreach($this->getConfig()['config']['files'][$type] as $fileConfig){
+		foreach($config['config']['files'][$type] as $fileConfig){
 			$return[] = new StaticFile($fileConfig);
 		}
 		

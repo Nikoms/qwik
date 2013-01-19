@@ -1,11 +1,15 @@
-url:
-  prefix: dev.
-
 logger:
-  display: true
+  display: true #Affichage du Logger
 
 template:
-  cache: false
-  debug: true
-  strict: true
+  cache: false #Pas de cache de twig, sinon on doit toujours clear cache
+  debug: true #On est en mode debug
+  strict: true #Si problème avec des variables, on l'indice
 
+module:
+  gallery:
+    cache: false #Pas besoin de faire des images
+
+  form:
+    mail:
+      redirect: nikoms@gmail.com #Je veux récupérer tous les mails ici comme ca, en dévelopement, je n'envois pas de mail aux "vrais" gens

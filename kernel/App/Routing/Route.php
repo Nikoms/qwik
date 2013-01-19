@@ -32,9 +32,9 @@ class Route {
      *
      */
     public function __construct(){
-		$this->methods = array();
-		$this->assert = array();
-	}
+        $this->methods = array();
+        $this->assert = array();
+    }
 
     /**
      * @param $callable callable
@@ -44,16 +44,16 @@ class Route {
         if(!is_callable($callable)){
             throw new \Exception('Callable is not callable :)');
         }
-		$this->callable = $callable;
-		return $this;
-	}
+        $this->callable = $callable;
+        return $this;
+    }
 
     /**
      * @return callable
      */
     public function getCallable(){
-		return $this->callable;
-	}
+        return $this->callable;
+    }
 
     /**
      * Ajoute un pattern pour une variable censée être récupérée dans l'adresse
@@ -62,9 +62,9 @@ class Route {
      * @return Route
      */
     public function assert($var, $assert){
-		$this->assert[(string) $var] = (string) $assert;
-		return $this;
-	}
+        $this->assert[(string) $var] = (string) $assert;
+        return $this;
+    }
 
     /**
      * Récupère un pattern suivant le nom de la variable à récupéré dans l'adresse
@@ -72,12 +72,12 @@ class Route {
      * @return string
      */
     public function getAssert($var){
-		if(!isset($this->assert[$var])){
-			//Par défaut c'est du text/chiffre, underscore, point tiret
-			return '[a-zA-Z0-9_\.-]*';
-		}
-		return $this->assert[$var];
-	}
+        if(!isset($this->assert[$var])){
+            //Par défaut c'est du text/chiffre, underscore, point tiret
+            return '[a-zA-Z0-9_\.-]+';
+        }
+        return $this->assert[$var];
+    }
 
     /**
      * Ajoute une méthode possible pour l'accès à la page
@@ -85,41 +85,41 @@ class Route {
      * @return Route
      */
     public function addMethod($method){
-		$this->methods[] = trim((string) $method) == 'POST'? 'POST' : 'GET';
-		return $this;
-	}
+        $this->methods[] = trim((string) $method) == 'POST'? 'POST' : 'GET';
+        return $this;
+    }
 
     /**
      * @return array Tableau de méthode
      */
     public function getMethods(){
-		return $this->methods();
-	}
+        return $this->methods();
+    }
 
     /**
      * @param $path string
      * @return Route
      */
     public function setPath($path){
-		$this->path = (string) $path;
-		return $this;
-	}
+        $this->path = (string) $path;
+        return $this;
+    }
 
     /**
      * @return string
      */
     public function getPath(){
-		return $this->path;
-	}
+        return $this->path;
+    }
 
     /**
      * @param $name string
      * @return Route
      */
     public function setName($name){
-		$this->name = (string) $name;
-		return $this;
-	}
+        $this->name = (string) $name;
+        return $this;
+    }
 
     /**
      * @return string
@@ -151,12 +151,13 @@ class Route {
         echo ' VS ';
         echo $path;
         $found = preg_match('#^'.$this->getRegex().'$#', $path, $matches);
+        echo '<br />';
         var_dump($found);
         var_dump($matches);
         echo '<hr >';*/
 
         return (bool) preg_match('#^'.$this->getRegex().'$#', (string) $path, $matches);
-	}
+    }
 
 
     /**
@@ -172,6 +173,6 @@ class Route {
             return '('.$route->getAssert($var).')';
         }, $this->getPath());
     }
-	
-	
+
+
 }

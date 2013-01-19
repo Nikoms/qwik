@@ -5,7 +5,10 @@ namespace Qwik\Kernel\App\Routing;
 /**
  * Gestionnaire de routes
  */
-class RouterManager {
+use Qwik\Kernel\App\AppManager;
+use Qwik\Kernel\App\Language;
+
+class Router {
 
     /**
      * @var array Liste des routes
@@ -18,8 +21,8 @@ class RouterManager {
      * @param $baseUrl string
      */
     public function __construct($baseUrl){
-		$this->baseUrl = (string) $baseUrl;
-	}
+        $this->baseUrl = (string) $baseUrl;
+    }
 
     /**
      * Ajoute d'une route qui répond uniquement à une méthode POST
@@ -29,8 +32,8 @@ class RouterManager {
      * @return Route
      */
     public function post($name, $path, $callable){
-		return $this->addRoute($this->buildRoute($name, $path, $callable)->addMethod('POST'));
-	}
+        return $this->addRoute($this->buildRoute($name, $path, $callable)->addMethod('POST'));
+    }
 
 
     /**
@@ -41,8 +44,8 @@ class RouterManager {
      * @return Route
      */
     public function get($name, $path, $callable){
-		return $this->addRoute($this->buildRoute($name, $path, $callable)->addMethod('GET'));
-	}
+        return $this->addRoute($this->buildRoute($name, $path, $callable)->addMethod('GET'));
+    }
 
     /**
      * Ajoute d'une route qui répond à une méthode GET et POST
@@ -51,9 +54,9 @@ class RouterManager {
      * @param callback $callable callback à appeler
      * @return Route
      */
-	public function match($name, $path, $callable){
-		return $this->addRoute($this->buildRoute($name, $path, $callable)->addMethod('POST')->addMethod('GET'));
-	}
+    public function match($name, $path, $callable){
+        return $this->addRoute($this->buildRoute($name, $path, $callable)->addMethod('POST')->addMethod('GET'));
+    }
 
     /**
      * Ajout d'une route dans le manager
@@ -61,17 +64,17 @@ class RouterManager {
      * @return Route
      */
     public function addRoute(Route $route){
-		$this->routes[$route->getName()] = $route;
-		return $route;
-	}
+        $this->routes[$route->getName()] = $route;
+        return $route;
+    }
 
     /**
      * Renvoi la liste des routes gérées par le manager
      * @return Route[]
      */
     public function getRoutes(){
-		return $this->routes;
-	}
+        return $this->routes;
+    }
 
     /**
      * Récupère un object Response en fonction du $path ou lance une exception si aucune route n'a renvoyé de resultat
@@ -82,17 +85,18 @@ class RouterManager {
     public function getResponseForUri($uri){
         $uri = trim((string) $uri);
 
-        //Si l'index.php n'est pas à la racine du site, alors on enlève tout ce qui se trouve avant.
-        //Ceci afin de tester les routes dans les meilleures conditions, c'est à dire "A partir du dossier où se trouve index.php"
-        if($this->getBaseUrl() !== '/'){
-            $uri = str_replace($this->getBaseUrl(), '', $uri);
+        //Si on a un base Url et que notre base url se trouve au début, alors on enlève le base url de l'uri
+        if(strlen($this->getBaseUrl()) && strpos($uri, $this->getBaseUrl()) === 0){
+            //uri commencera donc par un /
+            $uri = substr($uri, strlen($this->getBaseUrl()));
         }
+
 
         //On prend pas ce qu'il y a après ? ou #
         $uri = substr($uri, 0, strcspn($uri, '?#'));
-        
+
         //On trouve (peut-être) la route en fonction du uri demandé
-		$route = $this->findRoute($uri);
+        $route = $this->findRoute($uri);
 
         //Si on a pas trouvé de route, on lance une exception (404)
         if(is_null($route)){
@@ -102,7 +106,7 @@ class RouterManager {
         //Enfin, tout va bien, on a un Response
         return $this->getResponse($route->getCallable(), $route->getVarForPath($uri));
 
-	}
+    }
 
     /**
      * Renvoi la première route qui correspond au pattern du path. Si aucune route n'a été trouvée, on renvoi null
@@ -113,14 +117,14 @@ class RouterManager {
 
         $uri = (string) $uri;
         //Pour chaque route
-		foreach($this->getRoutes() as $route){
+        foreach($this->getRoutes() as $route){
             //Regarde sur l'uri correspond à la route
-			if($route->matchWith($uri)){
-				return $route;
-			}
-		}
-		return null;
-	}
+            if($route->matchWith($uri)){
+                return $route;
+            }
+        }
+        return null;
+    }
 
 
     /**
@@ -149,8 +153,8 @@ class RouterManager {
      */
     public function getBaseUrl(){
         return $this->baseUrl;
-		//return dirname($_SERVER['SCRIPT_NAME']);
-	}
+        //return dirname($_SERVER['SCRIPT_NAME']);
+    }
 
 
     /**
@@ -167,4 +171,40 @@ class RouterManager {
             ->setCallable($callable);
         return $route;
     }
+
+
+    /**
+     * Renvoi le path en fonction du nom de la route et des variables
+     * @param string $routeName
+     * @param array $vars
+     */
+    public function getPath($routeName, array $vars = array()){
+        $routeName = (string) $routeName;
+
+        if(isset($this->routes[$routeName])){
+            $varsInPath = array();
+            foreach($vars as $key => $var){
+                $varsInPath['{'.$key.'}'] = $var;
+            }
+
+            $varsInPath = array_merge($this->getCommonVars(), $varsInPath);
+
+            return $this->getBaseUrl() . strtr($this->routes[$routeName]->getPath(), $varsInPath);
+        }
+
+        //Si on a pas de route, alors on se dit que routeName, c'est le path vers un fichier statique..
+        return $this->getBaseUrl() . $routeName;
+
+    }
+
+
+    private function getCommonVars(){
+        return array(
+            '{_locale}' => Language::get(),
+        );
+    }
+}
+
+function getPath($routeName, array $vars = array()){
+    return AppManager::getInstance()->getRouter()->getPath($routeName,$vars);
 }

@@ -18,9 +18,9 @@ class AppManager {
      */
     private $site;
     /**
-     * @var \Qwik\Kernel\App\Routing\RouterManager
+     * @var \Qwik\Kernel\App\Routing\Router
      */
-    private $routerManager;
+    private $router;
     /**
      * @var bool Mode debug ou pas
      *//*
@@ -53,28 +53,13 @@ class AppManager {
      * @param $domain string nom de (sous) domaine
      * @return AppManager
      */
-    public static function init($www){
+    public static function initWithPath($www){
         $domain = filter_var($_SERVER['HTTP_HOST'], FILTER_SANITIZE_URL);
-        self::$instance = new AppManager($www, $domain);
+        self::$instance = new AppManager();
+        self::$instance->init($www, $domain);
         return self::$instance;
 	}
 
-    /**
-     * Initialise la varibale debug en fonction du nom du domaine. Si ca commence par dev., on est en mode debug :)
-     * @param $domain
-     */
-    //TODO: faire autrement, faire un array de config par env
-    /*private function initDebug($domain){
-		//On est en debug si notre domaine commence par dev.
-		$this->isDebug = strpos($domain, 'dev.') === 0;	
-	}*/
-
-    /**
-     * @return bool
-     */
-/*    public function isDebug(){
-		return $this->isDebug;
-	}*/
 
     /**
      * Récupération du nom de domain cleané (sans dev. s'il y en avait un)
@@ -82,8 +67,7 @@ class AppManager {
      * @return string
      */
     private function getProperDomain($domain){
-
-		return (strpos($domain, 'dev.') === 0) ? substr($domain, 4) : $domain;
+		return (strpos($domain, 'local.') === 0) ? substr($domain, 6) : $domain;
 	}
 
     /**
@@ -103,20 +87,33 @@ class AppManager {
      * @param $www string là où se trouve notre fichier index.php (path absolut)
      * @param $domain string
      */
-    private function __construct($www, $domain){
+    private function __construct(){
 
+	}
 
-        //initialisation du path dans lequel on se trouve (le plus souvent "/")
-        $this->initBase();
+    /**
+     * Initialise l'app avec le www et le nom de domaine
+     * @param string $www
+     * @param string $domain
+     */
+    public function init($www, $domain){
 
         $www = (string) $www;
+        $domain = (string) $domain;
+
+        //Init base url
+        $this->initBaseUrl();
+
+        //Set de l'environnement
+        $this->initEnvironment();
+
 
         //On récupère le bon domaine
-		$domain = $this->getProperDomain((string) $domain);
+        $domain = $this->getProperDomain($domain);
 
         //Récupération du site
-		$siteManager = new \Qwik\Kernel\App\Site\SiteManager();
-		$this->site = $siteManager->getByPath($www, $domain);
+        $siteManager = new \Qwik\Kernel\App\Site\SiteManager();
+        $this->site = $siteManager->getByPath($www, $domain);
 
         //Si c'est un alias, alors on va rediriger  via un header
         if($this->getSite()->getRedirect() != ''){
@@ -129,27 +126,24 @@ class AppManager {
         }
 
         //Si le site existe pas, alors on va prendre default pour afficher une page standard (oops, ce site n'existe pas encore)
-		if(!$this->getSite()->exists()){
-			$this->site = $siteManager->getByPath($www, 'default');
-		}
+        if(!$this->getSite()->exists()){
+            $this->site = $siteManager->getByPath($www, 'default');
+        }
 
 
-		//Initialisation de la langue en cours
-		Language::init($this->getSite()->getLanguages());
+        //Initialisation de la langue en cours
+        Language::init($this->getSite()->getLanguages());
 
-        //Initialisation de l'app
-		$this->initApp();
-	}
+        //Initialisation du router
+        $this->router = new \Qwik\Kernel\App\Routing\Router($this->getBaseUrl());
 
+        //Initialise le moteur de template
+        TemplateProxy::init($this);
 
-    private function initBase(){
-
-        //Init base url
-        $this->initBaseUrl();
-        //Set de l'environnement
-        $this->initEnvironment();
-
+        //Initialise les routes de de base
+        $this->initRoutes();
     }
+
 
 
 
@@ -175,19 +169,6 @@ class AppManager {
 	}
 
 
-    /**
-     * Initialise l'app
-     */
-    private function initApp(){
-		//Initialisation du routerManager
-		$this->routerManager = new \Qwik\Kernel\App\Routing\RouterManager($this->getBaseUrl());
-
-        //Initialise le moteur de template
-        TemplateProxy::init($this);
-
-        //Initialise les routes de de base
-		$this->initRoutes();
-	}
 
     /**
      * Ajoute les routes des modules
@@ -215,7 +196,7 @@ class AppManager {
 
 
 		//Arrivée sur le site, j'attends une redirection vers la première page
-        $this->getRouterManager()->get('root', '/', function() use ($site){
+        $this->getRouter()->get('root', '/', function() use ($site){
 
             //Récupération de la première page
             $pageManager = new \Qwik\Kernel\App\Page\PageManager();
@@ -228,13 +209,13 @@ class AppManager {
 
             //TODO: faire un ResponseRedirect
             //TODO: création d'une url avec un nom de route + variables (twig aussi)
-            header('Location: ' . $this->getBaseUrl() . Language::get() . '/' . $firstPage->getUrl());
+            header('Location: ' . $this->getBaseUrl() . '/' . Language::get() . '/' . $firstPage->getUrl());
             exit();
         });
-        
+
         //J'ai choisi une langue, mais pas de page, j'attends une redirection vers la première page
         //TODO: Code dupliqué par rapport au "/". Faire quelque chose
-        $this->getRouterManager()->get('root_language', '/{_locale}', function($_locale) use($site){
+        $this->getRouter()->get('root_language', '/{_locale}', function($_locale) use($site){
 
             //Si on gère la langue, alors on va sur la première page
             if(in_array($_locale, $site->getLanguages())){
@@ -248,7 +229,7 @@ class AppManager {
                 //Response redirect
                 //TODO: faire un ResponseRedirect
                 //TODO: création d'une url avec un nom de route + variables (twig aussi)
-                header('Location: ' . $this->getBaseUrl() . Language::get() . '/' . $firstPage->getUrl());
+                header('Location: ' . $this->getBaseUrl() . '/' . Language::get() . '/' . $firstPage->getUrl());
                 exit();
 
             }else{ //Sinon Exception :)
@@ -257,7 +238,7 @@ class AppManager {
         })->assert('_locale','[a-z]{2}');
 
         //J'ai une langue et une page :)
-        $this->getRouterManager()->get('page', '/{_locale}/{pageName}', function($_locale, $pageName) use($site){
+        $this->getRouter()->get('page', '/{_locale}/{pageName}', function($_locale, $pageName) use($site){
             //Changement de la langue quand c'est possible...
             Language::changeIfPossible($_locale);
 
@@ -279,7 +260,7 @@ class AppManager {
         })->assert('_locale','[a-z]{2}');
 
         //Clear varnish et les templates
-        $this->getRouterManager()->get('cc', '/admin/cc', function() use($site){
+        $this->getRouter()->get('cc', '/admin/cc', function() use($site){
 
             //Clear Vanish, que si on a curl init
             if(function_exists('curl_init')){
@@ -313,16 +294,16 @@ class AppManager {
             }
             return TemplateProxy::getInstance()->renderPage($page);
         });
-        
+
         //On va voir si les modules on des routes
 		$this->addModulesRoutes();
 	}
 
     /**
-     * @return Routing\RouterManager
+     * @return Routing\Router
      */
-    public function getRouterManager(){
-        return $this->routerManager;
+    public function getRouter(){
+        return $this->router;
     }
 
 
@@ -336,21 +317,15 @@ class AppManager {
 
         //Récupération de là où se trouve le script
         $baseUrl = str_replace(DIRECTORY_SEPARATOR, '/', dirname($_SERVER['SCRIPT_NAME']));
+        //on enlève le slash au début et à la fin, comme ca, c'est bon pour tout le monde qu'on soit dans le / ou /dd/lol/ok
+        $baseUrl = trim($baseUrl, '/');
 
-        //Si c'est pas juste un slash, alors c'est par exemple /monDossier/ok. Il faut donc rajouter un slash au bout
-        if($baseUrl !== '/'){
-            $baseUrl = $baseUrl . '/';
+        if(
+            isset($_SERVER['PATH_INFO']) //Si path_info, alors on a fait un index.php/mon/path... ou dev.php/mon/path...
+            || ($_SERVER['REQUEST_URI'] === $_SERVER['SCRIPT_NAME']) //$baseUrl .= '/' . basename($_SERVER['SCRIPT_NAME'])
+        ){
+            $baseUrl .= '/' . basename($_SERVER['SCRIPT_NAME']);
         }
-
-        if(isset($_SERVER['PATH_INFO'])){ //Si path_info, alors on a fait un index.php/... ou dev.php/... du coup on prend le nom du fichier + slash à la fin
-            $baseUrl .= basename($_SERVER['SCRIPT_NAME']) .'/';
-        }else{
-            //Si on a juste demandé /index.php ou /dev.php, alors on dit que c'est /
-            if($_SERVER['REQUEST_URI'] === $_SERVER['SCRIPT_NAME']){
-                $baseUrl .= trim($_SERVER['SCRIPT_NAME'],'/') . '/';
-            }
-        }
-
 
         $this->setBaseUrl($baseUrl);
     }
@@ -394,7 +369,7 @@ class AppManager {
         $uri = $this->getUri();
 
         try{
-            $response = $this->getRouterManager()->getResponseForUri($uri);
+            $response = $this->getRouter()->getResponseForUri($uri);
         }catch(\Qwik\Kernel\App\Page\PageNotFoundException $ex){
 
             //Récupère le fichier s'il existe. Ceci peut arriver lorsqu'on demande un fichier statitque (js, css, jpg, etc...) alors qu'on a le prefix dev.php par exemple
@@ -496,7 +471,7 @@ class AppManager {
 			throw new \Exception('Page '.$pageUrl.' introuvable');
 		}
 		foreach($page->getZone($zoneName)->getModules() as $module){
-			
+
 			if($module->getUniqId() == $uniqId){
 				return $module;
 			}
@@ -504,5 +479,5 @@ class AppManager {
 		throw new \Exception('Impossible de trouver le module');
 	}
 
-	
+
 }

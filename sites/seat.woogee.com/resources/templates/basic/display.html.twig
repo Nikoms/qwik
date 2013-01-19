@@ -4,15 +4,15 @@
 
 {% block head %}
 	 <!-- Bootstrap -->
-	<link href="{{ app.getBaseUrl() }}qwik/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="{{ path('/qwik/lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
 	
     <!-- Site -->
-    <link rel="stylesheet" href="{{ app.getBaseUrl() }}q/templates/style.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{ path('/q/templates/style.css') }}" type="text/css" media="screen, projection">
 
 {% endblock %}
 
 {% block body %}
-    <img src="{{ app.getBaseUrl() }}q/templates/images/background1.jpg" class="superbg" alt="background" />
+    <img src="{{ path('/q/templates/images/background1.jpg') }}" class="superbg" alt="background" />
 	{% include "templates/top.html.twig" %}
 
 	<div class="container main">
@@ -22,6 +22,6 @@
 	</div>
 
 	{% include "templates/bottom.html.twig" %}
-    <script src="{{ app.getBaseUrl() }}q/templates/background.js" type="text/javascript"></script>
+    <script src="{{ path('/q/templates/background.js') }}" type="text/javascript"></script>
 
 {% endblock %}

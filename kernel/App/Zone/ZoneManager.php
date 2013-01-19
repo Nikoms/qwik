@@ -15,33 +15,15 @@ class ZoneManager {
      */
     public function getByPage(Page $page){
         $zones =  array();
-
-        if(isset($page->getConfig()['zones']) && is_array($page->getConfig()['zones'])){
-            foreach($page->getConfig()['zones'] as $zoneName => $config){
+        $config = $page->getConfig();
+        if(isset($config['zones']) && is_array($config['zones'])){
+            foreach($config['zones'] as $zoneName => $config){
                 $zones[$zoneName] = $this->getBuildZone($page, $zoneName, $config);
             }
         }
 
         return $zones;
     }
-
-    /**
-     * @param \Qwik\Kernel\App\Page\Page $page
-     * @param $zoneName string
-     * @return Zone
-     */
-    /*public function getOneByName(Page $page, $zoneName){
-
-
-        $zoneName = trim((string) $zoneName);
-
-        if(($zoneName === '') || empty($page->getConfig()['zones'][$zoneName])){
-            return null;
-        }
-
-        //Renvoi la zone construite
-        return $this->getBuildZone($page, $zoneName, $page->getConfig()['zones'][$zoneName]);
-	}*/
 
     /**
      * Renvoi une zone construite en fonction des arguments

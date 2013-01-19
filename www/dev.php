@@ -4,4 +4,4 @@
 require_once '../kernel/App/AutoLoader.php';
 //Initialisation du logger (dev only?)
 \Qwik\Kernel\Log\Logger::getInstance();
-Qwik\Kernel\App\AppManager::init(__DIR__)->render();
+Qwik\Kernel\App\AppManager::initWithPath(__DIR__)->render();

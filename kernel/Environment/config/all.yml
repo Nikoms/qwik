@@ -1,6 +1,3 @@
-url:
-  prefix: ""
-
 logger:
   active: true
   display: false
@@ -18,3 +15,11 @@ template:
    - \Qwik\Kernel\Template\Extension\Translate
    - \Qwik\Kernel\Template\Extension\Locale
    - \Qwik\Kernel\Template\Extension\App
+
+module:
+  gallery:
+    cache: true #cache des thumbnail. Si c'est mis à truc, le thumnail sera physiquement créé, sinon, on fera toujours du process php
+
+  form:
+    mail:
+      redirect: false #redirection des mails toujours vers la même boite (pour debug, mettre un email)

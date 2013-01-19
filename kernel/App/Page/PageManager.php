@@ -39,12 +39,13 @@ class PageManager {
     public function findOneByUrl(\Qwik\Kernel\App\Site\Site $site, $url){
         $url = (string) $url;
 
+        $config = $this->getPagesConfig($site);
         //Si on a pas de config pour cette page, on renvoi null
-        if(empty($this->getPagesConfig($site)[$url])){
+        if(empty($config[$url])){
             return null;
         }
 
-        return $this->getBuildPage($site, $url, $this->getPagesConfig($site)[$url]);
+        return $this->getBuildPage($site, $url, $config[$url]);
     }
 
     /**
@@ -94,8 +95,9 @@ class PageManager {
      * @return array
      */
     private function getPagesConfig(\Qwik\Kernel\App\Site\Site $site){
+        $config = $site->getConfig();
         //TODO: ne pas prendre ca du site
-        return $site->getConfig()['pages'];
+        return $config['pages'];
     }
 
     /**

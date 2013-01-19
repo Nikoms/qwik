@@ -69,7 +69,7 @@ class TemplateProxy {
         $this->setTemplateEngine($twig);
 
         //Ajout de extensions
-        $this->addExtensions($appManager);
+        $this->addExtensions();
 
     }
 
@@ -89,7 +89,7 @@ class TemplateProxy {
 
     /**
      * Renvoi l'affichage d'une page
-     * @param Page\Page $page
+     * @param \Qwik\Kernel\App\Page\Page $page
      * @return string
      */
     public function renderPage(\Qwik\Kernel\App\Page\Page $page){
@@ -131,13 +131,15 @@ class TemplateProxy {
      * Ajout des extension dans le moteur de template
      * @param AppManager $appManager
      */
-    private function addExtensions(\Qwik\Kernel\App\AppManager $appManager){
+    private function addExtensions(){
         //Ajout de la méthode pour traduire un truc dans le template
         $this->getTemplateEngine()->addFilter('translate', new \Twig_Filter_Function('\Qwik\Kernel\App\Language::getValue'));
         //Renvoi la langue en cours
         $this->getTemplateEngine()->addFunction('locale', new \Twig_Function_Function('\Qwik\Kernel\App\Language::get'));
         //Récupération de l'app (notamment pour le baseUrl)
-        $this->getTemplateEngine()->addGlobal('app', $appManager);
+        //$this->getTemplateEngine()->addGlobal('base_url', \Qwik\Kernel\App\AppManager::getInstance()->getBaseUrl());
+        //Gestion des path
+        $this->getTemplateEngine()->addFunction('path', new \Twig_Function_Function('\Qwik\Kernel\App\Routing\getPath'));
     }
 
 }

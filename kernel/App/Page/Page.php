@@ -111,10 +111,11 @@ class Page {
      * @throws \Exception Si pas de template
      */
     public function getTemplate(){
-        if(empty($this->getConfig()['template'])){
+        $config = $this->getConfig();
+        if(empty($config['template'])){
             throw new \Exception('Template non défini');
         }
-		return $this->getConfig()['template'];
+		return $config['template'];
 	}
 
     /**
