@@ -1,0 +1,20 @@
+
+template: basic
+title: Contact
+zones:
+  zone1:
+    infos:
+      module: file
+      config:
+        file: contact.html
+    maps:
+      module: gmaps
+      config:
+        map:
+          position: bottom #hide, top, bottom, left, right
+          width: 100%
+          height: 400px
+        addresses:
+          - title: Centre commercial "La Mazerine"<br />Avenue Albert Ier – 1332 Genval
+            latitude: "50.727262"
+            longitude: "4.487579"

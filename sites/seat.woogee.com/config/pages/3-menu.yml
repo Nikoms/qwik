@@ -1,0 +1,6 @@
+
+template: basic
+title: Menu
+zones:
+  zone1:
+    intro: menu/salle2.yml

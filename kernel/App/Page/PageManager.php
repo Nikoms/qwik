@@ -7,6 +7,10 @@ use Qwik\Kernel\App\Config;
 
 class PageManager {
 
+    /**
+     * @var array liste des pages pour chaque path de site
+     */
+    static private $pages = array();
 
     /**
      * Récupération d'une page en fonction d'une erreur (ex: 404)
@@ -95,19 +99,63 @@ class PageManager {
      * @return array
      */
     private function getPagesConfig(\Qwik\Kernel\App\Site\Site $site){
-        $config = $site->getConfig();
-        //TODO: ne pas prendre ca du site
-        return $config['pages'];
+
+        //Check si on a pas déjà le site en cache, car on fait bcp d'appel à cette méthode
+        if(empty(self::$pages[$site->getPath()])){
+            $pagesPath = $site->getPath() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'pages';
+            //Check si on a le dossier "pages" avec le nouveau système 1 fichier par page
+            if(is_dir($pagesPath)){
+                self::$pages[$site->getPath()] = $this->getPagesByPath($pagesPath);
+            }else{
+                //Pas de pages
+                throw new \Exception('No pages config found');
+            }
+
+
+        }
+
+        return self::$pages[$site->getPath()];
     }
 
+
+    private function getPagesByPath($path){
+        //1. Récupération des pages
+        $pages = \Qwik\Kernel\App\Config::getInstance()->getPathConfig($path);
+
+        //2. Réorder "naturel" et insensible à la case
+        uksort($pages, function ($a, $b){
+            return strnatcasecmp($a,$b);
+        });
+
+        //3. On supprime les numéros dans les clés
+        $return = array();
+        foreach($pages as $url => $page){
+            //On enlève tous les whitespaces de l'url
+            $url = str_replace(' ', '', $url);
+            //Le pattern de l'url est par exemple 1-mapage
+            $pattern = '/([0-9]+)-(\w+)/i';
+            //On remplace le tout par le deuxième match trouvé, c'est à dire le nom de la page
+            $replacement = '$2';
+            $url = preg_replace($pattern, $replacement, $url);
+
+            $return[$url] = $page;
+        }
+
+        return $return;
+    }
     /**
      * Renvoi un tableau de config (array) de pages d'erreur
      * @param \Qwik\Kernel\App\Site\Site $site
      * @return array
      */
     public function getPagesErrorConfig(\Qwik\Kernel\App\Site\Site $site){
-        //TODO: ne pas prendre ca du site
-        $config = $site->getConfig();
-        return isset($config['errors']) ? $config['errors'] : array();
+
+        $errorsPath = $site->getPath() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'errors';
+        //Check si on a le dossier "pages" avec le nouveau système 1 fichier par page
+        if(is_dir($errorsPath)){
+            return $this->getPagesByPath($errorsPath);
+        }
+        return array();
+
     }
 }

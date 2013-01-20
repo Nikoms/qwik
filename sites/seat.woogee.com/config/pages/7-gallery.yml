@@ -1,0 +1,14 @@
+
+template: basic
+title: Galerie
+zones:
+  zone1:
+   - module: gallery
+     config:
+       perLine: 4
+       position: center
+       path: images/gallery
+       thumbnail:
+         width: 200
+         height: 150
+         quality: 85

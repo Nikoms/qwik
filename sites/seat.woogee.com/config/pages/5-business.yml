@@ -1,0 +1,9 @@
+
+template: basic
+title: Business lunch
+zones:
+  zone1:
+    download:
+      module: file
+      config:
+        file: business.html.twig

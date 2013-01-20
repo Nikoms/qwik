@@ -1,0 +1,130 @@
+
+template: basic
+title:
+  fr: Tarif
+  nl: Tarief
+  en: Rates
+meta:
+  description:
+    fr: BBSalve, Bed and Breakfast à Bruxelles
+    nl: BBSalve, Bed and Breakfast in Brussel
+    en: BBSalve, Bed and Breakfast in Brussels
+  keywords:
+    fr: bbsalve, bed and breakfast, maison d&#039;hôte, b&amp;b, bed, breakfast, Bruxelles, Auderghem, Ouderghem, Schuman, brussel, brussels
+zones:
+  zone1:
+    text:
+      module: html
+      config:
+        content:
+          fr: |-
+              <h4>
+                  Chambre principale</h4>
+              <p>
+                  Prix par nuit en chambre double avec salle de douche privative, petit d&eacute;jeuner compris.</p>
+
+              <p>- A partir de 90 euros pour une personne. <br />- A partir de 100 euros pour deux personnes.</p>
+
+              <h4>
+                  2me Chambre</h4>
+              <p>
+                  Chambre pouvant convenir &agrave; une troisi&egrave;me personne ou enfants.<br />
+                  (Attention: cette chambre n&rsquo;est pas lou&eacute;e seule)<br />
+                  Lit de b&eacute;b&eacute; sur demande.</p>
+              <p>
+                  - 25 euros pour un enfant de plus de 3 ans<br />
+                  - 50 euros par personne.</p>
+              <h4>
+                  Paiement</h4>
+              <p>
+                  Pas de carte de cr&eacute;dit.</p>
+              <p>
+                  Pour toutes infos, merci de prendre contact par mail &agrave; l&rsquo;adresse <a href="mailto:info@bbsalve.be">info@bbsalve.be</a>.</p>
+              <h4>
+                  Autres infos</h4>
+              <p>
+                  Wifi gratuit dans toute la maison.<br />
+                  Interdiction de fumer (possibilit&eacute; dans le jardin).<br />
+                  Animaux domestiques non-admis.<br />
+                  Ouvert toute l&rsquo;ann&eacute;e.<br />
+                  Accueil en Fran&ccedil;ais, N&eacute;erlandais et notions d&rsquo;Anglais</p>
+              <h4>
+                  Organisation pratique</h4>
+              <p>
+                  Arriv&eacute;e : Check in entre 17h et 21h (&agrave; convenir si heure tardive). Merci de nous informer par e-mail ou t&eacute;l&eacute;phone de l&rsquo;heure de votre arriv&eacute;e 48h &agrave; l&rsquo;avance.<br />
+                  D&eacute;part : Les chambres doivent &ecirc;tre lib&eacute;r&eacute;es au plus tard &agrave; 10h30, mais il est possible de laisser les bagages dans la maison.</p>
+          nl: |-
+              <h4>
+                  Hoofdslaapkamer</h4>
+              <p>
+                  Prijs per nacht in dubbele slaapkamer met badkamer en WC, ontbijt inbegrepen.</p>
+
+              <p>- Vanaf 90 euros voor één persoon. <br />- Vanaf 100 euros pour twee personen.</p>
+
+              <h4>
+                  Bijkomende slaapkamer</h4>
+              <p>
+                  Kamer geschikt voor derde persoon of voor kinderen.<br />
+                  (Opgelet&nbsp;: deze kamer kan niet afzonderlijk gehuurd worden)<br />
+                  Babybed op aanvraag.</p>
+              <p>
+                  - 25 euros voot kinderen boven 3 jaar<br />
+                  - 50 euros per persoon.</p>
+              <h4>
+                  Betaling</h4>
+              <p>
+                  <span class="short_text" id="result_box" lang="nl"><span class="hps">Geen credit card</span></span>.</p>
+              <p>
+                  Voor alle info of vragen over betaling, gelieve contact op te nemen op het e-mailadres <a href="mailto:info@bbsalve.be">info@bbsalve.be</a>.</p>
+              <h4>
+                  Verdere info</h4>
+              <p>
+                  Gratis wifiverbinding in het hele huis<br />
+                  Verboden te roken (mogelijkheid in de tuin).<br />
+                  Huisdieren verboden.<br />
+                  Het hele jaar open.<br />
+                  Ontvangst in het Frans, Nederlands en basis Engels.</p>
+              <h4>
+                  Praktische organisatie</h4>
+              <p>
+                  Aankomst&nbsp;: Check in tussen 17u en 21u (te bespreken indien later uur). Gelieve ons 48u op voorhand per mail of t&eacute;l&eacute;foon te verwittigen van jullie aankomst.<br />
+                  Vertrek&nbsp;: De kamers moeten ten laatste om 10u30 verlaten worden. Mogelijkheid om bagages in het huis te laten.</p>
+          en: |-
+              <h4>
+                  Master bedroom</h4>
+              <p>
+                  Price per night in double bedroom with bathroom and toilet, breakfast included.</p>
+
+              <p>- From 90 euros for one person. <br />- From 100 euros for two people.</p>
+
+              <h4>
+                  Additional bedroom</h4>
+              <p>
+                  Room suitable for third person or children.<br />
+                  (NB: this room can not be rented separately)<br />
+                  Baby bed available on demand.</p>
+              <p>
+                  - 25 eurosfor children older than 3<br />
+                  - 50 euros per person.</p>
+              <h4>
+                  Paymenent&nbsp;:</h4>
+              <p>
+                  No credit card.</p>
+              <p>
+                  For all information or questions about payment, please contact us at the email address <a href="mailto:info@bbsalve.be">info@bbsalve.be</a>.</p>
+              <h4>
+                  Other info</h4>
+              <p>
+                  Free wifi in the whole house<br />
+                  No smoking inside (possibility in the garden).<br />
+                  No animals<br />
+                  Open during the whole year.<br />
+                  French, Dutch and basic English.</p>
+              <h4>
+                  practical organization</h4>
+              <p>
+                  Arrival&nbsp;: Check in between 17h and 21h (to be discussed if later). Please inform us 48 hours in advance by mail or telephone of your arrival time.<br />
+                  Departure&nbsp;: Rooms must be left at 10.30 am at the latest, but it&rsquo;s possible to leave luggages in the house.<br />
+                  &nbsp;</p>
+
+

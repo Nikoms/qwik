@@ -1,0 +1,12 @@
+
+template: basic
+title: 404
+zones:
+  zone1:
+    text:
+      module: html
+      config:
+        content:
+          fr: Impossible de trouver la page
+          nl: Pagina niet gevonden
+          en: Page not found

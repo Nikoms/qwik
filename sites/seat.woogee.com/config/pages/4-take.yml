@@ -1,0 +1,10 @@
+
+template: basic
+title: Take Away
+zones:
+  zone1:
+    intro:
+      module: file
+      config:
+        file: takeAway.html.twig
+    txt: menu/takeAway.yml

@@ -118,3 +118,10 @@ img.superbg {
 .take-away-intro{
     font-size:20px;
 }
+
+.download-folder-image{
+    text-align: center;
+}
+.download-folder-text{
+    text-align: right;
+}

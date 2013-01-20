@@ -236,8 +236,9 @@ abstract class Module {
     static private function getWithFile($filePath, Zone $zone, $uniqId){
         $filePath = (string) $filePath;
         $uniqId = (string) $uniqId;
+        //On prend la config du dossier config
+        $file = $zone->getPage()->getSite()->getPath() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $filePath);
 
-        $file = $zone->getPage()->getSite()->getPath() . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $filePath);
         if(!file_exists($file)){
             throw new \Exception('File ' . $file . ' not found (for module creation)');
         }

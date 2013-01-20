@@ -1,0 +1,26 @@
+
+template: basic
+title:
+  fr: Photos
+  nl: Foto's
+  en: Photos
+meta:
+  description:
+    fr: BBSalve, Bed and Breakfast à Bruxelles
+    nl: BBSalve, Bed and Breakfast in Brussel
+    en: BBSalve, Bed and Breakfast in Brussels
+  keywords:
+    fr: bbsalve, bed and breakfast, maison d&#039;hôte, b&amp;b, bed, breakfast, Bruxelles, Auderghem, Ouderghem, Schuman, brussel, brussels
+zones:
+  zone1:
+    photos:
+      module: gallery
+      config:
+        position: center
+        path: images/photos
+        perLine: 4
+        subTitle: 0
+        thumbnail:
+          width: 120
+          height: 80
+          quality: 85

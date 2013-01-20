@@ -4,13 +4,14 @@ logger:
 
 
 template:
-  cache: %site_path%/cache
+  cache: %site_path%/cache/templates
   debug: false
   strict: false
   path:
-   - %site_path%/resources
+   - %site_path%/resources/views
+   - %site_path%/resources/includes
    - %kernel_path%/Module
-   - %kernel_path%/Resources
+   - %kernel_path%/Resources/views
   extensions:
    - \Qwik\Kernel\Template\Extension\Translate
    - \Qwik\Kernel\Template\Extension\Locale

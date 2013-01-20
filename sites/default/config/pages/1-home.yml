@@ -1,0 +1,17 @@
+
+template: 404
+title:
+  fr: Oops
+  nl: Whoops
+meta:
+  charset: utf-8
+  description: 404
+  keywords: 404
+zones:
+  content:
+    intro:
+      module: html
+      config:
+        content:
+          fr: "Oops... Le site n'existe pas... Encore"
+          en: "Whoops... The website doesn't exists... Yet!"

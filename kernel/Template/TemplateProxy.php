@@ -2,6 +2,7 @@
 
 namespace Qwik\Kernel\Template;
 
+use Qwik\Kernel\App\AppManager;
 use Qwik\Kernel\App\Language;
 
 /**
@@ -45,13 +46,13 @@ class TemplateProxy {
         require_once __DIR__ . '/../vendor/Twig/Autoloader.php';
         \Twig_Autoloader::register();
 
+
         //Chemins vers les twig
-        //Todo: Render cela paramétrable
-        $loader = new \Twig_Loader_Filesystem(array(
-            $appManager->getSite()->getPath() . '/resources',
-            __DIR__ . '/../Module',
-            __DIR__ . '/../Resources',
-        ));
+        $paths = AppManager::getInstance()->getEnvironment()->get('template.path');
+        foreach($paths as $key => $path){
+            $paths[$key] = str_replace('/', DIRECTORY_SEPARATOR, $path);
+        }
+        $loader = new \Twig_Loader_Filesystem($paths);
 
         //Création du moteur de template
         $twig = new \Twig_Environment($loader, array(
@@ -117,6 +118,17 @@ class TemplateProxy {
 
         );
     }
+
+    /**
+     * Renvoi la string compilé avec le template et les variables
+     * @return string
+     * @param string $templatePath
+     * @param array $vars
+     */
+    public function renderTemplate($templatePath, $vars = array()){
+        return $this->getTemplateEngine()->render((string) $templatePath, $vars);
+    }
+
 
 
 

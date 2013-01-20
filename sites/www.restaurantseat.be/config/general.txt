@@ -1,6 +1,0 @@
-url: www.seatrestaurant.be
-languages: 
-  available: [fr]
-title: Sea't Restaurant
-google: 
-  analytics: false

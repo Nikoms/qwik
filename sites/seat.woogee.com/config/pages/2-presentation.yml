@@ -1,0 +1,7 @@
+template: basic
+title: Présentation
+zones:
+  zone1:
+   - module: file
+     config:
+       file: presentation.html

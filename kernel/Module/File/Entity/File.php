@@ -3,6 +3,7 @@ namespace Qwik\Kernel\Module\File\Entity;
 
 use Qwik\Kernel\App\Module\Module;
 use Qwik\Kernel\App\Language;
+use Qwik\Kernel\Template\TemplateProxy;
 
 
 /**
@@ -88,10 +89,7 @@ class File extends Module{
      * @return bool|string Renvoi le chemin vers le fichier selon la langue. Si le fichier n'existe pas, on renvoi false.
      */
     private function getFileWithLanguage($file, $language){
-    	
-    	$site = $this->getZone()->getPage()->getSite();
-        //Path où on va chercher les fichiers 
-    	$path = str_replace('/', DIRECTORY_SEPARATOR, $site->getWww() . DIRECTORY_SEPARATOR . $site->getRealUploadPath());
+
 		
 		//On garde la langue en cours
 		$currentLanguage = Language::get();
@@ -107,15 +105,25 @@ class File extends Module{
         
         //On renvient à la langue courante
 		Language::changeIfPossible($currentLanguage);
-		
+
+
+        $filePath = $this->getPath() . str_replace('/', DIRECTORY_SEPARATOR, $file) ;
         //Si le fichier existe, ok on le renvoi
-        if(file_exists($path . $file)){
-        	return $path . $file;
+        if(file_exists($filePath)){
+        	return $filePath;
         }
         //Le fichier n'existe pas
         return false;
         
         
+    }
+
+    /**
+     * Path où on va chercher les fichiers
+     */
+    private function getPath(){
+        $site = $this->getZone()->getPage()->getSite();
+        return $site->getPath() . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -136,6 +144,11 @@ class File extends Module{
                 };
                 //On passe $this, même si je sais qu'on peut accéder à this dans la méthode anonyme. C'est plus clair dans le ".php" d'utilise $module plutot que $this
                 return $phpToString($this);
+                break;
+            case 'twig':
+                //On récupère le nom du fichier, sans tout son path, qui ne nous interesse pas
+                $file = str_replace($this->getPath(), '', $file);
+                return TemplateProxy::getInstance()->renderTemplate($file);
                 break;
             default:
                 return file_get_contents($file);

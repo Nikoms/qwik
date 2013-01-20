@@ -1,0 +1,113 @@
+
+template: home
+title:
+  fr: Présentation
+  nl: Presentatie
+  en: Presentation
+meta:
+  description:
+    fr: BBSalve, Bed and Breakfast à Bruxelles
+    nl: BBSalve, Bed and Breakfast in Brussel
+    en: BBSalve, Bed and Breakfast in Brussels
+  keywords:
+    fr: bbsalve, bed and breakfast, maison d&#039;hôte, b&amp;b, bed, breakfast, Bruxelles, Auderghem, Ouderghem, Schuman, brussel, brussels
+zones:
+  zone1:
+    intro:
+      module: html
+      config:
+        content:
+          fr: |-
+              <p>
+              <strong>B&amp;B Salve</strong> est une maison des ann&eacute;es 20, pleine de charme nich&eacute;e dans un petit coin de paradis dans le sud est de Bruxelles. Pr&eacute;serv&eacute;e des regards et du bruit, la maison se situe &agrave; deux pas des transports publics, commerces et restaurants.</p>
+              <p>
+              <strong>B&amp;B Salve</strong> peut convenir pour des s&eacute;jours d&rsquo;affaires ou de loisirs.</p>
+              <p>
+              Elle comprend deux chambres confortables am&eacute;nag&eacute;es avec go&ucirc;t ainsi qu&#39;une salle de douche avec lavabo et WC priv&eacute;.</p>
+              <p>
+              Les chambres sont situ&eacute;es au deuxi&egrave;me &eacute;tage r&eacute;serv&eacute;, pour plus de tranquillit&eacute;, qu&rsquo;&agrave; un seul h&ocirc;te &agrave; la fois.</p>
+              <p>
+              Il y a &eacute;galement une possibilit&eacute; de parking gratuit devant la maison.<br />
+              <br />
+              &nbsp;</p>
+          nl: |-
+              <p>
+                  <strong>B&amp;B Salve</strong> is een charmevolle woning uit de jaren &rsquo;20, gelegen in een klein stukje paradijs <span class="short_text" id="result_box" lang="nl"><span class="hps">in het zuidoosten</span> <span class="hps">van Brussel</span></span>. Het huis bevindt zich in een rustige en stille straat, niet ver van het openbaar vervoer , winkels en restaurants.</p>
+              <p>
+                  <strong>B&amp;B Salve</strong> is de perfecte logeerplaats gedurende zakenrijzen of ontspanningsverblijven.</p>
+              <p>
+                  Twee comfortabele kamers, smaakvol ingericht, met bijhorende badkamer en WC staan ter beschikking.</p>
+              <p>
+                  De kamers bevinden zich op de tweede verdieping die slechts voorbehouden is voor &eacute;&eacute;n gast (of familie) tegelijkertijd. Er is een mogelijkheid om voor het huis gratis te parkeren.</p>
+          en: |-
+              <p>
+                  <strong>B&amp;B Salve</strong> is a charming home built in the twenties, situated in a small piece of paradise <span class="short_text" id="result_box" lang="en"><span class="hps">in the south east</span> <span class="hps">of Brussels</span></span>. The house is located in a peaceful and quiet street, close to public transport, shops and restaurants.</p>
+              <p>
+                  <strong>B&amp;B Salve</strong> is a perfect place to stay during business or leisure trips.</p>
+              <p>
+                  Two comfortable rooms, tastefully decorated, with attached bathroom and toilet are available.</p>
+              <p>
+                  The rooms are located on the second floor, which is only reserved for one guest (or family) simultaneously. There is a possibility of free parking in front of the house.</p>
+
+
+    gallery:
+      module: gallery
+      config:
+        perLine: 4
+        position: center
+        path: images/home
+        thumbnail:
+          width: 120
+          height: 80
+          quality: 85
+  zone2:
+    infos:
+      module: html
+      config:
+        content:
+          fr: |-
+             <h4>Informations pratiques</h4>
+             <p>
+              Adresse:</p>
+             <p>
+              Dr&egrave;ve Louisa Chaudoir, 15</p>
+             <p>
+              1160 Bruxelles</p>
+             <p>
+              Belgique</p>
+             <hr />
+             <p>
+              E-mail:</p>
+             <p>
+              <a href="mailto:info@bbsalve.be?subject=B%26B%20Salve">info@bbsalve.be</a></p>
+          nl: |-
+              <h4>Praktische informatie</h4>
+              <p>
+                  Adresse:</p>
+              <p>
+                  Louisa Chaudoir Dreef, 15</p>
+              <p>
+                  1160 Brussel</p>
+              <p>
+                  Belg&iuml;e</p>
+              <hr />
+              <p>
+                  E-mail:</p>
+              <p>
+                  <a href="mailto:info@bbsalve.be?subject=B%26B%20Salve">info@bbsalve.be</a></p>
+          en: |-
+              <h4>
+                  Practical Information</h4>
+              <p>
+                  Address:</p>
+              <p>
+                  Dr&egrave;ve Louisa Chaudoir, 15</p>
+              <p>
+                  1160 Brussels</p>
+              <p>
+                  Belgium</p>
+              <hr />
+              <p>
+                  E-mail:</p>
+              <p>
+                  <a href="mailto:info@bbsalve.be?subject=B%26B%20Salve">info@bbsalve.be</a></p>
