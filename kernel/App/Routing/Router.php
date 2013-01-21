@@ -92,9 +92,6 @@ class Router {
         }
 
 
-        //On prend pas ce qu'il y a après ? ou #
-        $uri = substr($uri, 0, strcspn($uri, '?#'));
-
         //On trouve (peut-être) la route en fonction du uri demandé
         $route = $this->findRoute($uri);
 
@@ -203,8 +200,5 @@ class Router {
             '{_locale}' => Language::get(),
         );
     }
-}
 
-function getPath($routeName, array $vars = array()){
-    return AppManager::getInstance()->getRouter()->getPath($routeName,$vars);
 }

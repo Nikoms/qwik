@@ -23,7 +23,7 @@
             <input type="hidden" value="{{ module.getUniqId() }}" name="_uniqId" />
             <input type="hidden" value="{{ module.getZone().getName() }}" name="_zone" />
             <input type="hidden" value="{{ module.getZone().getPage().getUrl() }}" name="_page" />
-            <button>{{ module.translate('form.send') | translate }} <img class="qwik-form-spinner" src="{{ path('/qwik/module/form/images/spinner.gif') }}" alt="..." /></button>
+            <button>{{ module.translate('form.send') | translate }} <img class="qwik-form-spinner" src="{{ asset('/qwik/module/form/images/spinner.gif') }}" alt="..." /></button>
         </div>
     </div>
 

@@ -2,7 +2,9 @@
 namespace Qwik\Kernel\App;
 
 use Qwik\Kernel\App\Language;
+use Qwik\Kernel\App\Page\PageNotFoundException;
 use Qwik\Kernel\Environment\Environment;
+use Qwik\Kernel\Template\Asset;
 use Qwik\Kernel\Template\TemplateProxy;
 
 class AppManager {
@@ -204,7 +206,7 @@ class AppManager {
 
             //Si pas de page, alors 404
             if(!$firstPage){
-                throw new \Qwik\Kernel\App\Page\PageNotFoundException();
+                throw new PageNotFoundException();
             }
 
             //TODO: faire un ResponseRedirect
@@ -224,7 +226,7 @@ class AppManager {
 
                 //Si pas de "première" page, alors Exception!
                 if(!$firstPage){
-                    throw new \Qwik\Kernel\App\Page\PageNotFoundException();
+                    throw new PageNotFoundException();
                 }
                 //Response redirect
                 //TODO: faire un ResponseRedirect
@@ -233,7 +235,7 @@ class AppManager {
                 exit();
 
             }else{ //Sinon Exception :)
-                throw new \Qwik\Kernel\App\Page\PageNotFoundException();
+                throw new PageNotFoundException();
             }
         })->assert('_locale','[a-z]{2}');
 
@@ -253,7 +255,7 @@ class AppManager {
 
             //Si pas de page, alors 404
             if(!$page){
-                throw new \Qwik\Kernel\App\Page\PageNotFoundException();
+                throw new PageNotFoundException();
             }
             return TemplateProxy::getInstance()->renderPage($page);
 
@@ -290,7 +292,7 @@ class AppManager {
 
             //Si pas de page, alors 404
             if(!$page){
-                throw new \Qwik\Kernel\App\Page\PageNotFoundException();
+                throw new PageNotFoundException();
             }
             return TemplateProxy::getInstance()->renderPage($page);
         });
@@ -322,7 +324,7 @@ class AppManager {
 
         if(
             isset($_SERVER['PATH_INFO']) //Si path_info, alors on a fait un index.php/mon/path... ou dev.php/mon/path...
-            || ($_SERVER['REQUEST_URI'] === $_SERVER['SCRIPT_NAME']) //$baseUrl .= '/' . basename($_SERVER['SCRIPT_NAME'])
+            || (substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], '?#')) === $_SERVER['SCRIPT_NAME']) //$baseUrl .= '/' . basename($_SERVER['SCRIPT_NAME'])
         ){
             $baseUrl .= '/' . basename($_SERVER['SCRIPT_NAME']);
         }
@@ -349,17 +351,18 @@ class AppManager {
     //TODO: faire avec getEnv, une classe request
     private function getUri(){
 
+        $uri = $_SERVER['REQUEST_URI'];
         //PATH_INFO, c'est quand on écrit par exemple dev.php/fr/home. On a /fr/home dans PATH_INFO.
         if(isset($_SERVER['PATH_INFO'])){
-            return $_SERVER['PATH_INFO'];
+            $uri = $_SERVER['PATH_INFO'];
         }else{
             //Si on a juste demandé /index.php ou /dev.php, alors on dit que c'est /
-            if($_SERVER['REQUEST_URI'] === $_SERVER['SCRIPT_NAME']){
-                return '/';
+            if(substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], '?#')) === $_SERVER['SCRIPT_NAME']){
+                $uri = '/';
             }
         }
-        //REQUEST_URI, c'est quand on écrit directement /fr/home
-        return $_SERVER['REQUEST_URI'];
+
+        return $uri;
     }
     /**
      * Affiche la page demandée
@@ -370,11 +373,10 @@ class AppManager {
 
         try{
             $response = $this->getRouter()->getResponseForUri($uri);
-        }catch(\Qwik\Kernel\App\Page\PageNotFoundException $ex){
-
-            //Récupère le fichier s'il existe. Ceci peut arriver lorsqu'on demande un fichier statitque (js, css, jpg, etc...) alors qu'on a le prefix dev.php par exemple
-            $response = $this->getResponseOfFile($uri);
-            //Si on a toujours pas de réponse
+        }catch (PageNotFoundException $ex){
+            //Si page not found, alors on va voir si on a pas un asset à cet endroit...
+            $response = Asset::getResponseOfAsset($uri);
+            //On a pas trouvé d'asset.. Bon bah tt pis :)
             if($response === null){
                 $response = $this->getResponseForException($ex);
             }
@@ -409,52 +411,6 @@ class AppManager {
         $response->setContent($content);
 
         return $response;
-    }
-    /**
-     * @param $uri
-     * @return null|Routing\Response
-     */
-    private function getResponseOfFile($uri){
-
-        $virtualPath = '/' . $this->getSite()->getVirtualUploadPath();
-        //Si on est ici, on demande une ressource dans le dossier "public"
-        if(strpos($uri, $virtualPath) === 0){ // Le fichier demandé est "url rewrité"
-            $uri = DIRECTORY_SEPARATOR . $this->getSite()->getRealUploadPath() . substr($uri, strlen($virtualPath));
-        }
-        //On rajoute à l'url, le path vers www
-        $fullPathOfFile = $this->getSite()->getWww() . $uri ;
-        $fullPathOfFile = str_replace('/', DIRECTORY_SEPARATOR, $fullPathOfFile);
-
-        switch(strtolower(pathinfo($uri, PATHINFO_EXTENSION))){
-            //Liste des extensions autorisées à être lues (switch plus rapide que in_array)
-            case 'js':
-            case 'css':
-            case 'jpg':
-            case 'jpeg':
-            case 'gif':
-            case 'png':
-            case 'txt':
-            case 'html':
-            case 'htm':
-            case 'doc':
-            case 'docx':
-            case 'xls':
-            case 'xlsx':
-            case 'ppt':
-            case 'pptx':
-            case 'csv':
-            case 'pdf':
-                //Si le fichier existe, on va le chercher, sinon on passera au "default" qui renvoi null
-                if(file_exists($fullPathOfFile)){
-                    $response = new \Qwik\Kernel\App\Routing\Response();
-                    $response->setContent(file_get_contents($fullPathOfFile));
-                    $response->setFileName($fullPathOfFile);
-                    return $response;
-                }
-                //break; #nobreak!
-            default:
-                return null;
-        }
     }
 
     /**

@@ -71,7 +71,7 @@ class Gallery extends Module{
 			//on Calcule le path www du cache (thumbnail)
 			$thumbPath = $site->getWww() . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $site->getRealUploadPath() . Gallery::getThumbnailPathFor($width, $height, $quality) . '/'  . $pathOfFile);
 
-				
+
 			//On va copier l'originale... (si elle existe)
             $from = Gallery::getOriginalWwwPath($site, $url);
             if(file_exists($from)){

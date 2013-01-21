@@ -4,10 +4,10 @@
 
 {% block head %}
 	 <!-- Bootstrap -->
-	<link href="{{ path('/qwik/lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+	<link href="{{ asset('/qwik/lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
 	
     <!-- Site -->
-    <link rel="stylesheet" href="{{ path('/q/templates/style.css') }}" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{ asset('/q/templates/style.css') }}" type="text/css" media="screen, projection">
 
     <style>
         body{
@@ -42,25 +42,25 @@
         }
 
         .carre-image{
-            background:url('{{ path('/q/templates/images/home/1.jpg') }}') no-repeat scroll center 0 transparent;
+            background:url('{{ asset('/q/templates/images/home/1.jpg') }}') no-repeat scroll center 0 transparent;
         }
         .carre-image2{
-            background-image: url('{{ path('/q/templates/images/home/2.jpg') }}');
+            background-image: url('{{ asset('/q/templates/images/home/2.jpg') }}');
         }
         .carre-image3{
-            background-image: url('{{ path('/q/templates/images/home/3.jpg') }}');
+            background-image: url('{{ asset('/q/templates/images/home/3.jpg') }}');
         }
         .carre-image4{
-            background-image: url('{{ path('/q/templates/images/home/4.jpg') }}');
+            background-image: url('{{ asset('/q/templates/images/home/4.jpg') }}');
         }
         .carre-image5{
-            background-image: url('{{ path('/q/templates/images/home/5.jpg') }}');
+            background-image: url('{{ asset('/q/templates/images/home/5.jpg') }}');
         }
         .carre-image6{
-            background-image: url('{{ path('/q/templates/images/home/6.jpg') }}');
+            background-image: url('{{ asset('/q/templates/images/home/6.jpg') }}');
         }
         .carre-image7{
-            background-image: url('{{ path('/q/templates/images/home/7.jpg') }}');
+            background-image: url('{{ asset('/q/templates/images/home/7.jpg') }}');
         }
         .carre-line{
             font-size: 30px;
@@ -101,7 +101,7 @@
 
 <div class="container carres">
     <div class="row">
-        <div class="span4 carre carre-logo"><img src="{{ path('/q/templates/images/logo_small.png') }}" alt="Logo" /></div>
+        <div class="span4 carre carre-logo"><img src="{{ asset('/q/templates/images/logo_small.png') }}" alt="Logo" /></div>
         <div class="span4 carre carre-image carre-image1">
             <div class="carre-line"><a href="{{ path('/fr/presentation') }}">Présentation</a></div>
         </div>

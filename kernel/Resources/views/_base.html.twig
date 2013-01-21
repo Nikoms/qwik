@@ -7,7 +7,7 @@
 <body>
 {% block body %}{% endblock %}
 {% for file in page.getFiles('javascript') %}
-    <script src="{{ path(file.getPath()) }}"></script>...
+    <script src="{{ asset(file.getPath()) }}"></script>
 {% endfor %}
 
 

@@ -148,10 +148,16 @@ class TemplateProxy {
         $this->getTemplateEngine()->addFilter('translate', new \Twig_Filter_Function('\Qwik\Kernel\App\Language::getValue'));
         //Renvoi la langue en cours
         $this->getTemplateEngine()->addFunction('locale', new \Twig_Function_Function('\Qwik\Kernel\App\Language::get'));
-        //Récupération de l'app (notamment pour le baseUrl)
-        //$this->getTemplateEngine()->addGlobal('base_url', \Qwik\Kernel\App\AppManager::getInstance()->getBaseUrl());
         //Gestion des path
-        $this->getTemplateEngine()->addFunction('path', new \Twig_Function_Function('\Qwik\Kernel\App\Routing\getPath'));
+        $this->getTemplateEngine()->addFunction('path', new \Twig_Function_Function('\Qwik\Kernel\Template\path'));
+        //Renvoi l'asset
+        $this->getTemplateEngine()->addFunction('asset', new \Twig_Function_Function('\Qwik\Kernel\Template\Asset::getPathOfAsset'));
     }
 
+}
+
+
+
+function path($routeName, array $vars = array()){
+    return AppManager::getInstance()->getRouter()->getPath($routeName,$vars);
 }
