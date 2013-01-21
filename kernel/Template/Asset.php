@@ -25,7 +25,7 @@ class Asset{
         $virtualPath = '/' . \Qwik\Kernel\App\AppManager::getInstance()->getSite()->getVirtualUploadPath();
 
         if(strpos($uri, $virtualPath) === 0){ // Le fichier demandé est "url rewrité", donc on va prendre dans le dossier ressource
-            $fullPathOfFile = \Qwik\Kernel\App\AppManager::getInstance()->getSite()->getPath() . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . substr($uri, strlen($virtualPath)) ;
+            $fullPathOfFile = \Qwik\Kernel\App\AppManager::getInstance()->getSite()->getWww() . DIRECTORY_SEPARATOR . \Qwik\Kernel\App\AppManager::getInstance()->getSite()->getRealUploadPath() . substr($uri, strlen($virtualPath)) ;
         }else{ //Si c'est pas un url rewrité alors on va dans le dossier WWW
             $fullPathOfFile = \Qwik\Kernel\App\AppManager::getInstance()->getSite()->getWww() . $uri;
         }

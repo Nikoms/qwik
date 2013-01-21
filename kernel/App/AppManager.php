@@ -322,14 +322,23 @@ class AppManager {
         //on enlève le slash au début et à la fin, comme ca, c'est bon pour tout le monde qu'on soit dans le / ou /dd/lol/ok
         $baseUrl = trim($baseUrl, '/');
 
+
         if(
             isset($_SERVER['PATH_INFO']) //Si path_info, alors on a fait un index.php/mon/path... ou dev.php/mon/path...
-            || (substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], '?#')) === $_SERVER['SCRIPT_NAME']) //$baseUrl .= '/' . basename($_SERVER['SCRIPT_NAME'])
+            || ($this->getCleanedUri() === $_SERVER['SCRIPT_NAME']) //Si on a juste tapé /dev.php ou /index.php par exemple
         ){
             $baseUrl .= '/' . basename($_SERVER['SCRIPT_NAME']);
         }
 
         $this->setBaseUrl($baseUrl);
+    }
+
+    /**
+     * Renvoi la requestUri sans la querystring et autres params
+     * @return string
+     */
+    private function getCleanedUri(){
+        return substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], '?#'));
     }
 
     /**
@@ -351,16 +360,19 @@ class AppManager {
     //TODO: faire avec getEnv, une classe request
     private function getUri(){
 
-        $uri = $_SERVER['REQUEST_URI'];
+        //On enlève les querystring et autre de la request URI
+        $uri = $this->getCleanedUri();
+
         //PATH_INFO, c'est quand on écrit par exemple dev.php/fr/home. On a /fr/home dans PATH_INFO.
         if(isset($_SERVER['PATH_INFO'])){
             $uri = $_SERVER['PATH_INFO'];
         }else{
             //Si on a juste demandé /index.php ou /dev.php, alors on dit que c'est /
-            if(substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], '?#')) === $_SERVER['SCRIPT_NAME']){
+            if($uri === $_SERVER['SCRIPT_NAME']){
                 $uri = '/';
             }
         }
+
 
         return $uri;
     }
