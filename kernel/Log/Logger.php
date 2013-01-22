@@ -25,7 +25,7 @@ class Logger{
      */
     //private $isStarted;
     /**
-     * @var array Tableau des logs regroupé par "md5"
+     * @var array Tableau des logs
      */
     private $logs;
 
@@ -36,9 +36,24 @@ class Logger{
     private $lastErrorBacktrace = array();
 
     /**
+     * @var bool Affiche le logger à la fin de la page
+     */
+    private $isDisplayed;
+
+    /**
+     * @var string|false Path où sont sauver les logs. On y rajoutera la date du jour :) Si c'est à false => On n'enregistre rien
+     */
+    private $savePath;
+
+    /**
      *
      */
     private function __construct(){
+        //Il faut une session pour les logs
+        if(session_id() === ''){
+            session_start();
+            echo 'start';
+        }
         $this->logs = array();
         //$this->start();
         //Quand c'est fini, on passe par le shutdown du Logger
@@ -58,17 +73,45 @@ class Logger{
     }
 
     /**
-     * Démarrage du log
+     * @param boolean $isDisplayed
      */
-    private function start(){
-        //echo 'start';
+    public function setIsDisplayed($isDisplayed){
+        $this->isDisplayed = $isDisplayed;
+        return $this;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isDisplayed(){
+        return $this->isDisplayed;
+    }
+
+    /**
+     * @param string|false $savePath
+     */
+    public function setSavePath($savePath){
+        $this->savePath = $savePath;
+    }
+
+    /**
+     * @return string|false
+     */
+    public function getSavePath(){
+        return $this->savePath;
+    }
+
+
+
+
 
     /**
      * Arret du log (= de la page)
      */
     private function stop(){
-       // echo 'stop';
+        $this->saveInFile();
+        //On affiche les logs
+        $this->showLogs();
     }
 
     /**
@@ -119,24 +162,14 @@ class Logger{
             $this->setLastErrorBacktrace($this->getDebugBacktraceLight());
         }
 
-        //Prend le md5 de l'erreur = unique pour un message
-        $id = md5($message . '+' . $file . '+' . $line);
-
-        //Si on a déjà le message, ca ne nous interesse plus, à part pour rajouter le count :)
-        if(isset($this->logs[$id])){
-            $this->logs[$id]['count'] ++ ;
-            return;
-        }
-
         //On regroupe toutes les erreurs. Pas besoin de toutes les avoir plusieurs fois
-        $this->logs[$id] =  array(
+        $this->logs[] =  array(
             'message' => $message,
             'file' => $file,
             'line' => $line,
             'errorNumber' => $number,
             'errorName' => $this->getErrorName($number),
-            'count' => 1,
-            'backtrace' => $this->getLastErrorBacktrace(),
+            'backtrace' => serialize($this->getLastErrorBacktrace()),
         );
         $this->emptyLastErrorBacktrace();
 
@@ -178,8 +211,6 @@ class Logger{
         $this->checkLastError();
         //On arrête tout
         $this->stop();
-        //On affiche les logs
-        $this->showLogs();
     }
 
     /**
@@ -197,11 +228,14 @@ class Logger{
      * Affichage des logs
      */
     private function showLogs(){
-        //Todo: afficher que si mode debug
-        if(!empty($this->logs)){
-            print_r($this->logs);
+        if($this->isDisplayed()){
+            if(!empty($this->logs)){
+                //en attendant, on affiche dans un pre :)
+                echo '<pre>';
+                print_r($this->logs);
+                echo '</pre>';
+            }
         }
-
     }
 
     /**
@@ -229,6 +263,29 @@ class Logger{
         }
     }
 
+    private function saveInFile(){
+        if($this->getSavePath() !== false){
+            $path =  str_replace('/', DIRECTORY_SEPARATOR, $this->getSavePath()) . DIRECTORY_SEPARATOR . date('Y-m-d');
+            $fileName = session_id() . '.csv';
+
+            if(!is_dir($path)){
+                mkdir($path, 0777, true);
+            }
+
+            $fp = fopen($path . DIRECTORY_SEPARATOR . $fileName , 'a+');
+            foreach ($this->getLogs() as $line) {
+                fputcsv($fp, $line);
+            }
+            fclose($fp);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    private function getLogs(){
+        return $this->logs;
+    }
 
     /**
      * @return array

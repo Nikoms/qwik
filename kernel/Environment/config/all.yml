@@ -1,6 +1,7 @@
 logger:
   active: true
   display: false
+  save_path: %site_path%/logs
 
 
 template:

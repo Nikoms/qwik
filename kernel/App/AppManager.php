@@ -106,9 +106,6 @@ class AppManager {
         //Init base url
         $this->initBaseUrl();
 
-        //Set de l'environnement
-        $this->initEnvironment();
-
 
         //On récupère le bon domaine
         $domain = $this->getProperDomain($domain);
@@ -132,6 +129,12 @@ class AppManager {
             $this->site = $siteManager->getByPath($www, 'default');
         }
 
+
+        //Set de l'environnement, après site, c'est mieux :)
+        $this->initEnvironment();
+
+        //On ne peut initialiser le logger qu'une fois qu'on a un env
+        $this->initLogger();
 
         //Initialisation de la langue en cours
         Language::init($this->getSite()->getLanguages());
@@ -341,6 +344,13 @@ class AppManager {
         return substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], '?#'));
     }
 
+
+    private function initLogger(){
+        //Initialisation du logger (dev only?)
+        \Qwik\Kernel\Log\Logger::getInstance()
+            ->setIsDisplayed($this->getEnvironment()->get('logger.display'))
+            ->setSavePath($this->getEnvironment()->get('logger.save_path'));
+    }
     /**
      * Init l'environnement
      */
