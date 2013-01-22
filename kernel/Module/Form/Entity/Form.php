@@ -104,7 +104,7 @@ class Form extends Module{
     public function sendMail(array $fields){
 
         //On intègre Swift
-    	require_once __DIR__ . '/../../../vendor/Swift/swift_required.php';    	
+    	require_once __DIR__ . '/../../../vendor/Swift2/lib/swift_required.php';
 		\Swift::init(function(){});
 		
 		$config = $this->getConfig();

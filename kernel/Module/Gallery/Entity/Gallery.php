@@ -80,6 +80,7 @@ class Gallery extends Module{
                 $thumbnail = $imagine->open($from)->thumbnail(new \Imagine\Image\Box($width, $height), \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND);
 
                 //Si le cache est actif, alors on sauve, au bon endroit, en fichier physique
+                //TODO: pour le moment, comme "asset" renvoi l'adresse directe, on passe théoriquement toujours ici :)
                 if($appManager->getEnvironment()->get('module.gallery.cache')){
 
                     //Creation du path du thumbnail

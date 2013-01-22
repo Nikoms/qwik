@@ -4,17 +4,18 @@ namespace Qwik\Kernel\Template;
 
 class Asset{
 
+    /**
+     * Renvoi le path de l'asset. Pour le moment, peu importe qu'on soit en dev/prod, on renvoi toujours l'url "directe"
+     * @param $uri
+     * @return string
+     */
     public static function getPathOfAsset($uri){
-        //si j'ai un cache alors on renvoi l'uri directement
-        if(\Qwik\Kernel\App\AppManager::getInstance()->getEnvironment()->get('template.cache', false)){
-            return $uri;
-        }
-
-        return \Qwik\Kernel\App\AppManager::getInstance()->getBaseUrl() . $uri;
-        //Si on est ici, on demande une ressource dans le dossier "public"
-
+        $pathInfo = pathinfo(\Qwik\Kernel\App\AppManager::getInstance()->getBaseUrl(), PATHINFO_DIRNAME);
+        //On remplace les \ par des / et on enlève le slash à la fin, car normalement uri doit commencer par un /
+        $pathInfo = rtrim(str_replace('\\', '/', $pathInfo), '/');
+        return $pathInfo . $uri;
     }
-
+/*
     public static function getFullPath($uri){
 
         //si j'ai un cache alors je ne devrais pas être ici!
@@ -67,5 +68,5 @@ class Asset{
             default:
                 return null;
         }
-    }
+    }*/
 }

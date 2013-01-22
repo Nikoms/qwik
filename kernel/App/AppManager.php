@@ -385,13 +385,13 @@ class AppManager {
 
         try{
             $response = $this->getRouter()->getResponseForUri($uri);
-        }catch (PageNotFoundException $ex){
+        /*}catch (PageNotFoundException $ex){
             //Si page not found, alors on va voir si on a pas un asset à cet endroit...
             $response = Asset::getResponseOfAsset($uri);
             //On a pas trouvé d'asset.. Bon bah tt pis :)
             if($response === null){
                 $response = $this->getResponseForException($ex);
-            }
+            }*/
         }catch (\Exception $ex){ //Si j'ai une exception, je la catch, pour joliment l'afficher
             $response = $this->getResponseForException($ex);
         }

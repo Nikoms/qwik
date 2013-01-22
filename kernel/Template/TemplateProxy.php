@@ -43,7 +43,7 @@ class TemplateProxy {
     public function __construct(\Qwik\Kernel\App\AppManager $appManager){
 
         //Autoloader de Twig
-        require_once __DIR__ . '/../vendor/Twig/Autoloader.php';
+        require_once __DIR__ . '/../vendor/Twig2/lib/Twig/Autoloader.php';
         \Twig_Autoloader::register();
 
 
@@ -151,11 +151,23 @@ class TemplateProxy {
         //Gestion des path
         $this->getTemplateEngine()->addFunction('path', new \Twig_Function_Function('\Qwik\Kernel\Template\path'));
         //Renvoi l'asset
-        $this->getTemplateEngine()->addFunction('asset', new \Twig_Function_Function('\Qwik\Kernel\Template\Asset::getPathOfAsset'));
+        $this->getTemplateEngine()->addFunction('asset', new \Twig_Function_Function('\Qwik\Kernel\Template\asset'));
     }
 
 }
 
+
+/**
+ * Renvoi le path de l'asset. Pour le moment, peu importe qu'on soit en dev/prod, on renvoi toujours l'url "directe"
+ * @param $uri
+ * @return string
+ */
+function asset($uri){
+    $pathInfo = pathinfo(\Qwik\Kernel\App\AppManager::getInstance()->getBaseUrl(), PATHINFO_DIRNAME);
+    //On remplace les \ par des / et on enlève le slash à la fin, car normalement uri doit commencer par un /
+    $pathInfo = rtrim(str_replace('\\', '/', $pathInfo), '/');
+    return $pathInfo . $uri;
+}
 
 
 function path($routeName, array $vars = array()){

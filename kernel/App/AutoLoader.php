@@ -10,9 +10,9 @@ class AutoLoader {
      * @var array Tableaux des namespaces gérés, avec leur chemin vers le bon dossier
      */
     private static $namespaces = array(
-		'Symfony\Component\Yaml' 				=> 'kernel/vendor/Yaml',
+		'Symfony\Component\Yaml' 				=> 'kernel/vendor/Yaml2',
 		'Qwik\Kernel'							=> 'kernel',
-		'Imagine' 								=> 'kernel/vendor/Imagine/lib/Imagine',
+		'Imagine' 								=> 'kernel/vendor/Imagine2/lib/Imagine',
 	);
 
     /**
