@@ -78,6 +78,7 @@ class Response {
 
     private function initContentType(){
         if($this->getFileName() !== ''){
+            //nécessite l'extention "fileinfo"
             $finfo = finfo_open(FILEINFO_MIME_TYPE); // Retourne le type mime à la extension mimetype
             $header = finfo_file($finfo, $this->getFileName());
             finfo_close($finfo);
