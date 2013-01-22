@@ -52,7 +52,6 @@ class Logger{
         //Il faut une session pour les logs
         if(session_id() === ''){
             session_start();
-            echo 'start';
         }
         $this->logs = array();
         //$this->start();
