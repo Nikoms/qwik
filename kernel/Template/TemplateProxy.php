@@ -163,10 +163,16 @@ class TemplateProxy {
  * @return string
  */
 function asset($uri){
-    $pathInfo = pathinfo(\Qwik\Kernel\App\AppManager::getInstance()->getBaseUrl(), PATHINFO_DIRNAME);
-    //On remplace les \ par des / et on enlève le slash à la fin, car normalement uri doit commencer par un /
-    $pathInfo = rtrim(str_replace('\\', '/', $pathInfo), '/');
-    return $pathInfo . $uri;
+	$allPathInfo = pathinfo(\Qwik\Kernel\App\AppManager::getInstance()->getBaseUrl());
+    //Remplacement des / + je ne veux pas de / à la fin, car uri commence par /
+	$prePath = rtrim(str_replace('\\', '/', $allPathInfo['dirname']),'/');
+
+	//Si basename est rempli et que basename == fileName alors c'est que notre uri était un dossier :)
+	if($allPathInfo['basename'] !== '' && $allPathInfo['basename'] === $allPathInfo['filename']){
+		$prePath .= '/' . $allPathInfo['basename'];
+	}
+
+    return $prePath . $uri;
 }
 
 

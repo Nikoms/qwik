@@ -2,9 +2,11 @@
 namespace Qwik\Kernel\Module\Form\Entity\Field;
 
 
+use Qwik\Kernel\App\Language;
 /**
  * Champ E-mail
  */
+
 class Email extends Text{
 
     protected function isSpecificValid(){
@@ -14,8 +16,7 @@ class Email extends Text{
 		}
 		//Si c'est pas un mail, c'est pas valide
 	    if(!filter_var($this->getValue(), FILTER_VALIDATE_EMAIL)){
-            //TODO: multilangue
-	    	$this->setError('E-mail non valide');
+	    	$this->setError(Language::getValue($this->getModule()->translate('form.fields.email.notvalid')));
 	    	return false;
 	    }
 	    return true;

@@ -198,10 +198,10 @@ class AppManager {
      */
     private function initRoutes(){
 		$site = $this->getSite();
-
+		$appManager = $this;
 
 		//Arrivée sur le site, j'attends une redirection vers la première page
-        $this->getRouter()->get('root', '/', function() use ($site){
+        $this->getRouter()->get('root', '/', function() use ($site, $appManager){
 
             //Récupération de la première page
             $pageManager = new \Qwik\Kernel\App\Page\PageManager();
@@ -214,13 +214,14 @@ class AppManager {
 
             //TODO: faire un ResponseRedirect
             //TODO: création d'une url avec un nom de route + variables (twig aussi)
-            header('Location: ' . $this->getBaseUrl() . '/' . Language::get() . '/' . $firstPage->getUrl());
+			//24/01/2013 : Utilisation de appManager, pcq en 5.3, le this est pas bon
+            header('Location: ' . $appManager->getBaseUrl() . '/' . Language::get() . '/' . $firstPage->getUrl());
             exit();
         });
 
         //J'ai choisi une langue, mais pas de page, j'attends une redirection vers la première page
         //TODO: Code dupliqué par rapport au "/". Faire quelque chose
-        $this->getRouter()->get('root_language', '/{_locale}', function($_locale) use($site){
+        $this->getRouter()->get('root_language', '/{_locale}', function($_locale) use($site, $appManager){
 
             //Si on gère la langue, alors on va sur la première page
             if(in_array($_locale, $site->getLanguages())){
@@ -234,7 +235,7 @@ class AppManager {
                 //Response redirect
                 //TODO: faire un ResponseRedirect
                 //TODO: création d'une url avec un nom de route + variables (twig aussi)
-                header('Location: ' . $this->getBaseUrl() . '/' . Language::get() . '/' . $firstPage->getUrl());
+                header('Location: ' . $appManager->getBaseUrl() . '/' . Language::get() . '/' . $firstPage->getUrl());
                 exit();
 
             }else{ //Sinon Exception :)
@@ -323,8 +324,8 @@ class AppManager {
         //Récupération de là où se trouve le script
         $baseUrl = str_replace(DIRECTORY_SEPARATOR, '/', dirname($_SERVER['SCRIPT_NAME']));
         //on enlève le slash au début et à la fin, comme ca, c'est bon pour tout le monde qu'on soit dans le / ou /dd/lol/ok
-        $baseUrl = trim($baseUrl, '/');
-
+		//24/01/2013 : trim => rtrim
+        $baseUrl = rtrim($baseUrl, '/');
 
         if(
             isset($_SERVER['PATH_INFO']) //Si path_info, alors on a fait un index.php/mon/path... ou dev.php/mon/path...
