@@ -10,9 +10,9 @@ class AutoLoader {
      * @var array Tableaux des namespaces gérés, avec leur chemin vers le bon dossier
      */
     private static $namespaces = array(
-		'Symfony\Component\Yaml' 				=> 'kernel/vendor/Yaml2',
+		//'Symfony\Component\Yaml' 				=> 'kernel/vendor/Yaml2',
 		'Qwik\Kernel'							=> 'kernel',
-		'Imagine' 								=> 'kernel/vendor/Imagine2/lib/Imagine',
+		//'Imagine' 								=> 'kernel/vendor/Imagine2/lib/Imagine',
 	);
 
     /**
@@ -40,9 +40,9 @@ class AutoLoader {
 
 
         //Exception: si on appelle du twig ou swift, alors on by pass car ils ont leur propre auto loader
-        if(stripos($className, 'Twig_') === 0 || stripos($className, 'Swift_') === 0){
+        /*if(stripos($className, 'Twig_') === 0 || stripos($className, 'Swift_') === 0){
             return true;
-        }
+        }*/
 
         $className = (string) $className;
         //Récupération du path du fichier de la classe
@@ -118,6 +118,10 @@ class AutoLoader {
 	}
 
 }
-//On registre l'autoload
+$composerLoader =  __DIR__ . DIRECTORY_SEPARATOR . '..'. DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'vendor'. DIRECTORY_SEPARATOR .'autoload.php';
+require($composerLoader);
+
+//On registre l'autoload après composer
 AutoLoader::register();
+
 

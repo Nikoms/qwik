@@ -42,11 +42,6 @@ class TemplateProxy {
 
     public function __construct(\Qwik\Kernel\App\AppManager $appManager){
 
-        //Autoloader de Twig
-        require_once __DIR__ . '/../vendor/Twig2/lib/Twig/Autoloader.php';
-        \Twig_Autoloader::register();
-
-
         //Chemins vers les twig
         $paths = AppManager::getInstance()->getEnvironment()->get('template.path');
         foreach($paths as $key => $path){

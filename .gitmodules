@@ -1,15 +1,3 @@
 [submodule "www/min"]
 	path = www/min
 	url = https://github.com/mrclay/minify.git
-[submodule "kernel/vendor/Imagine2"]
-	path = kernel/vendor/Imagine2
-	url = https://github.com/avalanche123/Imagine.git
-[submodule "kernel/vendor/Yaml2"]
-	path = kernel/vendor/Yaml2
-	url = https://github.com/symfony/Yaml.git
-[submodule "kernel/vendor/Twig2"]
-	path = kernel/vendor/Twig2
-	url = https://github.com/fabpot/Twig.git
-[submodule "kernel/vendor/Swift2"]
-	path = kernel/vendor/Swift2
-	url = https://github.com/swiftmailer/swiftmailer.git

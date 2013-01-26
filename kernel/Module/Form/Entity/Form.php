@@ -103,10 +103,6 @@ class Form extends Module{
      */
     public function sendMail(array $fields){
 
-        //On intègre Swift
-    	require_once __DIR__ . '/../../../vendor/Swift2/lib/swift_required.php';
-		\Swift::init(function(){});
-		
 		$config = $this->getConfig();
 		$oldLanguage = Language::get();
 		
