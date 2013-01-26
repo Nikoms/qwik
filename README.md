@@ -31,13 +31,16 @@ Librairies externes:
 - Google maps (Pour le module gmaps)
 
 
+Updates:
+===
+- 26/01/2013: Utilisation de composer pour les vendor (yaml, swiftmailer, twig et Imagine)
+
 La suite:
 ===
 
 
 Il y a encore plein de choses à faire (voir les todos), à améliorer (Structure des dossiers/namespace), mais voici ce qu'il reste au programme:
 
-- Utilisation de composer pour les vendor (plus déplacer vendor en dehors de Kernel)
 - Faire du unit testing
 - Utiliser openSaas
 - minify des fichiers statiques + versionning des asserts, comme ca on peut faire du cache des fichiers sans avoir "peur" lors de la MTP (voir webpagetest.org)
