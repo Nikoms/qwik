@@ -1,4 +1,4 @@
-qwik
+﻿qwik
 ====
 
 Gestion d'un cms multilangue, sans base de données avec des fichiers yml :)
@@ -24,9 +24,10 @@ Librairies externes:
 - Swiftmailer (Envoi de formulaire)
 - Yaml (Tout le temps, pour les fichiers config)
 - Imagine (Création des thumbnails dans le module "gallery")
+
 - jQuery (Pour les modules "gallery" et "gmaps")
-- jQueryUi (Pour le module "form", car il sert aux champs "date")
-- Twitter bootstrap (pour le formulaire)
+- jQueryUi (Pour le module "form", car il sert aux champs "date") => A changer
+- Twitter bootstrap (pour le formulaire) => A changer
 - Fancybox2 (pour la galerie)
 - Google maps (Pour le module gmaps)
 
@@ -42,7 +43,10 @@ La suite:
 Il y a encore plein de choses à faire (voir les todos), à améliorer (Structure des dossiers/namespace), mais voici ce qu'il reste au programme:
 
 - Faire du unit testing
+- Utiliser Kalendae plutot que datepicker
+- Pas utiliser bootstrap pour le formulaire
 - Utiliser openSaas
+- Utiliser coffeescript
 - minify des fichiers statiques + versionning des asserts, comme ca on peut faire du cache des fichiers sans avoir "peur" lors de la MTP (voir webpagetest.org)
 - Gestion des sous(-sous)-domaines, pour les fichiers statiques pour améliorer les perfs front-end, avec CDN?
 - Utilisation de la classe "Config", au lieu d'array, là où ce n'est pas déjà fait
