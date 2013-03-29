@@ -17,13 +17,17 @@ Modules dispos:
 - Html: Affichage d'html, directement intégré dans le fichier twig de la page (Module pour faire ses pages "quick'n'dirty" :) )
 - Restaurant: Gestion d'une carte/menu pour restaurant
 
-Librairies externes:
+Librairies externes (BackEnd):
 ===
 
 - Twig (Tout le temps)
 - Swiftmailer (Envoi de formulaire)
 - Yaml (Tout le temps, pour les fichiers config)
 - Imagine (Création des thumbnails dans le module "gallery")
+
+
+Librairies externes (FrontEnd):
+===
 
 - jQuery (Pour les modules "gallery" et "gmaps")
 - jQueryUi (Pour le module "form", car il sert aux champs "date") => A changer
