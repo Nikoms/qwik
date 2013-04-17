@@ -10,16 +10,16 @@
 class LanguageTest extends PHPUnit_Framework_TestCase {
 
     public static function setUpBeforeClass(){
-        \Qwik\Kernel\App\Language::init(array('fr','nl','en'));
+        \Qwik\Component\Locale\Language::init(array('fr','nl','en'));
     }
 
     public function testInit(){
-        $this->assertSame('fr', \Qwik\Kernel\App\Language::get());
+        $this->assertSame('fr', \Qwik\Component\Locale\Language::get());
     }
 
     public function testGetValueString(){
         $value = "ceci est un test";
-        $this->assertSame($value, \Qwik\Kernel\App\Language::getValue($value));
+        $this->assertSame($value, \Qwik\Component\Locale\Language::getValue($value));
     }
 
     public function testGetValueArrayOk(){
@@ -27,26 +27,26 @@ class LanguageTest extends PHPUnit_Framework_TestCase {
             'nl' => "ceci est un test (nl)",
             'fr' => "ceci est un test (fr)",
         );
-        $this->assertSame("ceci est un test (fr)", \Qwik\Kernel\App\Language::getValue($value));
+        $this->assertSame("ceci est un test (fr)", \Qwik\Component\Locale\Language::getValue($value));
     }
 
     public function testGetValueArrayOnlyTaken(){
         $value = array(
             'nl' => "ceci est un test (nl)",
         );
-        $this->assertSame("ceci est un test (nl)", \Qwik\Kernel\App\Language::getValue($value));
+        $this->assertSame("ceci est un test (nl)", \Qwik\Component\Locale\Language::getValue($value));
     }
 
     public function testGetValueArrayOnlyGoodTaken(){
         $value = array(
             'fr' => "ceci est un test (fr)",
         );
-        $this->assertSame("ceci est un test (fr)", \Qwik\Kernel\App\Language::getValue($value));
+        $this->assertSame("ceci est un test (fr)", \Qwik\Component\Locale\Language::getValue($value));
     }
 
     public function testChangeIfPossible(){
-        \Qwik\Kernel\App\Language::changeIfPossible('nl');
-        $this->assertSame('nl', \Qwik\Kernel\App\Language::get());
+        \Qwik\Component\Locale\Language::changeIfPossible('nl');
+        $this->assertSame('nl', \Qwik\Component\Locale\Language::get());
     }
 
     public function testGetValueArrayFirstTaken(){
@@ -54,6 +54,6 @@ class LanguageTest extends PHPUnit_Framework_TestCase {
             'fr' => "ceci est un test (fr)",
             'en' => "ceci est un test (en)",
         );
-        $this->assertSame("ceci est un test (fr)", \Qwik\Kernel\App\Language::getValue($value));
+        $this->assertSame("ceci est un test (fr)", \Qwik\Component\Locale\Language::getValue($value));
     }
 }
