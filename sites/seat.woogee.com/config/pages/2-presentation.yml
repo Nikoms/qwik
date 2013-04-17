@@ -1,5 +1,8 @@
 template: basic
 title: Présentation
+meta:
+  description: Restaurant et take-away à la Hulpe
+  keywords: restaurant, la hulpe, genval, mazerine, take away, à emporter, sandwiches, business lunch, traiteur, snack, sandwicherie
 zones:
   zone1:
    - module: file
