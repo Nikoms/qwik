@@ -85,7 +85,7 @@ class Language {
     public static function getPreferedLanguage(/*$acceptedLanguages = "auto"*/) {
 		// if $http_accept_language was left out, read it from the HTTP-Header
 		//if ($acceptedLanguages == "auto")
-		$acceptedLanguages = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		$acceptedLanguages = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '';
 	
 		// standard  for HTTP_ACCEPT_LANGUAGE is defined under
 		// http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
