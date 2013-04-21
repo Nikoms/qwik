@@ -59,10 +59,9 @@ class AppManager {
      * @param string $www chemin vers le dossier www (là où se trouve notre fichier index.php) (path absolu)
      * @return AppManager
      */
-    public static function initWithPath($www){
-        $domain = filter_var($_SERVER['HTTP_HOST'], FILTER_SANITIZE_URL);
+    public static function initWithPath($www, $env){
         self::$instance = new AppManager();
-        self::$instance->init($www, $domain);
+        self::$instance->init($www, $env);
         return self::$instance;
 	}
 
@@ -100,15 +99,15 @@ class AppManager {
     /**
      * Initialise l'app avec le www et le nom de domaine
      * @param string $www
-     * @param string $domain
+     * @param string $env
      */
-    public function init($www, $domain){
+    public function init($www, $env){
         //Init base url
         $this->initBaseUrl();
 
 
         //On récupère le bon domaine
-        $domain = $this->getProperDomain($domain);
+        $domain = $this->getProperDomain(filter_var($_SERVER['HTTP_HOST'], FILTER_SANITIZE_URL));
 
         //Récupération du site
         $siteManager = new SiteManager();
@@ -131,7 +130,7 @@ class AppManager {
 
 
         //Set de l'environnement, après site, c'est mieux :)
-        $this->initEnvironment();
+        $this->setEnvironment(new Environment($env, $this));
 
         //On ne peut initialiser le logger qu'une fois qu'on a un env
         $this->initLogger();
@@ -179,17 +178,14 @@ class AppManager {
      * Ajoute les routes des modules
      */
     private function addModulesRoutes(){
-		foreach(scandir(Module::getModulesPath()) as $moduleName){
-			if($moduleName != '.' && $moduleName != '..'){
-				try{
-					$className = Module::getClassName($moduleName);
-					//Ajout de la route par la méthode static "addRoute" du module
-					call_user_func_array(array($className, 'injectInApp'), array($this, $this->getSite()));
-				}catch(\Exception $ex){
-					continue;
-				}
-			}
-		}
+        $modules = $this->getEnvironment()->get('modules', array());
+        foreach($modules as $namespace){
+            $className = $namespace . '\\' . 'UrlInjector';
+            if(class_exists($className)){
+                //Ajout de la route par la méthode static "addRoute" du module
+                call_user_func_array(array($className, 'injectInApp'), array($this, $this->getSite()));
+            }
+        }
 	}
 
     /**
@@ -351,18 +347,6 @@ class AppManager {
         Logger::getInstance()
             ->setIsDisplayed($this->getEnvironment()->get('logger.display'))
             ->setSavePath($this->getEnvironment()->get('logger.save_path'));
-    }
-    /**
-     * Init l'environnement
-     */
-    //TODO: faire une classe request
-    private function initEnvironment(){
-        $env = pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_FILENAME);
-        if($env == 'index'){
-            $env = 'prod';
-        }
-
-        $this->setEnvironment(new Environment($env, $this));
     }
 
     /**

@@ -18,6 +18,14 @@ template:
    - \Qwik\Component\Template\Extension\Locale
    - \Qwik\Component\Template\Extension\App
 
+modules:
+  file: Qwik\Module\File
+  form: Qwik\Module\Form
+  gallery: Qwik\Module\Gallery
+  gmaps: Qwik\Module\Gmaps
+  html: Qwik\Module\Html
+  restaurant: Qwik\Module\Restaurant
+
 module:
   gallery:
     cache: true #cache des thumbnail. Si c'est mis à truc, le thumnail sera physiquement créé, sinon, on fera toujours du process php

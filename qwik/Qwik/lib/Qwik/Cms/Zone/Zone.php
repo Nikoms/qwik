@@ -3,6 +3,7 @@
 namespace Qwik\Cms\Zone;
 
 use Qwik\Cms\Module\Module;
+use Qwik\Cms\Module\ModuleManager;
 use Qwik\Cms\Page\Page;
 
 /**
@@ -78,11 +79,11 @@ class Zone {
 	}
 
     /**
-     * @return array|\Qwik\Cms\Module\Module[] Tableau des modules
+     * @return array|Module[] Tableau des modules
      */
     public function getModules(){
 		if(is_null($this->modules)){
-            $moduleManager = new \Qwik\Cms\Module\ModuleManager();
+            $moduleManager = new ModuleManager();
             $this->modules = $moduleManager->getByZone($this);
 		}
 		return $this->modules;
@@ -100,15 +101,15 @@ class Zone {
      * On demande simplement aux modules de la zone de bien vouloir donner leur fichiers et on fait le récap :)
      * @return array
      */
-    public function getFiles(){
+    public function getAssetsByType(){
 		$files = array();
 		$files['javascript'] = array();
 		$files['css'] = array();
 
         //Modules, donnéez moi vos fichiers statiques
 		foreach ($this->getModules() as $module){
-			$files['javascript'] = array_merge($files['javascript'], $module->getConfigObject()->getFiles('javascript'));
-			$files['css'] = array_merge($files['css'], $module->getConfigObject()->getFiles('css'));
+			$files['javascript'] = array_merge($files['javascript'], $module->getModuleConfig()->getAssets('javascript'));
+			$files['css'] = array_merge($files['css'], $module->getModuleConfig()->getAssets('css'));
 		}
 
         //On fait un array_unique, car si plusieurs modules utilisent le meme js/css, on ne le prend qu'une fois

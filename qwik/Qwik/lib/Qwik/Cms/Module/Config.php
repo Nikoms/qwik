@@ -11,11 +11,11 @@ use Qwik\Component\Template\Asset;
 class Config extends \Qwik\Component\Config\Config{
 
     /**
-     * Retourne un tableau de fichiers de type "$type"
+     * Retourne un tableau d'assets
      * @param $type
-     * @return array
+     * @return Asset[]
      */
-    public function getFiles($type){
+    public function getAssets($type){
         $config = $this->getConfig();
 		if(empty($config['config']) || empty($config['config']['files']) || empty($config['config']['files'][$type])){
 			return array();

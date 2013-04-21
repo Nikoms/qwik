@@ -1,11 +1,11 @@
 <meta charset="utf-8" />
 <title>{% block title %}{{ page.getSite().getTitle() ~ ' - ' ~ page.getTitle() }}{% endblock %}</title>
-<meta name="Description" content="{{ page.getDescription() | translate }}">
-<meta name="Keywords" content="{{ page.getKeywords() | translate }}">
+<meta name="Description" content="{{ page.getConfig().get('meta.description') | translate }}">
+<meta name="Keywords" content="{{ page.getConfig().get('meta.keywords') | translate }}">
 <meta name="viewport" content="width=device-width">
 <meta name="author" content="Qwik">
 
 <script src="{{ asset('/qwik/js/jquery.js') }}"></script>
-{% for file in page.getFiles('css') %}
+{% for file in page.getAssets('css') %}
     <link href="{{ asset(file.getPath()) }}" rel="stylesheet" media="all">
 {% endfor %}

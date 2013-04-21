@@ -1,8 +1,8 @@
 {
     "require": {
         "twig/twig": "1.*",
-	"swiftmailer/swiftmailer": "4.*",
-	"symfony/yaml":"2.*",
-	"imagine/Imagine":"0.*"
+	    "swiftmailer/swiftmailer": "4.*",
+	    "symfony/yaml":"2.*",
+	    "imagine/Imagine":"0.*"
     }
 }

@@ -63,4 +63,11 @@ class Config{
         //L'élément n'existe pas, on renvoit la valeur par défaut
         return $defaultValue;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(){
+        return $this->config;
+    }
 }

@@ -2,6 +2,9 @@
 
 namespace Qwik\Module\Form\Entity;
 
+use Qwik\Module\Form\Form;
+use Qwik\Module\Form\Entity\Field\Field;
+
 /**
  * Validateur de formulaire
  */
@@ -86,11 +89,15 @@ class Validator{
 	}
 
     /**
-     * @return array Renvoi les champs avec leur valeur setté
+     * Renvoi les champs avec leur valeur setté
+     * @return Field[]
      */
     public function getFields(){
 		$fields = array();
-		foreach($this->getModule()->getFields() as $key => $field){
+        /**
+         * @var $field Field
+         */
+        foreach($this->getModule()->getFields() as $key => $field){
 			$value = isset($this->postedDatas[$key]) ? $this->postedDatas[$key] : ''; 
 			$field->setValue($value);
 			$fields[$field->getName()] = $field;

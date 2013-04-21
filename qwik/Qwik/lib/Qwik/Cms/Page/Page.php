@@ -3,6 +3,8 @@
 namespace Qwik\Cms\Page;
 
 use Qwik\Cms\Zone\Zone;
+use Qwik\Cms\Zone\ZoneManager;
+use Qwik\Component\Config\Config;
 use Qwik\Component\Locale\Language;
 use Qwik\Cms\Site\Site;
 
@@ -51,14 +53,14 @@ class Page {
 	}
 
     /**
-     * @param array $config
+     * @param Config $config
      */
-    public function setConfig(array $config){
+    public function setConfig(Config $config){
 		$this->config = $config;
 	}
 
     /**
-     * @return array
+     * @return Config
      */
     public function getConfig(){
 		return $this->config;
@@ -111,11 +113,7 @@ class Page {
      * @throws \Exception Si pas de template
      */
     public function getTemplate(){
-        $config = $this->getConfig();
-        if(empty($config['template'])){
-            throw new \Exception('Template non défini');
-        }
-		return $config['template'];
+        return $this->getConfig()->get('template','');
 	}
 
     /**
@@ -123,8 +121,8 @@ class Page {
      * @return string
      */
     public function getTitle(){
-		$config = $this->getConfig();
-		return isset($config['title']) ? Language::getValue($config['title']) : '';
+		return Language::getValue($this->getConfig()->get('title',''));
+		//return isset($config['title']) ? Language::getValue($config['title']) : '';
 	}
 
     /**
@@ -154,7 +152,7 @@ class Page {
     public function getZones(){
 
         if(is_null($this->zones)){
-            $zoneManager = new \Qwik\Cms\Zone\ZoneManager();
+            $zoneManager = new ZoneManager();
             $this->zones = $zoneManager->getByPage($this);
         }
 
@@ -165,7 +163,7 @@ class Page {
      * @param $type (css|javascript)
      * @return array
      */
-    public function getFiles($type){
+    public function getAssets($type){
 
         if(empty($this->assets)){
             $this->assets = array();
@@ -173,7 +171,7 @@ class Page {
             $this->assets['css'] = array();
 
             foreach($this->getZones() as $zone){
-                $filesOfZone = $zone->getFiles();
+                $filesOfZone = $zone->getAssetsByType();
                 $this->assets['javascript'] = array_merge($this->assets['javascript'], $filesOfZone['javascript']);
                 $this->assets['css'] = array_merge($this->assets['css'], $filesOfZone['css']);
             }
@@ -183,24 +181,4 @@ class Page {
 
 		return isset($this->assets[$type]) ? $this->assets[$type] : array();
 	}
-
-    public function getKeywords(){
-        $config = $this->getConfig();
-        if(empty($config['meta']) || empty($config['meta']['keywords'])){
-            return '';
-        }
-        return $config['meta']['keywords'];
-    }
-
-    public function getDescription(){
-        $config = $this->getConfig();
-        if(empty($config['meta']) || empty($config['meta']['description'])){
-            return '';
-        }
-        return $config['meta']['description'];
-    }
-	
-	
-	
-
 }

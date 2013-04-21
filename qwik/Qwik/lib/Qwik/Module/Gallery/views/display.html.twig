@@ -14,6 +14,6 @@
 
 <div class="qwik-gallery" style="{{ style }}">
 {% for file in files %}<!--
-	--><a href="{{ asset('/' ~ module.getZone().getPage().getSite().getVirtualUploadPath() ~ file) }}" data-fancybox-group="{{ module.getUniqId() }}" class="fancybox" target="_blank" title="{% if subTitle %}{{ file | toTitle }}{% endif %}"><img alt="{{ file | toTitle }}" src="{{ asset('/' ~ module.getThumbnailPath() ~ '/' ~ file) }}" height="{{ module.thumbnailInfos.height}}" width="{{ module.thumbnailInfos.width}}"/></a><!--
+	--><a href="{{ asset('/' ~ module.getZone().getPage().getSite().getVirtualUploadPath() ~ file) }}" data-fancybox-group="{{ module.getUniqId() }}" class="fancybox" target="_blank" title="{% if subTitle %}{{ file | toTitle }}{% endif %}"><img alt="{{ file | toTitle }}" src="{{ asset('/' ~ module.getThumbnailPath() ~ '/' ~ file) }}" height="{{ module.getConfig().get('thumbnail').height}}" width="{{ module.getConfig().get('thumbnail').width}}"/></a><!--
 -->{% endfor %}
 </div>

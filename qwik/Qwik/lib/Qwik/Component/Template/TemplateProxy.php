@@ -3,6 +3,7 @@
 namespace Qwik\Component\Template;
 
 use Qwik\Cms\AppManager;
+use Qwik\Cms\Module\Module;
 use Qwik\Component\Locale\Language;
 
 /**
@@ -23,7 +24,7 @@ class TemplateProxy {
      * Initialisation du moteur de template
      * @param AppManager $appManager
      */
-    public static function init(\Qwik\Cms\AppManager $appManager){
+    public static function init(AppManager $appManager){
         self::$singleton = new TemplateProxy($appManager);
     }
 
@@ -40,7 +41,7 @@ class TemplateProxy {
         return self::$singleton;
     }
 
-    public function __construct(\Qwik\Cms\AppManager $appManager){
+    public function __construct(AppManager $appManager){
 
         //Chemins vers les twig
         $paths = AppManager::getInstance()->getEnvironment()->get('template.path');
@@ -102,7 +103,7 @@ class TemplateProxy {
      * @param $module
      * @return string
      */
-    public function renderModule($module){
+    public function renderModule(Module $module){
         //Dans les variables du template, on rajoute toujours "module"
         return $this->getTemplateEngine()->render(
             $module->getTemplatePath(),

@@ -9,16 +9,13 @@ class ZoneManager {
 
 
     /**
-     * @param \Qwik\Cms\Page\Page $page
+     * @param Page $page
      * @return Zone[]
      */
     public function getByPage(Page $page){
-        $zones =  array();
-        $config = $page->getConfig();
-        if(isset($config['zones']) && is_array($config['zones'])){
-            foreach($config['zones'] as $zoneName => $config){
-                $zones[$zoneName] = $this->getBuildZone($page, $zoneName, $config);
-            }
+        $zones = array();
+        foreach($page->getConfig()->get('zones', array()) as $zoneName => $config){
+            $zones[$zoneName] = $this->getBuildZone($page, $zoneName, $config);
         }
 
         return $zones;

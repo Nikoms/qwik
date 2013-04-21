@@ -4,20 +4,23 @@ namespace Qwik\Cms\Page;
 
 
 
+use Qwik\Cms\Site\Site;
+use Qwik\Component\Config\Config;
+
 class PageManager {
 
     /**
-     * @var array liste des pages pour chaque path de site
+     * @var Page[] liste des pages pour chaque path de site
      */
     static private $pages = array();
 
     /**
      * Récupération d'une page en fonction d'une erreur (ex: 404)
-     * @param \Qwik\Cms\Site\Site $site
+     * @param Site $site
      * @param \Exception $exception
      * @return null|Page
      */
-    public function findErrorBySite(\Qwik\Cms\Site\Site $site, \Exception $exception){
+    public function findErrorBySite(Site $site, \Exception $exception){
         $errors = $this->getPagesErrorConfig($site);
         $code = $exception->getCode();
         //Si on trouve pas d'erreur avec ce code, alors on met default
@@ -27,19 +30,18 @@ class PageManager {
         if(empty($errors[$code])){
             return null;
         }
-
         return $this->getBuildPage($site, 'error_' . $code, $errors[$code]);
-
     }
 
 
 
     /**
      * Récupération d'une page en fonction du site et de l'url
-     * @param \Qwik\Cms\Site\Site $site
+     * @param Site $site
      * @param $url string
+     * @return null|Page
      */
-    public function findOneByUrl(\Qwik\Cms\Site\Site $site, $url){
+    public function findOneByUrl(Site $site, $url){
         $url = (string) $url;
 
         $config = $this->getPagesConfig($site);
@@ -53,10 +55,10 @@ class PageManager {
 
     /**
      * Trouve la première page d'un site
-     * @param \Qwik\Cms\Site\Site $site
+     * @param Site $site
      * @return Page
      */
-    public function findFirst(\Qwik\Cms\Site\Site $site){
+    public function findFirst(Site $site){
         $configs = $this->getPagesConfig($site);
         $firstUrl = key($configs);
         return $this->getBuildPage($site, $firstUrl, $configs[$firstUrl]);
@@ -64,14 +66,15 @@ class PageManager {
 
     /**
      * Construit une page sur base des infos donnés
-     * @param $name string
+     * @param Site $site
+     * @param string $url
      * @param array $config
      * @return Page
      */
-    private function getBuildPage(\Qwik\Cms\Site\Site $site, $url, array $config){
+    private function getBuildPage(Site $site, $url, array $config){
         $url = (string) $url;
         $page = new Page();
-        $page->setConfig($config);
+        $page->setConfig(new Config($config));
         $page->setSite($site);
         $page->setUrl($url);
         $page->setIsHidden(!empty($config['hidden']));
@@ -80,10 +83,10 @@ class PageManager {
 
     /**
      *
-     * @param \Qwik\Cms\Site\Site $site
+     * @param Site $site
      * @return \Qwik\Cms\Page\Page[]
      */
-    public function findAll(\Qwik\Cms\Site\Site $site){
+    public function findAll(Site $site){
         $pages = array();
         foreach($this->getPagesConfig($site) as $url => $config){
             $pages[$url] =  $this->getBuildPage($site, $url, $config);

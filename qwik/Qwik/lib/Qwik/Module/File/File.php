@@ -33,14 +33,14 @@ class File extends Module{
      * @return array Tableau des fichiers à afficher
      */
     private function getFiles(){
-        $config = $this->getConfig();
+        $file = $this->getConfig()->get('file', array());
         //si pas de fichier on renvoit un array vide
-        if(empty($config['file'])){
+        if(empty($file)){
             return array();
         }
         
         //On fait en sorte d'avoir un array de fichiers, même si on a qu'un fichier
-        $files = is_array($config['file']) ? $config['file'] : array((string) $config['file']);
+        $files = (array) $file;
         $return = array();
 
         //Pour chaque fichier, on va faire des choses pour que ca marche en multilangue :)

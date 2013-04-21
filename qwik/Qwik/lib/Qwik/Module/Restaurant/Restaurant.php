@@ -43,9 +43,10 @@ class Restaurant extends Module{
     			$item['children'] = $this->toTree($item['children']);
     		}else{
                 $config = $this->getConfig();
+                $priceFormat = $config->get('format.price');
                 //On format le prix, si on l'a demandé (config:format) et que le prix est un numérique (is_numeric)
-                if(is_numeric($item['price']) && isset($config['format']) && isset($config['format']['price'])){
-                    $item['price'] = sprintf($config['format']['price'],$item['price']);
+                if(is_numeric($item['price']) && $priceFormat !== null){
+                    $item['price'] = sprintf($priceFormat, $item['price']);
                 }
             }
     		$return[$where][] = $item;
