@@ -47,6 +47,10 @@ class TemplateProxy {
         $paths = AppManager::getInstance()->getEnvironment()->get('template.path');
         foreach($paths as $key => $path){
             $paths[$key] = str_replace('/', DIRECTORY_SEPARATOR, $path);
+            //On a peut-être pas le dossier? (genre includes)
+            if(!file_exists($path)){
+                unset($paths[$key]);
+            }
         }
         $loader = new \Twig_Loader_Filesystem($paths);
 

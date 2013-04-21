@@ -4,6 +4,7 @@ namespace Qwik\Cms\Module;
 
 use Qwik\Cms\AppManager;
 use Qwik\Cms\Zone\Zone;
+use Qwik\Component\Config\Config;
 use Qwik\Component\Log\Logger;
 use Symfony\Component\Yaml\Yaml;
 

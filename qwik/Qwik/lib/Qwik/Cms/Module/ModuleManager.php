@@ -12,7 +12,7 @@ class ModuleManager{
     }
 
     /**
-     * @param \Qwik\Cms\Zone\Zone $zone
+     * @param Zone $zone
      * @return Module[]
      */
     public function getByZone(Zone $zone){

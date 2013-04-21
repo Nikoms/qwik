@@ -122,8 +122,7 @@ class File extends Module{
      * Path où on va chercher les fichiers
      */
     private function getPath(){
-        $site = $this->getZone()->getPage()->getSite();
-        return $site->getPath() . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR;
+        return $this->getZone()->getPage()->getSite()->getPath() . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR;
     }
 
     /**

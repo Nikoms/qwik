@@ -3,7 +3,7 @@
 namespace Qwik\Cms\Module;
 
 use Qwik\Cms\AppManager;
-use Qwik\Cms\Site\Site;
+use Qwik\Component\Config\Config;
 use Qwik\Component\Config\Loader;
 use Qwik\Component\Locale\Language;
 use Qwik\Component\Template\TemplateProxy;
@@ -28,7 +28,7 @@ abstract class Module {
 
     /**
      * Config générale du module
-     * @var Config
+     * @var ModuleConfig
      */
     private $moduleConfig;
     /**
@@ -58,6 +58,9 @@ abstract class Module {
         return $this->config;
 	}
 
+    /**
+     * @return ModuleConfig
+     */
     public function getModuleConfig(){
         //Si pas déjà instancié
         if($this->moduleConfig === null){
@@ -67,7 +70,7 @@ abstract class Module {
             //Récupération de la config sous forme d'array
             $config = Loader::getInstance()->getPathConfig($pathOfConfig);
             //Transformation de l'array en objet
-            $this->moduleConfig = new Config($config);
+            $this->moduleConfig = new ModuleConfig($config);
         }
         return $this->moduleConfig;
     }
