@@ -3,7 +3,8 @@ namespace Qwik\Module\File;
 
 use Qwik\Cms\Module\Module;
 use Qwik\Component\Locale\Language;
-use Qwik\Component\Template\TemplateProxy;
+use Qwik\Module\File\Type\Content;
+use Qwik\Module\File\Type\Twig;
 
 
 /**
@@ -11,29 +12,12 @@ use Qwik\Component\Template\TemplateProxy;
  */
 class File extends Module{
 
-    /**
-     * @return array Renvoi des variables pour le moteur de template
-     */
-    public function getTemplateVars(){
-
-        $fileContent = '';
-        //Récupération du contenu de(s) fichier(s)
-        foreach($this->getFiles() as $file){
-        	$fileContent .= $this->getFileContent($file);
-        }
-
-        //Le retour est uniquement dans fileContent (concaténation des contenus de tous les fichiers)
-        $config = array(
-            'fileContent' => $fileContent,
-        );
-        return $config;
-    }
 
     /**
      * @return array Tableau des fichiers à afficher
      */
-    private function getFiles(){
-        $file = $this->getConfig()->get('file', array());
+    public function getFiles(){
+        $file = $this->getInfo()->getConfig()->get('config.file', array());
         //si pas de fichier on renvoit un array vide
         if(empty($file)){
             return array();
@@ -47,11 +31,11 @@ class File extends Module{
         foreach($files as $file){
 
         	//1. récup du nom du fichier (avec éventuellement des modifs suite à la langue)
-        	$file = $this->getFile($file);
+        	$file = $this->getFilePath($file);
 
         	//2. si c'est pas false, alors le fichier existe et on le rajoute dans l'array de return
         	if($file !== false){
-        		$return[] = $file;
+        		$return[] = $this->getFile($file);
         	}
         }
         
@@ -63,7 +47,7 @@ class File extends Module{
      * @param $file
      * @return bool|string Renvoi le path absolu du fichier (peut changer en fonction de la langue) ou FALSE si on a pas trouvé de fichier
      */
-    private function getFile($file){
+    private function getFilePath($file){
     	
     	//On essaye d'avoir le fichier de la langue en cours
     	if($fullFileName = $this->getFileWithLanguage($file, Language::get())){
@@ -122,35 +106,34 @@ class File extends Module{
      * Path où on va chercher les fichiers
      */
     private function getPath(){
-        return $this->getZone()->getPage()->getSite()->getPath() . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR;
+        return $this->getInfo()->getZone()->getPage()->getSite()->getPath() . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR;
     }
 
     /**
      * @param string $file Chemin du fichier
-     * @return string Renvoi le contenu du fichier
+     * @return \Qwik\Module\File\Type\File
      */
-    private function getFileContent($file){
+    private function getFile($file){
         $file = (string) $file;
         switch(pathinfo($file, PATHINFO_EXTENSION)){
             case 'txt':
-                return nl2br(file_get_contents($file));
+                return new Content(nl2br(file_get_contents($file)));
                 break;
             case 'php':
+                //$module pourra être utilisé par l'include
                 $phpToString = function($module) use ($file){
                     ob_start();
                     include $file;
-                    return ob_get_clean();
+                    return new Content(ob_get_clean());
                 };
                 //On passe $this, même si je sais qu'on peut accéder à this dans la méthode anonyme. C'est plus clair dans le ".php" d'utilise $module plutot que $this
                 return $phpToString($this);
                 break;
             case 'twig':
-                //On récupère le nom du fichier, sans tout son path, qui ne nous interesse pas
-                $file = str_replace($this->getPath(), '', $file);
-                return TemplateProxy::getInstance()->renderTemplate($file);
+                return new Twig(str_replace($this->getPath(), '', $file));
                 break;
             default:
-                return file_get_contents($file);
+                return new Content(file_get_contents($file));
                 break;
         }
     }

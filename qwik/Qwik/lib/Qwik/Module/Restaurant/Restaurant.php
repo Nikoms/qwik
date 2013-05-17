@@ -12,13 +12,8 @@ class Restaurant extends Module{
     /**
      * @return array Envoi des variables pour le template
      */
-    public function getTemplateVars(){
-        //On donne le contenu de la config
-    	$return = parent::getTemplateVars();
-        //On rajoute children qui est  la carte en mode "arbre"
-        $vars = parent::getTemplateVars();
-    	$return['children'] =  $this->toTree($vars['menu']);
-        return $return;
+    public function getTree(){
+       return $this->toTree($this->getInfo()->getConfig()->get('config.menu'));
     }
 
     /**
@@ -42,7 +37,7 @@ class Restaurant extends Module{
     			$where = 'menu';
     			$item['children'] = $this->toTree($item['children']);
     		}else{
-                $config = $this->getConfig();
+                $config = $this->getInfo()->getConfig();
                 $priceFormat = $config->get('format.price');
                 //On format le prix, si on l'a demandé (config:format) et que le prix est un numérique (is_numeric)
                 if(is_numeric($item['price']) && $priceFormat !== null){

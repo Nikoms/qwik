@@ -55,7 +55,8 @@ $(function(){
                         $errorContainer.html(data.message).show();
                     }
                 }catch(ex){
-
+                    //On peut resubmit... Au cas où
+                    $form.find(':submit').removeAttr('disabled');
                 }
         }).fail(function(jqXHR, textStatus) {
             //On a eu un problème (pas de json, ou timeout)
@@ -79,7 +80,8 @@ function qwikFormError($form, errors){
     $form.find('.qwik-form-form-field').removeClass('error');
     //Pour chaque erreur, on va mettre l'erreur et afficher le message
     for(var name in errors){
-        $form.find('#' + formId + '_' + name).addClass('error');
-        $form.find('#' + formId + '_' + name + ' .qwik-form-field-message').show().html(errors[name]);
+        var $fieldGroup = $form.find("[name='form["+name+"]']").closest('.control-group');
+        $fieldGroup.addClass('error');
+        $fieldGroup.find('.qwik-form-field-message').show().html(errors[name]);
     }
 }

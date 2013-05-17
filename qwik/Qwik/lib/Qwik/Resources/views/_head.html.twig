@@ -6,6 +6,6 @@
 <meta name="author" content="Qwik">
 
 <script src="{{ asset('/qwik/js/jquery.js') }}"></script>
-{% for file in page.getAssets('css') %}
+{% for file in app.qwik_module.getAssets(page, 'css') %}
     <link href="{{ asset(file.getPath()) }}" rel="stylesheet" media="all">
 {% endfor %}

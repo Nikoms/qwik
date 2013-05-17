@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="{{ locale() }}">
+<html lang="{{ app.locale }}">
 <head>
 	{% include "_head.html.twig" with {'page':page} %}
     {% block head %}{% endblock %}
 </head>
 <body>
 {% block body %}{% endblock %}
-{% for file in page.getAssets('javascript') %}
+{% for file in app.qwik_module.getAssets(page, 'javascript') %}
     <script src="{{ asset(file.getPath()) }}"></script>
 {% endfor %}
+
 
 
 {#inclusion de Google Analytics en fin de page #}

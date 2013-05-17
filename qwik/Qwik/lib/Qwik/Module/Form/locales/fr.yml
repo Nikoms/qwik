@@ -1,0 +1,13 @@
+form.unexpectedError: Une erreur inattendue s'est produite. Veuillez réessayer plus tard.
+form.emailSent: E-mail envoyé.
+form.field.mandatory: Ce champ est obligatoire.
+form.send: Envoyer
+form.error: Une erreur est survenue lors de la soumission du formulaire. Veuillez vérifier les champs en rouge.
+form.subject: E-mail provenant de vote site internet
+form.body: |+
+  Bonjour,
+
+  Un visiteur vient de poster ce formulaire:
+
+
+form.field.email.notvalid: E-mail non valide

@@ -1,0 +1,13 @@
+form.unexpectedError: An unexpected error has occurred. Please try again later.
+form.emailSent: E-mail sent.
+form.field.mandatory: This field is mandatory.
+form.send: Send
+form.error: An error has occured while sending the message. Please check the red fields.
+form.subject: Email coming from your website
+form.body: |+
+  Hello,
+
+  A visitor just posted this form:
+
+
+form.field.email.notvalid: E-mail address not valid

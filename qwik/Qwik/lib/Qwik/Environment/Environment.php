@@ -2,6 +2,7 @@
 
 namespace Qwik\Environment;
 
+use Qwik\Application;
 use Qwik\Cms\AppManager;
 use Qwik\Component\Config\Config;
 use Qwik\Component\Config\Loader;
@@ -17,14 +18,14 @@ class Environment extends Config{
      */
     private $app;
 
-    public function __construct($env, AppManager $app){
+    public function __construct(Application $app, $env){
         $this->setApp($app);
         $this->setEnv($env);
         parent::__construct($this->loadConfig());
     }
 
     /**
-     * @param \Qwik\Cms\AppManager $app
+     * @param \Qwik\Application $app
      */
     public function setApp($app)
     {
@@ -32,14 +33,12 @@ class Environment extends Config{
     }
 
     /**
-     * @return \Qwik\Cms\AppManager
+     * @return \Qwik\Application
      */
     public function getApp()
     {
         return $this->app;
     }
-
-
 
     /**
      * @param string $env
@@ -68,15 +67,25 @@ class Environment extends Config{
     }
 
     /**
+     * @return string
+     */
+    private function getConfigPath(){
+        return  __DIR__ . DIRECTORY_SEPARATOR . '..'. DIRECTORY_SEPARATOR . 'Resources\config' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
      * Charge la configuration
      */
     private function loadConfig(){
-        $configPath = __DIR__ . DIRECTORY_SEPARATOR . '..'. DIRECTORY_SEPARATOR . 'Resources\config' . DIRECTORY_SEPARATOR;
-        $myConfigFile = $configPath . $this->getEnv().'.yml';
-        $allConfigFile = $configPath . 'all.yml';
+        $loader = new Loader();
 
-        $config = new Loader();
-        return $config->merge($config->getFileConfig($allConfigFile), $config->getFileConfig($myConfigFile));
+        $allConfig = $loader->getFileConfig($this->getConfigPath() . 'config.yml');
+        $myConfigFile = $this->getConfigPath() . 'config_'.$this->getEnv().'.yml';
+        if(!file_exists($myConfigFile)){
+            return $allConfig;
+        }
+
+        return $loader->merge($allConfig, $loader->getFileConfig($myConfigFile));
     }
 
 
@@ -91,12 +100,17 @@ class Environment extends Config{
             }
             return $return;
         }else{
+            $app = $this->getApp()->getSilex();
             return str_replace(
                 array('%site_path%', '%kernel_path%'),
-                array($this->getApp()->getSite()->getPath(), __DIR__ . '/..'),
+                array($app['site']->getPath(), __DIR__ . '/..'),
                 $var
             );
         }
+    }
+
+    public function __toString(){
+        return $this->getEnv();
     }
 }
 

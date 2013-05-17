@@ -1,19 +1,21 @@
+
+
 {% set style = '' %}
 
-{% if position == 'center' %}
+{% if this.getPosition() == 'center' %}
 {% set style = 'margin-left: auto;margin-right: auto;' %}
-{% elseif position == 'left' %}
+{% elseif this.getPosition() == 'left' %}
 {% set style = 'float: left;' %}
-{% elseif position == 'right' %}
+{% elseif this.getPosition() == 'right' %}
 {% set style = 'float: right;' %}
 {% endif  %}
 
-{% if width != '' %}
-{% set style = style ~ 'width:' ~ width ~ ';' %}
+{% if this.getWidth() != '' %}
+{% set style = style ~ 'width:' ~ this.getWidth() ~ ';' %}
 {% endif  %}
 
 <div class="qwik-gallery" style="{{ style }}">
-{% for file in files %}<!--
-	--><a href="{{ asset('/' ~ module.getZone().getPage().getSite().getVirtualUploadPath() ~ file) }}" data-fancybox-group="{{ module.getUniqId() }}" class="fancybox" target="_blank" title="{% if subTitle %}{{ file | toTitle }}{% endif %}"><img alt="{{ file | toTitle }}" src="{{ asset('/' ~ module.getThumbnailPath() ~ '/' ~ file) }}" height="{{ module.getConfig().get('thumbnail').height}}" width="{{ module.getConfig().get('thumbnail').width}}"/></a><!--
+{% for file in this.getFiles() %}<!--
+	--><a href="{{ asset('/' ~ this.getVirtualUploadPath() ~ file) }}" data-fancybox-group="{{ this.getInfo().getUniqId() }}" class="fancybox" target="_blank" title="{% if this.hasSubtitle() %}{{ file | toTitle }}{% endif %}"><img alt="{{ file | toTitle }}" src="{{ asset('/' ~ this.getThumbnailPath() ~ '/' ~ file) }}" height="{{ this.getInfo().getConfig().get('config.thumbnail').height}}" width="{{ this.getInfo().getConfig().get('config.thumbnail').width}}"/></a><!--
 -->{% endfor %}
 </div>

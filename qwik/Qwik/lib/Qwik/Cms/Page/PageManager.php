@@ -6,6 +6,7 @@ namespace Qwik\Cms\Page;
 
 use Qwik\Cms\Site\Site;
 use Qwik\Component\Config\Config;
+use Qwik\Component\Config\Loader;
 
 class PageManager {
 
@@ -104,13 +105,13 @@ class PageManager {
 
         //Check si on a pas déjà le site en cache, car on fait bcp d'appel à cette méthode
         if(empty(self::$pages[$site->getPath()])){
-            $pagesPath = $site->getPath() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'pages';
+            $pagesPath = $site->getPath() . DIRECTORY_SEPARATOR . 'site' . DIRECTORY_SEPARATOR . 'pages';
             //Check si on a le dossier "pages" avec le nouveau système 1 fichier par page
             if(is_dir($pagesPath)){
                 self::$pages[$site->getPath()] = $this->getPagesByPath($pagesPath);
             }else{
                 //Pas de pages
-                throw new \Exception('No pages config found');
+                throw new \Exception('No pages config found in ' . $pagesPath);
             }
 
 
@@ -122,7 +123,7 @@ class PageManager {
 
     private function getPagesByPath($path){
         //1. Récupération des pages
-        $pages = \Qwik\Component\Config\Loader::getInstance()->getPathConfig($path);
+        $pages = Loader::getInstance()->getPathConfig($path);
 
         //2. Réorder "naturel" et insensible à la case
         uksort($pages, function ($a, $b){
@@ -152,7 +153,7 @@ class PageManager {
      */
     public function getPagesErrorConfig(\Qwik\Cms\Site\Site $site){
 
-        $errorsPath = $site->getPath() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'errors';
+        $errorsPath = $site->getPath() . DIRECTORY_SEPARATOR . 'site' . DIRECTORY_SEPARATOR . 'errors';
         //Check si on a le dossier "pages" avec le nouveau système 1 fichier par page
         if(is_dir($errorsPath)){
             return $this->getPagesByPath($errorsPath);

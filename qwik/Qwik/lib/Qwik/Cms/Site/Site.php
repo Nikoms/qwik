@@ -7,7 +7,7 @@ namespace Qwik\Cms\Site;
 use Qwik\Cms\Page\Page;
 
 
-
+use Qwik\Component\Config\Loader;
 use Qwik\Component\Locale\Language;
 
 /**
@@ -165,6 +165,7 @@ class Site {
      * @return bool Indique si le site est un alias d'un autre. Un alias = on reste sur le meme domaine mais on accède aux infos de l'autre
      */
     public function getAlias(){
+        exit('redirect todo');
         $config = $this->getConfig();
         return isset($config['general']['alias']) ? $config['general']['alias'] : '';
     }
@@ -173,6 +174,7 @@ class Site {
      * @return string Renvoi quel est la redirectiondu site. Renvoi vide si le site n'a pas de redirection
      */
     public function getRedirect(){
+        exit('redirect todo');
         $config = $this->getConfig();
         return isset($config['general']['redirect']) ? $config['general']['redirect'] : '';
     }
@@ -182,7 +184,7 @@ class Site {
      * @return Site
      */
     private function initConfig(){
-		$this->config = \Qwik\Component\Config\Loader::getInstance()->getPathConfig($this->getPath().'/config');
+		$this->config = Loader::getInstance()->getPathConfig($this->getPath().'/site');
         return $this;
 	}
 
@@ -194,6 +196,27 @@ class Site {
     public function getGoogleAnalytics(){
 		$config = $this->getConfig();
 		return (isset($config['general']['google']) && isset($config['general']['google']['analytics'])) ? (string) $config['general']['google']['analytics'] : '';
+	}
+
+    /**
+     * Renvoi un module en fonction des paramètres
+     * @param $pageUrl
+     * @param $zoneName
+     * @param $uniqId
+     * @return Module
+     * @throws \Exception
+     */
+    public function findModule($pageUrl, $zoneName, $uniqId){
+		$page = $this->getPage($pageUrl);
+		if(is_null($page)){
+			throw new \Exception('Page '.$pageUrl.' introuvable');
+		}
+		foreach($page->getZone($zoneName)->getModules() as $module){
+			if($module->getUniqId() == $uniqId){
+				return $module;
+			}
+		}
+		throw new \Exception('Impossible de trouver le module');
 	}
 	
 }

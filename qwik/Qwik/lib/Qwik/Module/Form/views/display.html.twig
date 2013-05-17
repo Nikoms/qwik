@@ -1,6 +1,11 @@
-<form method="post" data-id="{{ module.getUniqId() }}" novalidate="novalidate" class="form-horizontal qwik-form" action="{{ path('module_form_send') }}">
-    {% for field in fields %}
-        <div id="{{ module.getUniqId() }}_{{ field.getName() }}" class="control-group qwik-form-form-field">
+{% set form = this.getForm(app).createView() %}
+{% form_theme form 'Form/views/fields.html.twig' %}
+
+
+
+<form method="post" data-id="{{ this.getInfo().getUniqId() }}" novalidate="novalidate" class="form-horizontal qwik-form" action="{{ app.url_generator.generate('module_form_send') }}">
+{#    {% for field in this.getFields() %}
+        <div id="{{ this.getInfo().getUniqId() }}_{{ field.getName() }}" class="control-group qwik-form-form-field">
             <label class="control-label">{{ field.getLabel() | translate }} {% if field.isRequired() %}*{% endif %}</label>
             <div class="controls">
                 {{ field }}
@@ -8,24 +13,25 @@
             </div>
         </div>
     {% endfor %}
+#}
+    {{ form_widget(form) }}
 
 
     <div class="qwik-form-success alert alert-success" style="display:none">
-        <i class="icon-ok"></i> {{ module.translate('form.emailSent') | translate }}
+        <i class="icon-ok"></i> {{ app.translator.trans('form.emailSent') }}
     </div>
 
-    <div class="qwik-form-error alert alert-error" style="display:none" data-default="{{ module.translate('form.unexpectedError') | translate | e }}">
+    <div class="qwik-form-error alert alert-error" style="display:none" data-default="{{ app.translator.trans('form.unexpectedError') | e }}">
         <i class="icon-remove"></i> <span class="message"></span>
     </div>
 
     <div class="control-group">
         <div class="controls">
-            <input type="hidden" value="{{ module.getUniqId() }}" name="_uniqId" />
-            <input type="hidden" value="{{ module.getZone().getName() }}" name="_zone" />
-            <input type="hidden" value="{{ module.getZone().getPage().getUrl() }}" name="_page" />
-            <button>{{ module.translate('form.send') | translate }} <img class="qwik-form-spinner" src="{{ asset('/qwik/module/form/images/spinner.gif') }}" alt="..." /></button>
+            <input type="hidden" value="{{ this.getInfo().getUniqId() }}" name="_uniqId" />
+            <input type="hidden" value="{{ this.getInfo().getZone().getName() }}" name="_zone" />
+            <input type="hidden" value="{{ this.getInfo().getZone().getPage().getUrl() }}" name="_page" />
+            <button>{{ app.translator.trans('form.send') }} <img class="qwik-form-spinner" src="{{ asset('/qwik/module/form/images/spinner.gif') }}" alt="..." /></button>
         </div>
     </div>
 
 </form>
-

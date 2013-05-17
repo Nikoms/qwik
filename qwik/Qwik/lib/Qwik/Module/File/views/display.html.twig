@@ -1,1 +1,1 @@
-{{ fileContent }}
+{% for file in this.getFiles() %}{{ file.render(app) }}{% endfor %}

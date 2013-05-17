@@ -19,9 +19,9 @@
 	<div class="container">
 	    <div class="row">
 		    <div class="span8">
-		    	{{page.getZone('zone1')}}
+		    	{{app.qwik_zone_generator.render(page,'zone1')}}
 		    </div>
-		    <div class="span4"><div id="pratik">{{ page.getZone('zone2') }}</div></div>
+		    <div class="span4"><div id="pratik">{{ app.qwik_zone_generator.render(page,'zone2') }}</div></div>
 	    </div>
 	</div>
 

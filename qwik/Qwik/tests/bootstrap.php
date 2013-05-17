@@ -6,3 +6,5 @@
  * Time: 21:37
  */
 require_once __DIR__ . '/../lib/Qwik/AutoLoader.php';
+
+require(__DIR__ . '/../../../vendor/autoload.php');

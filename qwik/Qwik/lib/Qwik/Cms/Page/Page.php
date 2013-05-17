@@ -151,7 +151,7 @@ class Page {
      */
     public function getZones(){
 
-        if(is_null($this->zones)){
+        if($this->zones === null){
             $zoneManager = new ZoneManager();
             $this->zones = $zoneManager->getByPage($this);
         }
@@ -159,26 +159,4 @@ class Page {
         return $this->zones;
     }
 
-    /**
-     * @param $type (css|javascript)
-     * @return array
-     */
-    public function getAssets($type){
-
-        if(empty($this->assets)){
-            $this->assets = array();
-            $this->assets['javascript'] = array();
-            $this->assets['css'] = array();
-
-            foreach($this->getZones() as $zone){
-                $filesOfZone = $zone->getAssetsByType();
-                $this->assets['javascript'] = array_merge($this->assets['javascript'], $filesOfZone['javascript']);
-                $this->assets['css'] = array_merge($this->assets['css'], $filesOfZone['css']);
-            }
-            $this->assets['javascript'] = array_unique($this->assets['javascript']);
-            $this->assets['css'] = array_unique($this->assets['css']);
-        }
-
-		return isset($this->assets[$type]) ? $this->assets[$type] : array();
-	}
 }

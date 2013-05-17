@@ -5,7 +5,7 @@
 {% block head %}{% endblock %}
 
 {% block body %}
-	{{page.getZone('content')}}
+	{{app.qwik_zone_generator.render()page.getZone('content'))}}
 {% endblock %}
 
 

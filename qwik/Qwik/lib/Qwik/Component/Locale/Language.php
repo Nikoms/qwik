@@ -45,6 +45,7 @@ class Language {
 		if(in_array($newLanguage,self::$languages)){
 			self::$current = $newLanguage;
 		}
+        return self::$current;
 	}
 
     /**

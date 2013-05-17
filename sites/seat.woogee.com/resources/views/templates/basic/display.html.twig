@@ -14,10 +14,9 @@
 {% block body %}
     <img src="{{ asset('/q/templates/images/background1.jpg') }}" class="superbg" alt="background" />
 	{% include "templates/top.html.twig" %}
-
 	<div class="container main">
 	    <div class="row">
-		    <div class="span12">{{page.getZone('zone1')}}</div>
+		    <div class="span12">{{app.qwik_zone_generator.render(page,'zone1')}}</div>
 	    </div>
 	</div>
 

@@ -84,6 +84,8 @@ class Organizer{
      * @return string
      */
     public static function getClassName($name){
-        return AppManager::getInstance()->getEnvironment()->get('modules.' . $name) . '\\' . ucfirst($name);
+        return 'Qwik\Module\\' . ucfirst($name) . '\\' . ucfirst($name);
+        //TODO !!!!
+        //return AppManager::getInstance()->getEnvironment()->get('modules.' . $name) . '\\' . ucfirst($name);
     }
 }

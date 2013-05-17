@@ -4,8 +4,10 @@ namespace Qwik\Module\Form;
 use Qwik\Cms\AppManager;
 use Qwik\Cms\Module\Module;
 use Qwik\Component\Locale\Language;
-use Qwik\Module\Form\Entity\Field\Email;
-use Qwik\Module\Form\Entity\Field\Field;
+use Qwik\Module\Form\Entity\Assert\Email;
+use Qwik\Module\Form\Entity\Assert\Finder;
+use Symfony\Component\Validator\Constraints as Assert;
+use Silex\Application;
 
 /**
  * Module "Formulaire"
@@ -14,93 +16,100 @@ class Form extends Module{
 
 
     /**
-     * @return array Variables pour le moteur de template
+     * @param Application $app
+     * @return mixed
      */
-    public function getTemplateVars(){
-        $return = array();
-        $return['fields'] = $this->getFields();
-
-        return $return;
+    public function getForm(Application $app){
+        return $this->getFormBuilder($app)->getForm();
     }
 
     /**
-     * @return Field Liste des objets Field
+     * @param Application $app
+     * @return mixed
      */
-    public function getFields(){
-    	$return = array();
+    private function getFormBuilder(Application $app){
+        $form = $app['form.factory']->createBuilder('form');
 
-        foreach($this->getConfig()->get('fields') as $name => $fieldConfig){
-            $field = Entity\Field\Field::getField($fieldConfig['type']);
-            $field->setModule($this);
-            $field->setLabel($fieldConfig['label']);
-            $field->setIsRequired(isset($fieldConfig['required']) && ((bool) $fieldConfig['required']));
-            $field->setName($name);
-            $field->setAttributes(isset($fieldConfig['attributes']) ? $fieldConfig['attributes'] : array());
-            $return[$name] = $field;
+        foreach($this->getFields() as $field){
+            $config = array(
+                'label' => Language::getValue($field->getLabel()),
+                'required'  => $field->isRequired(),
+                'constraints' => $field->getConstraints()
+            );
+            $form->add($field->getName(), $field->getType(), array_merge($config, $field->getConfig()));
         }
 
-        return $return;
+        return $form;
     }
+
+    /**
+     * @return \Qwik\Module\Form\Entity\Assert[]
+     */
+    private function getFields(){
+        $fields = array();
+        foreach($this->getInfo()->getConfig()->get('config.fields') as $name => $fieldInfos){
+            $field = Finder::getField($fieldInfos, $name);
+            $fields[$name] = $field;
+        }
+        return $fields;
+    }
+
 
     /**
      * Envoi du mail. Méthode qui doit être publique (pour le moment), car appelé de la function anonyme
-     * @param array $fields
-     * @return int 0|1
+     * @param Application $app
+     * @param \Symfony\Component\Form\Form $form
+     * @return int
      */
-    public function sendMail(array $fields){
+    public function sendMail(Application $app, \Symfony\Component\Form\Form $form){
 
-		//$config = $this->getConfig();
+        //TODO: faire quelque chose pour changer tout automatiquement la langue (silex[locale] etc...)
 		$oldLanguage = Language::get();
 		
 		//On change si possible avec la langue demandée en config
-		if($this->getConfig()->get('language', false)){
-			Language::changeIfPossible($this->getConfig()->get('language'));
+		if($this->getInfo()->getConfig()->get('config.language', false)){
+			Language::changeIfPossible($this->getInfo()->getConfig()->get('config.language'));
 		}
 
+
+        //TODO :attention, pour le moment, la traduction est celle du visiteur. Il faut donc que switcher de langue pour la mettre à celle voulue
         //Début du mail
-		$body = Language::getValue($this->translate('form.body'));
+		$body = $app['translator']->trans('form.body');
 		
 		//Par défaut, le from est celui à qui on envoi (au cas où on ne trouve pas d'email dans le formulaire)
-		$emailFrom = $this->getConfig()->get('email');
+		$replyTo = $emailFrom = $this->getInfo()->getConfig()->get('config.email');
 
-		foreach($fields as $field){
-			//Si j'ai un Field de dont le type est "Email", alors on va dire que c'est le "from" :)
-			if($field instanceof Email){
-				$emailFrom = $field->getValue();
-			}
-            //Rajout de l'info dans le body du mail
-			$body.= '- ' . Language::getValue($field->getLabel()).":\n";
-			$body.= $field->getValue()."\n\n";
-		}
+        $fields = $this->getFields();
+        foreach($form->getData() as $name => $value){
+            if(!isset($fields[$name])){
+                continue;
+            }
+            $field = $fields[$name];
 
-        $to = $this->getConfig()->get('email');
-        if(AppManager::getInstance()->getEnvironment()->get('module.form.mail.redirect')){
-            $to = AppManager::getInstance()->getEnvironment()->get('module.form.mail.redirect');
+            //Si j'ai un Field de dont le type est "Email", alors on va dire que c'est le "from" :)
+            if($field instanceof Email){
+                $replyTo = $value;
+            }
+            $body.= '- ' . Language::getValue($field->getLabel()) . ":\n" . $field->valueToString($value) . "\n\n";
         }
+
+
+        $to = $this->getInfo()->getConfig()->get('config.email');
+        if($app['env']->get('module.form.mail.redirect')){
+            $to = $app['env']->get('module.form.mail.redirect');
+        }
+
 
 		// Create the message
 		$message = \Swift_Message::newInstance()
-		
-		// Give the message a subject
-		    ->setSubject(strtoupper($this->getZone()->getPage()->getSite()->getDomain()) . ' - ' . Language::getValue($this->translate('form.subject')))
-		
-		// Set the From address with an associative array
+            //TODO :attention, pour le moment, la traduction est celle du visiteur. Il faut donc que switcher de langue pour la mettre à celle voulue
+		    ->setSubject(strtoupper($this->getInfo()->getZone()->getPage()->getSite()->getDomain()) . ' - ' . $app['translator']->trans('form.subject'))
 		    ->setFrom(array($emailFrom))
-		
-		// Set the To addresses with an associative array
+            ->setReplyTo($replyTo)
 		    ->setTo(array($to))
-		
-		// Give it a body
 		    ->setBody($body);
 
-		// Mail
-		$transport = \Swift_MailTransport::newInstance();
-		
-		
-		// Create the Mailer using your created Transport
-		$mailer = \Swift_Mailer::newInstance($transport);
-		
-		
+		$mailer = \Swift_Mailer::newInstance(\Swift_MailTransport::newInstance());
 		$result = $mailer->send($message);
 		
 		
@@ -109,5 +118,6 @@ class Form extends Module{
 		return $result;
     	
     }
+
 }
 

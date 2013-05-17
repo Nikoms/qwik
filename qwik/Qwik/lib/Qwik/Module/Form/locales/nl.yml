@@ -1,0 +1,11 @@
+form.unexpectedError: Er is een onverwachte fout opgetreden. Probeer het later opnieuw.
+form.emailSent: E-mail verstuurd.
+form.field.mandatory: Dit is een verplicht veld.
+form.send: Sturen
+form.error: Er is een fout opgetreden bij het verzenden van het bericht. Gelieve de rode velden na te kijken.
+form.subject: E-mail verstuurd via uw website
+form.body: |+
+  Een bezoeker stuurde u her volgende bericht:
+
+
+form.field.email.notvalid: Ongeldig e-mailaddres

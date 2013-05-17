@@ -3,7 +3,6 @@ namespace Qwik\Module\Gallery;
 
 use Imagine\Image\ImageInterface;
 use Qwik\Cms\Module\Module;
-use Qwik\Cms\Page\PageNotFoundException;
 use Qwik\Cms\Site\Site;
 use Qwik\Component\Template\TemplateProxy;
 
@@ -48,39 +47,61 @@ class Gallery extends Module{
 		return str_replace('_', ' ', $title);
 	}
 
-    /**
-     * @return array Renvoi les données pour le template
-     */
-    public function getTemplateVars(){
-		$return = array();
-		$return['files'] = array();
-
-        $thumbNailInfo = $this->getConfig()->get('thumbnail', array());
+    public function getFiles(){
+        $return = array();
 
         //On cast en array au cas où path renvoi une string
-        $paths = (array) $this->getConfig()->get('path',array());
+        $paths = (array) $this->getInfo()->getConfig()->get('config.path',array());
+
         //La liste des fichiers
-		foreach($paths as $path){
-			$return['files'] = array_merge($return['files'], $this->getFiles($path));
-		}
-        //La position de la galerie
-        $return['position'] = $this->getConfig()->get('position', '');
+        foreach($paths as $path){
+            $return = array_merge($return, $this->getFilesForPath($path));
+        }
+
+        return $return;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSubtitle(){
+        return $this->getInfo()->getConfig()->get('config.subTitle', false);
+    }
+
+    public function getVirtualUploadPath(){
+        return $this->getInfo()->getZone()->getPage()->getSite()->getVirtualUploadPath();
+    }
+
+    /**
+     * Largeur total des thumb
+     * @return string
+     */
+    public function getWidth(){
+        $thumbNailInfo = $this->getThumbnailInfos();
         //TODO : Pas terrible de combiné css/php. Si le css est écrasé, on a perdu. On pourrait peut-être dans la boucle du twig, dire. If i ==perLine, affiche <br />
         //La largeur du module. +5 car on a 5px de padding-left pour chaque img (voir css)
-        $perLine = $this->getConfig()->get('perLine');
-        $return['width'] = $perLine !== null ? ( $perLine * ($thumbNailInfo['width'] + 5)) . 'px' : '';
-        //A-t-on demandé un sous-titre à l'image
-        $return['subTitle'] = $this->getConfig()->get('subTitle', false);
+        $perLine = $this->getInfo()->getConfig()->get('config.perLine');
+        return $perLine !== null ? ( $perLine * ($thumbNailInfo['width'] + 5)) . 'px' : '';
+    }
 
-		return $return;
-	}
+    /**
+     * La position de la galerie
+     * @return string
+     */
+    public function getPosition(){
+        return $this->getInfo()->getConfig()->get('config.position', '');
+    }
+
+    public function getThumbnailInfos(){
+        return $this->getInfo()->getConfig()->get('config.thumbnail', array());
+    }
 
     /**
      * @return string Path du thumbnail à générer
      */
     public function getThumbnailPath(){
-		$infos = $this->getConfig()->get('thumbnail', array());
-		return $this->getZone()->getPage()->getSite()->getVirtualUploadPath() . self::getThumbnailPathFor($infos['width'], $infos['height'], $infos['quality']);
+		$infos = $this->getThumbnailInfos();
+		return $this->getVirtualUploadPath() . self::getThumbnailPathFor($infos['width'], $infos['height'], $infos['quality']);
 	}
 
     /**
@@ -98,9 +119,9 @@ class Gallery extends Module{
      * @param string $path
      * @return array Tableau des fichiers dans le dossier
      */
-    private function getFiles($path){
-        $path = (string) $path;
-        $fullPath = self::getOriginalWwwPath($this->getZone()->getPage()->getSite(), $path);
+    private function getFilesForPath($path){
+
+        $fullPath = self::getOriginalWwwPath($this->getInfo()->getZone()->getPage()->getSite(), $path);
 
 		if(!is_dir($fullPath)){
 			return array();

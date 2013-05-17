@@ -1,5 +1,5 @@
-﻿qwik
-====
+﻿qwik (En cours de restructuration)
+===
 
 Gestion d'un cms multilangue, sans base de données avec des fichiers yml :)
 
@@ -17,7 +17,7 @@ Modules dispos:
 - Html: Affichage d'html, directement intégré dans le fichier twig de la page (Module pour faire ses pages "quick'n'dirty" :) )
 - Restaurant: Gestion d'une carte/menu pour restaurant
 
-Librairies externes (BackEnd):
+Librairies externes (Php):
 ===
 
 - Twig (Tout le temps)
@@ -26,7 +26,7 @@ Librairies externes (BackEnd):
 - Imagine (Création des thumbnails dans le module "gallery")
 
 
-Librairies externes (FrontEnd):
+Librairies externes (Html, js, css):
 ===
 
 - jQuery (Pour les modules "gallery" et "gmaps")
@@ -39,6 +39,7 @@ Librairies externes (FrontEnd):
 Updates:
 ===
 - 26/01/2013: Utilisation de composer pour les vendor (yaml, swiftmailer, twig et Imagine)
+- 17/05/2013: Utilisation de Silex
 
 La suite:
 ===

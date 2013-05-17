@@ -7,13 +7,17 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class LanguageTest extends PHPUnit_Framework_TestCase {
+class LanguageTest extends \Namico\PHPUnit\Framework\TestCase {
 
     public static function setUpBeforeClass(){
         \Qwik\Component\Locale\Language::init(array('fr','nl','en'));
     }
 
-    public function testInit(){
+    /**
+     * @Language mock(method1, method2);construct(fr);attr(language=ok;pissette=doudouce;fmip=fmoup)
+     * @dataProvider dataProvider(Qwik\Component\Locale\Language)
+     */
+    public function testInit(\Qwik\Component\Locale\Language $language){
         $this->assertSame('fr', \Qwik\Component\Locale\Language::get());
     }
 

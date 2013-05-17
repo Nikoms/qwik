@@ -1,4 +1,8 @@
 <?php
 require('..' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 require_once '../qwik/Qwik/lib/Qwik/AutoLoader.php';
-Qwik\Cms\AppManager::initWithPath(__DIR__, 'dev')->render();
+
+
+
+$qwik = new \Qwik\Application(__DIR__, 'dev', new \Silex\Application());
+$qwik->run();

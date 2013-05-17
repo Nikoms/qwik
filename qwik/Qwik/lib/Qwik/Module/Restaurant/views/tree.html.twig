@@ -1,6 +1,3 @@
-{% set level = level + 1 %}
-
-
 {% if children.plats|length > 0 %}
 	<ul class="qwik-restaurant-plats">
 	{% for plat in children.plats %}
@@ -21,12 +18,13 @@
 {% endif %}
 
 {% if children.menu|length > 0 %}
+    {% set level = level + 1 %}
 	<ul class="qwik-restaurant-menu">
 	{% for m in children.menu %}
 		<li>
 		 	<p class="qwik-restaurant-level qwik-restaurant-level{{ level }}{% if m.class is defined %} {{ m.class }}{% endif %}">{{ m.title | translate }}</p>
             <p class="qwik-restaurant-level-description">{% if m.description is defined %} {{ m.description }}{% endif %}</p>
-		    {% include module.getName() ~ "/views/tree.html.twig" with {'children' : m.children, 'level' : level}%}
+		    {% include "Restaurant/views/tree.html.twig" with {'children' : m.children, 'level' : level}%}
 	    </li>
 	{% endfor %}
 	</ul>
