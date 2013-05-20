@@ -7,8 +7,9 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Qwik\Module\Form\Entity\Assert;
+namespace Qwik\Module\Form\Entity\Field;
 
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Base {
@@ -106,6 +107,19 @@ class Base {
      */
     public function valueToString($value){
         return $value;
+    }
+
+    /**
+     * @param FormBuilder $form
+     */
+    public function addToForm(FormBuilder $form){
+
+        $config = array(
+            'label' => $this->getName(),
+            'required'  => $this->isRequired(),
+            'constraints' => $this->getConstraints()
+        );
+        $form->add($this->getName(), $this->getType(), array_merge($config, $this->getConfig()));
     }
 
 }

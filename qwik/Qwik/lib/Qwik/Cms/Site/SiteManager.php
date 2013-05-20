@@ -11,7 +11,7 @@ class SiteManager {
 
     /**
      * @param $domain
-     * @param Request $request
+     * @param $www
      * @return Site
      */
     public function createWithDomain($domain, $www){
@@ -19,8 +19,7 @@ class SiteManager {
 		$site->setDomain($domain);
 
         //TODO: changer ceci, ce n'est pas au site à gérer le www
-        $site->setWww($www);
-        $site->setPath($site->getWww() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'sites' . DIRECTORY_SEPARATOR . $site->getDomain());
+        $site->setPath($www . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'sites' . DIRECTORY_SEPARATOR . $site->getDomain());
 
 		return $site;
 	}

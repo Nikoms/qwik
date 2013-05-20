@@ -121,8 +121,7 @@ class Page {
      * @return string
      */
     public function getTitle(){
-		return Language::getValue($this->getConfig()->get('title',''));
-		//return isset($config['title']) ? Language::getValue($config['title']) : '';
+		return $this->getConfig()->get('title','');
 	}
 
     /**

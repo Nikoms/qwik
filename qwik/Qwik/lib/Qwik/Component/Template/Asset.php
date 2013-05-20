@@ -23,8 +23,10 @@ class Asset{
         if(!is_array($config)){
             $config = array('path' => $config);
         }
+        //TODO - app['qwik.locale'].get()
+        $language = 'fr';
         //On remplace %%locale%% par la langue. Au cas où on a un fichier différent en fonction de la langue du visiteur. Ex: monFichier_%%locale%%.css
-        $config['path'] = str_replace('%%locale%%', Language::get(), $config['path']);
+        $config['path'] = str_replace('%%locale%%', $language, $config['path']);
         $this->config = $config;
     }
 

@@ -4,18 +4,7 @@
 
 
 <form method="post" data-id="{{ this.getInfo().getUniqId() }}" novalidate="novalidate" class="form-horizontal qwik-form" action="{{ app.url_generator.generate('module_form_send') }}">
-{#    {% for field in this.getFields() %}
-        <div id="{{ this.getInfo().getUniqId() }}_{{ field.getName() }}" class="control-group qwik-form-form-field">
-            <label class="control-label">{{ field.getLabel() | translate }} {% if field.isRequired() %}*{% endif %}</label>
-            <div class="controls">
-                {{ field }}
-                <span class="help-inline qwik-form-field-message" style="display:none;"></span>
-            </div>
-        </div>
-    {% endfor %}
-#}
     {{ form_widget(form) }}
-
 
     <div class="qwik-form-success alert alert-success" style="display:none">
         <i class="icon-ok"></i> {{ app.translator.trans('form.emailSent') }}

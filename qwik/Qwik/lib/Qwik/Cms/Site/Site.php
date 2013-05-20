@@ -27,10 +27,6 @@ class Site {
      * @var string Chemin vers le dossier non-atteignable du site. Là où l'on va retrouver la config, les templates twig, etc...
      */
     private $path;
-    /**
-     * @var string path du www, c'est-à-dire là où se trouve l'index.php
-     */
-    private $www;
 
     /**
      *
@@ -63,19 +59,6 @@ class Site {
 		$this->domain = (string) $domain;
 	}
 
-    /**
-     * @return string
-     */
-    public function getWww(){
-		return $this->www;
-	}
-
-    /**
-     * @param $www string
-     */
-    public function setWww($www){
-		$this->www = (string) $www;
-	}
 
     /**
      * @return string Chemin virtuel vers "getRealUploadPath". Ceci juste afin d'avoir un path plus beau qu'un path avec "denouveau" le nom de domaine
@@ -129,7 +112,7 @@ class Site {
      */
     public function getTitle(){
         $config = $this->getConfig();
-        return isset($config['general']['title']) ? Language::getValue($config['general']['title']) : '';
+        return isset($config['general']['title']) ? $config['general']['title'] : '';
     }
 
 
@@ -145,7 +128,8 @@ class Site {
 	}
 
     /**
-     * @param string $url
+     * @param $url
+     * @return null|Page
      */
     public function getPage($url){
         $url = (string) $url;

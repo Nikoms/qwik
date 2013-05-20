@@ -18,10 +18,17 @@ class Environment extends Config{
      */
     private $app;
 
+    private $convert;
+
     public function __construct(Application $app, $env){
+        $this->convert = array();
         $this->setApp($app);
         $this->setEnv($env);
         parent::__construct($this->loadConfig());
+    }
+
+    public function addConvert($key, $value){
+        $this->convert[$key] = $value;
     }
 
     /**
@@ -62,8 +69,7 @@ class Environment extends Config{
      * @return mixed
      */
     public function get($path, $defaultValue = null){
-        $value = parent::get($path, $defaultValue);
-         return $this->replaceVars($value);
+        return $this->replaceVars(parent::get($path, $defaultValue));
     }
 
     /**
@@ -100,12 +106,11 @@ class Environment extends Config{
             }
             return $return;
         }else{
-            $app = $this->getApp()->getSilex();
-            return str_replace(
-                array('%site_path%', '%kernel_path%'),
-                array($app['site']->getPath(), __DIR__ . '/..'),
-                $var
-            );
+            $return = $var;
+            foreach($this->convert as $key => $value){
+                $return = str_replace('%'.$key.'%', $value, $return);
+            }
+            return $return;
         }
     }
 

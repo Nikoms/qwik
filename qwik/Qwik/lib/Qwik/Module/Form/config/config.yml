@@ -2,6 +2,9 @@ attributes:
   mail: -
   fields: []
 
+register:
+  - Silex\Provider\FormServiceProvider
+  - Silex\Provider\ValidatorServiceProvider
 
 files:
   javascript:

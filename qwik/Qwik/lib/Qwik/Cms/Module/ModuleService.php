@@ -11,6 +11,7 @@ namespace Qwik\Cms\Module;
 
 use Qwik\Cms\Page\Page;
 use Silex\Application;
+use Symfony\Component\Yaml\Yaml;
 
 class ModuleService {
 
@@ -27,6 +28,22 @@ class ModuleService {
     public function __construct(Application $app){
         $this->app = $app;
         $this->controllers = array();
+    }
+
+    public function getList(){
+        return $this->app['env']->get('modules', array());
+    }
+
+    /**
+     * Register tous les providers des modules
+     */
+    public function registerProviders(){
+        foreach(array_keys($this->getList()) as $moduleName){
+            $controller = $this->getController($moduleName);
+            foreach($controller->getConfig()->get('config.register', array()) as $serviceProvider){
+                $this->app->register(new $serviceProvider());
+            }
+        }
     }
 
     /**

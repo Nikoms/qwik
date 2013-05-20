@@ -13,6 +13,7 @@ namespace Qwik;
 use Qwik\Cms\Module\ModuleServiceProvider;
 use Qwik\Cms\Site\SiteManager;
 use Qwik\Component\Locale\Language;
+use Qwik\Component\Locale\LocaleServiceProvider;
 use Qwik\Component\Routing\Service;
 use Qwik\Component\Template\ZoneGeneratorServiceProvider;
 use Qwik\Environment\Environment;
@@ -20,9 +21,7 @@ use Silex\Provider\FormServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\ValidatorServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 class Application{
 
@@ -31,37 +30,38 @@ class Application{
      */
     private $silex;
 
+    /**
+     * @var string
+     */
+    private $www;
+
     public function __construct($www, $env, \Silex\Application $silex){
         $this->setSilex($silex);
+        $this->setWww($www);
         $silex['qwik'] = $this;
-        $silex['www'] = $www;
         $silex['debug'] = true;
-
-        $silex->register(new UrlGeneratorServiceProvider());
-        $silex->register(new ZoneGeneratorServiceProvider());
-        $silex->register(new ModuleServiceProvider());
-        //TODO: appeler que si nécessaire
-        $silex->register(new FormServiceProvider());
-        $silex->register(new ValidatorServiceProvider());
-
 
 
         //Ajout du site
         $siteManager = new SiteManager();
-        $silex['site'] = $siteManager->getByRequest(Request::createFromGlobals(), $silex['www']);
+        $silex['site'] = $siteManager->getByRequest(Request::createFromGlobals(), $this->getWww());
 
         //Set de l'environnement, après site, c'est mieux :)
         $silex['env'] = new Environment($this, $env);
+        $silex['env']->addConvert('site_path', $silex['site']->getPath());
+        $silex['env']->addConvert('kernel_path', __DIR__);
 
 
-        //Initialisation de la langue en cours
-        Language::init($silex['site']->getLanguages());
-        $silex['locale'] = Language::get();
-        $silex->register(new TranslationServiceProvider(), array(
-            'locale_fallback' => Language::getDefault(),
-        ));
-        $silex['translator']->addLoader('yaml', new YamlFileLoader());
 
+        $silex->register(new UrlGeneratorServiceProvider());
+        //Modules & zones
+        $silex->register(new ModuleServiceProvider());
+        $silex->register(new ZoneGeneratorServiceProvider());
+        //Traductions
+        $silex->register(new LocaleServiceProvider());
+
+        //Registration des providers des modules
+        $silex['qwik.module']->registerProviders();
 
         //Template après tout, car la plupart des providers seront utilisés dans le twigServiceProvider. Il faut donc déjà les loader
         $this->addTemplateManager();
@@ -86,6 +86,24 @@ class Application{
     {
         return $this->silex;
     }
+
+    /**
+     * @param string $www
+     */
+    public function setWww($www)
+    {
+        $this->www = $www;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWww()
+    {
+        return $this->www;
+    }
+
+
 
 
 
@@ -118,7 +136,9 @@ class Application{
         ));
 
         //Ajout de la méthode pour traduire un truc dans le template
-        $silex['twig']->addFilter('translate', new \Twig_Filter_Function('\Qwik\Component\Locale\Language::getValue'));
+        $silex['twig']->addFilter('translate', new \Twig_Filter_Function(function($value) use($silex){
+            return $silex['qwik.locale']->getValue($value);
+        }));
         //Renvoi l'asset
         $silex['twig']->addFunction('asset', new \Twig_Function_Function(function ($uri){
             return Request::createFromGlobals()->getBasePath() . $uri;

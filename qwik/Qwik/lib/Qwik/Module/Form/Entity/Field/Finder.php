@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Qwik\Module\Form\Entity\Assert;
+namespace Qwik\Module\Form\Entity\Field;
 
 
 class Finder {

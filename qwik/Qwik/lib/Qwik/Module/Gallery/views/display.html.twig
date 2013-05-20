@@ -1,21 +1,29 @@
-
-
 {% set style = '' %}
+{% set imagesPerLine = this.getInfo().getConfig().get('config.perLine',5) %}
+{% set position = this.getInfo().getConfig().get('config.position') %}
 
-{% if this.getPosition() == 'center' %}
-{% set style = 'margin-left: auto;margin-right: auto;' %}
-{% elseif this.getPosition() == 'left' %}
-{% set style = 'float: left;' %}
-{% elseif this.getPosition() == 'right' %}
-{% set style = 'float: right;' %}
-{% endif  %}
-
-{% if this.getWidth() != '' %}
-{% set style = style ~ 'width:' ~ this.getWidth() ~ ';' %}
+{% if position == 'center' %}
+    {% set style = 'text-align: center;' %}
+{% elseif position == 'left' %}
+    {% set style = 'float: left;' %}
+{% elseif position == 'right' %}
+    {% set style = 'float: right;' %}
 {% endif  %}
 
 <div class="qwik-gallery" style="{{ style }}">
-{% for file in this.getFiles() %}<!--
-	--><a href="{{ asset('/' ~ this.getVirtualUploadPath() ~ file) }}" data-fancybox-group="{{ this.getInfo().getUniqId() }}" class="fancybox" target="_blank" title="{% if this.hasSubtitle() %}{{ file | toTitle }}{% endif %}"><img alt="{{ file | toTitle }}" src="{{ asset('/' ~ this.getThumbnailPath() ~ '/' ~ file) }}" height="{{ this.getInfo().getConfig().get('config.thumbnail').height}}" width="{{ this.getInfo().getConfig().get('config.thumbnail').width}}"/></a><!--
+    {% set i = 0 %}
+    {% for path in this.getPaths() %}
+        {% for file in app['qwik.module.gallery.file'].getFiles(path) %}<!--
+	    --><a href="{{ asset('/' ~ this.getVirtualUploadPath() ~ file) }}"
+              data-fancybox-group="{{ this.getInfo().getUniqId() }}"
+              class="fancybox"
+              target="_blank"
+              title="{% if this.hasSubtitle() %}{{ file | toTitle }}{% endif %}"><!--
+              --><img alt="{{ file | toTitle }}"
+                      src="{{ asset('/' ~ this.getThumbnailPath() ~ '/' ~ file) }}"
+                      height="{{ this.getInfo().getConfig().get('config.thumbnail').height}}"
+                      width="{{ this.getInfo().getConfig().get('config.thumbnail').width}}" /><!--
+        --></a>{% set i = i + 1 %}{% if (i%imagesPerLine == 0) %}<br />{% endif %}<!--
 -->{% endfor %}
+    {% endfor %}
 </div>

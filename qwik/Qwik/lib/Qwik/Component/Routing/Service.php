@@ -28,7 +28,7 @@ class Service {
         //J'ai choisi une langue, mais pas de page, j'attends une redirection vers la première page
         $app->getSilex()->get('/{_locale}/', function($_locale) use($app, $silex){
             //Changement de la langue quand c'est possible...
-            $silex['locale'] = Language::changeIfPossible($_locale);
+            $silex['locale'] = $silex['qwik.locale']->changeIfPossible($_locale);
             return Service::getFirstPageResponse($app);
         })->bind('root_language')->assert('_locale','[a-z]{2}');
 
@@ -36,7 +36,7 @@ class Service {
         //J'ai une langue et une page :)
         $app->getSilex()->get('/{_locale}/{pageName}/', function($_locale, $pageName) use($app,$silex){
             //Changement de la langue quand c'est possible...
-            $silex['locale'] = Language::changeIfPossible($_locale);
+            $silex['locale'] = $silex['qwik.locale']->changeIfPossible($_locale);
             $silex['translator']->setLocale($silex['locale']);
 
             $pageManager = new PageManager();
@@ -85,7 +85,7 @@ class Service {
         $silex = $app->getSilex();
         $modules = $silex['env']->get('modules', array());
         foreach(array_keys($modules) as $moduleName){
-            $silex['qwik_module']->getController($moduleName)->injectUrl();
+            $silex['qwik.module']->getController($moduleName)->injectUrl();
         }
     }
 
@@ -105,6 +105,6 @@ class Service {
         if(!$firstPage){
             throw new PageNotFoundException();
         }
-        return $silex->redirect('/' . Language::get() . '/' . $firstPage->getUrl());
+        return $silex->redirect('/' . $silex['qwik.locale']->get() . '/' . $firstPage->getUrl());
     }
 }

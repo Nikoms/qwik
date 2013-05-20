@@ -6,7 +6,7 @@
 </head>
 <body>
 {% block body %}{% endblock %}
-{% for file in app.qwik_module.getAssets(page, 'javascript') %}
+{% for file in app['qwik.module'].getAssets(page, 'javascript') %}
     <script src="{{ asset(file.getPath()) }}"></script>
 {% endfor %}
 

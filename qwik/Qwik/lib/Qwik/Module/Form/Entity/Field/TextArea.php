@@ -1,5 +1,5 @@
 <?php
-namespace Qwik\Module\Form\Entity\Assert;
+namespace Qwik\Module\Form\Entity\Field;
 
 
 /**

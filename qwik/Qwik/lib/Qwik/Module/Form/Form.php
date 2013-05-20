@@ -4,8 +4,8 @@ namespace Qwik\Module\Form;
 use Qwik\Cms\AppManager;
 use Qwik\Cms\Module\Module;
 use Qwik\Component\Locale\Language;
-use Qwik\Module\Form\Entity\Assert\Email;
-use Qwik\Module\Form\Entity\Assert\Finder;
+use Qwik\Module\Form\Entity\Field\Email;
+use Qwik\Module\Form\Entity\Field\Finder;
 use Symfony\Component\Validator\Constraints as Assert;
 use Silex\Application;
 
@@ -31,25 +31,21 @@ class Form extends Module{
         $form = $app['form.factory']->createBuilder('form');
 
         foreach($this->getFields() as $field){
-            $config = array(
-                'label' => Language::getValue($field->getLabel()),
-                'required'  => $field->isRequired(),
-                'constraints' => $field->getConstraints()
-            );
-            $form->add($field->getName(), $field->getType(), array_merge($config, $field->getConfig()));
+            $field->addToForm($form);
         }
 
         return $form;
     }
 
     /**
-     * @return \Qwik\Module\Form\Entity\Assert[]
+     * @return array
      */
-    private function getFields(){
+    public function getFields(){
         $fields = array();
         foreach($this->getInfo()->getConfig()->get('config.fields') as $name => $fieldInfos){
-            $field = Finder::getField($fieldInfos, $name);
-            $fields[$name] = $field;
+            $fieldName = $this->getInfo()->getUniqId().'_'.$name;
+            $field = Finder::getField($fieldInfos, $fieldName);
+            $fields[$fieldName] = $field;
         }
         return $fields;
     }
