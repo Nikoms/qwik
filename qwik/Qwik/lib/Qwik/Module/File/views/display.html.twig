@@ -1,1 +1,1 @@
-{% for file in this.getFiles() %}{{ file.render(app) }}{% endfor %}
+{% for file in this.getFiles(app['qwik.locale']) %}{{ file.render(app) }}{% endfor %}

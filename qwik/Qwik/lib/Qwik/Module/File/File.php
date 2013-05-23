@@ -2,7 +2,7 @@
 namespace Qwik\Module\File;
 
 use Qwik\Cms\Module\Module;
-use Qwik\Component\Locale\Language;
+use Qwik\Component\Locale\Locale;
 use Qwik\Module\File\Type\Content;
 use Qwik\Module\File\Type\Twig;
 
@@ -16,7 +16,7 @@ class File extends Module{
     /**
      * @return array Tableau des fichiers à afficher
      */
-    public function getFiles(){
+    public function getFiles(Locale $locale){
         $file = $this->getInfo()->getConfig()->get('config.file', array());
         //si pas de fichier on renvoit un array vide
         if(empty($file)){
@@ -31,7 +31,7 @@ class File extends Module{
         foreach($files as $file){
 
         	//1. récup du nom du fichier (avec éventuellement des modifs suite à la langue)
-        	$file = $this->getFilePath($file);
+        	$file = $this->getFilePath($file, $locale);
 
         	//2. si c'est pas false, alors le fichier existe et on le rajoute dans l'array de return
         	if($file !== false){
@@ -47,10 +47,10 @@ class File extends Module{
      * @param $file
      * @return bool|string Renvoi le path absolu du fichier (peut changer en fonction de la langue) ou FALSE si on a pas trouvé de fichier
      */
-    private function getFilePath($file){
-    	
+    private function getFilePath($file, Locale $locale){
+
     	//On essaye d'avoir le fichier de la langue en cours
-    	if($fullFileName = $this->getFileWithLanguage($file, Language::get())){
+    	if($fullFileName = $this->getFileWithLanguage($file, $locale, $locale->get())){
     		return $fullFileName;
     	}
 
@@ -60,7 +60,7 @@ class File extends Module{
 
 
     	//Sinon on essaye avec la langue par défaut
-    	if($fullFileName = $this->getFileWithLanguage($file, Language::getDefault())){
+    	if($fullFileName = $this->getFileWithLanguage($file, $locale, $locale->getDefault())){
     		return $fullFileName;
     	}
     	
@@ -68,27 +68,20 @@ class File extends Module{
     }
 
     /**
+     * Renvoi le chemin vers le fichier selon la langue. Si le fichier n'existe pas, on renvoi false.
      * @param $file
-     * @param $language
-     * @return bool|string Renvoi le chemin vers le fichier selon la langue. Si le fichier n'existe pas, on renvoi false.
+     * @param Locale $locale
+     * @param string $language
+     * @return bool|string
      */
-    private function getFileWithLanguage($file, $language){
+    private function getFileWithLanguage($file, Locale $locale, $language){
 
-		
-		//On garde la langue en cours
-		$currentLanguage = Language::get();
-		
-		//On change la langue
-		Language::changeIfPossible($language);
-		
     	//Si on a une valeur fr,nl,en ca fonctionne :)
-    	$file = Language::getValue($file);
+    	$file = $locale->getValue($file, $language);
         	
         //On transforme {language} en la langue en cours, comme ca c'est aussi dynamique sur le nom de fichier (ex: intro_{language}.html ou views/{language}/intro.html)
-        $file = str_replace('{language}', Language::get(), $file);
-        
-        //On renvient à la langue courante
-		Language::changeIfPossible($currentLanguage);
+        $file = str_replace('{language}', $language, $file);
+
 
 
         $filePath = $this->getPath() . str_replace('/', DIRECTORY_SEPARATOR, $file) ;

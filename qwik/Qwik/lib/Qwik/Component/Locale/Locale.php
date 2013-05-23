@@ -57,19 +57,23 @@ class Locale {
 	}
 
     /**
-     * Renvoit la valeur selon la langue (il faut que la valeur soit soit string ou array avec fr,nl,en,etc...)
-     * @param string|array $value
+     * Renvoi la valeur selon la langue (il faut que la valeur soit soit string ou array avec fr,nl,en,etc...)
+     * @param $value
+     * @param null $language
      * @return mixed
      */
-    public function getValue($value){
+    public function getValue($value, $language=null){
+        if($language === null){
+            $language = $this->get();
+        }
 
 		//Si c'est pas un array, alors on renvoit directement la valeur car on a pas de choix à faire
 		if(!is_array($value)){
 			return $value;
 		}
 		//Si on a une valeur dans la langue du visiteur, cool!
-		if(isset($value[$this->get()])){
-			return $value[$this->get()];
+		if(isset($value[$language])){
+			return $value[$language];
 		}
 		
 		//Si on est ici, c'est qu'on a pas trouvé dans la langue du visiteur... Snif!

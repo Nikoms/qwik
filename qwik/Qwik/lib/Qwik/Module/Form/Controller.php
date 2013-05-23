@@ -11,7 +11,6 @@ namespace Qwik\Module\Form;
 
 
 use Qwik\Cms\Module\Info;
-use Qwik\Component\Locale\Language;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -69,7 +68,7 @@ class Controller extends \Qwik\Cms\Module\Controller{
 
                     $request = Request::createFromGlobals();
                     $form = new Form($silex['site']->findModule($_POST['_page'], $_POST['_zone'], $_POST['_uniqId']));
-                    $postedForm = $form->getForm($silex);
+                    $postedForm = $form->getForm($silex['form.factory']);
 
                     //Message par défaut
                     $return = array(
@@ -82,9 +81,12 @@ class Controller extends \Qwik\Cms\Module\Controller{
                         $postedForm->bind($request);
 
                         if ($postedForm->isValid()) {
-                            $return['valid'] = true;
+
+                            $mailSender = new MailSender($silex['qwik.locale'], $silex['translator'], $silex['env']);
                             //On envoi le mail
-                            if(!$form->sendMail($silex, $postedForm)){
+                            if($mailSender->sendForm($form, $postedForm->getData())){
+                                $return['valid'] = true;
+                            }else{
                                 //Erreur non prévue
                                 $return['message'] = $silex['translator']->trans('form.unexpectedError');
                             }

@@ -1,4 +1,4 @@
-{% set form = this.getForm(app).createView() %}
+{% set form = this.getForm(app['form.factory']).createView() %}
 {% form_theme form 'Form/views/fields.html.twig' %}
 
 
