@@ -7,18 +7,22 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Qwik\Module\File;
+namespace Qwik\Module\Gallery;
 
 
+use Imagine\Image\ImageInterface;
 use Qwik\Cms\Module\Info;
+use Silex\Application;
+
 //TODO : implements ServiceProvider
 class ModuleProvider extends \Qwik\Cms\Module\Controller{
+
     /**
      * @param Info $info
      * @return Gallery
      */
     protected function getModule(Info $info){
-        return new File($info);
+        return new Gallery($info);
     }
 
 }

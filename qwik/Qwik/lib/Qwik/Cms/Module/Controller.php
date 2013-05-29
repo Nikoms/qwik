@@ -12,7 +12,7 @@ namespace Qwik\Cms\Module;
 
 use Qwik\Component\Config\Loader;
 use Silex\Application;
-
+//TODO: Controller > ModuleProvider... Et voir si la moitié de tout ca ne peut pas être jeté ou en tout cas ne pas etre extendé
 class Controller {
 
     /**

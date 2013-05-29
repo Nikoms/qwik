@@ -7,10 +7,18 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Qwik\Module\Gmaps;
+namespace Qwik\Module\Restaurant;
 
+
+use Qwik\Cms\Module\Info;
 
 //TODO : implements ServiceProvider
 class ModuleProvider extends \Qwik\Cms\Module\Controller{
-
+    /**
+     * @param Info $info
+     * @return Gallery
+     */
+    protected function getModule(Info $info){
+        return new Restaurant($info);
+    }
 }

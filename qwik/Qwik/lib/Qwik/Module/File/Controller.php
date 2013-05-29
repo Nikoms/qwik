@@ -10,15 +10,12 @@
 namespace Qwik\Module\File;
 
 
-use Qwik\Cms\Module\Info;
+use Silex\Application;
+use Silex\ControllerProviderInterface;
 
-class Controller extends \Qwik\Cms\Module\Controller{
-    /**
-     * @param Info $info
-     * @return Gallery
-     */
-    protected function getModule(Info $info){
-        return new File($info);
+class Controller implements ControllerProviderInterface {
+    public function connect(Application $app)
+    {
+        return $app['controllers_factory'];
     }
-
 }

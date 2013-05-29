@@ -10,6 +10,12 @@
 namespace Qwik\Module\Gmaps;
 
 
-class Controller extends \Qwik\Cms\Module\Controller{
+use Silex\Application;
+use Silex\ControllerProviderInterface;
 
+class Controller implements ControllerProviderInterface{
+    public function connect(Application $app)
+    {
+        return $app['controllers_factory'];
+    }
 }
