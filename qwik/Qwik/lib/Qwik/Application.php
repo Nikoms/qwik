@@ -14,6 +14,8 @@ use Qwik\Cms\Module\ModuleServiceProvider;
 use Qwik\Cms\Site\SiteManager;
 use Qwik\Component\Locale\Language;
 use Qwik\Component\Locale\LocaleServiceProvider;
+use Qwik\Component\Routing\Controller;
+use Qwik\Component\Routing\ControllerProvider;
 use Qwik\Component\Routing\Service;
 use Qwik\Component\Template\ZoneGeneratorServiceProvider;
 use Qwik\Environment\Environment;
@@ -35,21 +37,24 @@ class Application{
      */
     private $www;
 
-    public function __construct($www, $env, \Silex\Application $silex){
+    public function __construct(\Silex\Application $silex){
         $this->setSilex($silex);
-        $this->setWww($www);
-        $silex['qwik'] = $this;
-        $silex['debug'] = true;
+        $this->setWww($silex['qwik.www']);
+    }
 
-
+    /**
+     * Initialisation
+     */
+    public function init(){
+        $silex = $this->getSilex();
         //Ajout du site
         $siteManager = new SiteManager();
         $silex['site'] = $siteManager->getByRequest(Request::createFromGlobals(), $this->getWww());
 
         //Set de l'environnement, après site, c'est mieux :)
-        $silex['env'] = new Environment($this, $env);
-        $silex['env']->addConvert('site_path', $silex['site']->getPath());
-        $silex['env']->addConvert('kernel_path', __DIR__);
+        $silex['qwik.env'] = new Environment($this, $silex['qwik.config']);
+        $silex['qwik.env']->addConvert('site_path', $silex['site']->getPath());
+        $silex['qwik.env']->addConvert('kernel_path', __DIR__);
 
 
 
@@ -66,8 +71,9 @@ class Application{
         //Template après tout, car la plupart des providers seront utilisés dans le twigServiceProvider. Il faut donc déjà les loader
         $this->addTemplateManager();
 
-        //Ajout des routes en dernier
-        Service::addRoutes($this);
+
+        $silex->mount('/', new Controller());
+
 
     }
 
@@ -112,7 +118,7 @@ class Application{
 
         //Chemins vers les twig
         $silex = $this->getSilex();
-        $paths = $silex['env']->get('template.path');
+        $paths = $silex['qwik.env']->get('template.path');
         foreach($paths as $key => $path){
             $paths[$key] = str_replace('/', DIRECTORY_SEPARATOR, $path);
             //On a peut-être pas le dossier? (genre includes)
@@ -125,11 +131,11 @@ class Application{
             'twig.path' => $paths,
             'twig.options' => array(
                 //Si debug, pas de cache, sinon, ca se trouve dans le path du site
-                'cache' => $silex['env']->get('template.cache', false),
+                'cache' => $silex['qwik.env']->get('template.cache', false),
                 //Mode debug ou pas (voir doc), pour avoir un __toString
-                'debug' => $silex['env']->get('template.debug', false),
+                'debug' => $silex['qwik.env']->get('template.debug', false),
                 //On est strict quand on debug, sinon pas
-                'strict_variables' => $silex['env']->get('template.strict', false),
+                'strict_variables' => $silex['qwik.env']->get('template.strict', false),
                 //On auto escape pas les vars, on le fera quand on en aura besoin
                 'autoescape' => false,
             ),

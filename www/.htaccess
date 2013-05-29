@@ -3,7 +3,6 @@
 #
 AddDefaultCharset utf-8
 
-
 RewriteEngine On
 
 #
@@ -11,6 +10,7 @@ RewriteEngine On
 #
 
 #En mode dev, si on a un dev devant, on l'enlève de l'url rewriting
+RewriteCond %{REQUEST_URI} ^/q/ [NC]
 RewriteCond %{HTTP_HOST} ^local\.(.*)$ [NC]
 RewriteRule ^q/(.*)$ pissette/%1/$1 [L]
 

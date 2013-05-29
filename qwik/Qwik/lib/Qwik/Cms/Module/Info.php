@@ -93,15 +93,4 @@ class Info {
     public function getUniqId(){
 		return $this->uniqId;
 	}
-//
-//    /**
-//     * Récupération d'une traduction du fichier "translations.yml" dans la config du module en cours
-//     * @param $key
-//     * @return mixed
-//     */
-//    public function translate($key){
-//        //TODO : pas de ca ici
-//        return $this->getModuleConfig()->get('translations.' . $key);
-//    }
-
 }
