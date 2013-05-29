@@ -28,7 +28,7 @@ class Controller implements ControllerProviderInterface{
         //Ajout de l'url pour les thumbnails
         //TODO: Utiliser $controllers->get et pas $app->get, mais ca nécessite un petit refactoring car $controllers commence par /module/gallery
         //Ex: /q/cache/gallery/120/80/85/images/bureau/Desert.jpg. {url} => images/bureau/Desert.jpg
-        $controllers->get('/' . $app['site']->getVirtualUploadPath() . Gallery::WWW_THUMBNAIL_PATH . '/{url}', function($width, $height, $quality, $url) use ($app) {
+        $app->get('/' . $app['site']->getVirtualUploadPath() . Gallery::WWW_THUMBNAIL_PATH . '/{url}', function($width, $height, $quality, $url) use ($app) {
 
             //Pour les espaces, et autres caractères bizarres (ex: photo (2).jpg posait problème car les espaces étaient remplacés par des %20)
             $url = urldecode($url);
