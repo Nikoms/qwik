@@ -11,14 +11,19 @@ namespace Qwik\Module\Restaurant;
 
 
 use Qwik\Cms\Module\Info;
+use Silex\Application;
+use Silex\ServiceProviderInterface;
 
-//TODO : implements ServiceProvider
-class ModuleProvider extends \Qwik\Cms\Module\Controller{
-    /**
-     * @param Info $info
-     * @return Gallery
-     */
-    protected function getModule(Info $info){
-        return new Restaurant($info);
+class ModuleProvider implements ServiceProviderInterface
+{
+    public function register(Application $app)
+    {
+        $app['qwik.module.restaurant'] = $app->share(function ($app) {
+            return new Module($app);
+        });
+    }
+
+        public function boot(Application $app)
+    {
     }
 }

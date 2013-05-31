@@ -1,16 +1,14 @@
 <?php 
 namespace Qwik\Module\Gallery;
 
-use Imagine\Image\ImageInterface;
-use Qwik\Cms\Module\Module;
-use Qwik\Cms\Site\Site;
+use Qwik\Cms\Module\Instance;
 use Qwik\Component\Template\TemplateProxy;
 
 
 /**
  * Gestion d'une galerie
  */
-class Gallery extends Module{
+class Gallery extends Instance{
 
     /**
      * Constante qui situe les images miniatures

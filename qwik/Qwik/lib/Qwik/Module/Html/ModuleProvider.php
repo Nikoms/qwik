@@ -11,6 +11,20 @@ namespace Qwik\Module\Html;
 
 
 //TODO : implements ServiceProvider
-class ModuleProvider extends \Qwik\Cms\Module\Controller{
+use Silex\Application;
+use Silex\ServiceProviderInterface;
+
+class ModuleProvider implements ServiceProviderInterface
+{
+    public function register(Application $app)
+    {
+        $app['qwik.module.html'] = $app->share(function ($app) {
+            return new Module($app);
+        });
+    }
+
+    public function boot(Application $app)
+    {
+    }
 
 }

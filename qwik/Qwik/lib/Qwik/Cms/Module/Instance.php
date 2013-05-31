@@ -5,7 +5,7 @@ namespace Qwik\Cms\Module;
  * Class Bundle
  * @package Qwik\Cms\Module
  */
-class Module {
+class Instance {
 
 
     /**

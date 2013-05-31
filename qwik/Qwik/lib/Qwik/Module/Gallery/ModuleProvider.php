@@ -10,19 +10,25 @@
 namespace Qwik\Module\Gallery;
 
 
-use Imagine\Image\ImageInterface;
-use Qwik\Cms\Module\Info;
 use Silex\Application;
+use Silex\ServiceProviderInterface;
 
-//TODO : implements ServiceProvider
-class ModuleProvider extends \Qwik\Cms\Module\Controller{
+class ModuleProvider implements ServiceProviderInterface
+{
+    public function register(Application $app)
+    {
+        $app['qwik.module.gallery'] = $app->share(function ($app) {
+            return new Module($app);
+        });
 
-    /**
-     * @param Info $info
-     * @return Gallery
-     */
-    protected function getModule(Info $info){
-        return new Gallery($info);
+        $app['qwik.module.gallery.file'] = $app->share(function ($app) {
+            return new File($app['qwik']->getWww(), $app['site']);
+        });
     }
+
+    public function boot(Application $app)
+    {
+    }
+
 
 }

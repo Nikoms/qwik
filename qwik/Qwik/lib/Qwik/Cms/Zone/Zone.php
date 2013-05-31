@@ -91,26 +91,26 @@ class Zone {
 	}
 
 
-    /**
-     * Renvoi les fichiers statiques (js,css) nécessaires pour le bon affichage de la page.
-     * On demande simplement aux modules de la zone de bien vouloir donner leur fichiers et on fait le récap :)
-     * @return array
-     */
-    public function getAssetsByType(){
-		$files = array();
-		$files['javascript'] = array();
-		$files['css'] = array();
-
-        //Modules, donnéez moi vos fichiers statiques
-		foreach ($this->getModules() as $moduleInfo){
-			$files['javascript'] = array_merge($files['javascript'], $moduleInfo->getModuleConfig()->getAssets('javascript'));
-			$files['css'] = array_merge($files['css'], $moduleInfo->getModuleConfig()->getAssets('css'));
-		}
-
-        //On fait un array_unique, car si plusieurs modules utilisent le meme js/css, on ne le prend qu'une fois
-		$files['javascript'] = array_unique($files['javascript']);
-		$files['css'] = array_unique($files['css']);
-		return $files;
-	}
+//    /**
+//     * Renvoi les fichiers statiques (js,css) nécessaires pour le bon affichage de la page.
+//     * On demande simplement aux modules de la zone de bien vouloir donner leur fichiers et on fait le récap :)
+//     * @return array
+//     */
+//    public function getAssetsByType(){
+//		$files = array();
+//		$files['javascript'] = array();
+//		$files['css'] = array();
+//
+//        //Modules, donnéez moi vos fichiers statiques
+//		foreach ($this->getModules() as $moduleInfo){
+//			$files['javascript'] = array_merge($files['javascript'], $moduleInfo->getModuleConfig()->getAssets('javascript'));
+//			$files['css'] = array_merge($files['css'], $moduleInfo->getModuleConfig()->getAssets('css'));
+//		}
+//
+//        //On fait un array_unique, car si plusieurs modules utilisent le meme js/css, on ne le prend qu'une fois
+//		$files['javascript'] = array_unique($files['javascript']);
+//		$files['css'] = array_unique($files['css']);
+//		return $files;
+//	}
 
 }

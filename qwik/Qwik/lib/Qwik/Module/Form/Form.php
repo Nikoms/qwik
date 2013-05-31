@@ -1,8 +1,7 @@
 <?php 
 namespace Qwik\Module\Form;
 
-use Qwik\Cms\Module\Module;
-use Qwik\Module\Form\Entity\Field\Email;
+use Qwik\Cms\Module\Instance;
 use Qwik\Module\Form\Entity\Field\Finder;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -11,7 +10,7 @@ use Silex\Application;
 /**
  * Module "Formulaire"
  */
-class Form extends Module{
+class Form extends Instance{
 
 
     /**

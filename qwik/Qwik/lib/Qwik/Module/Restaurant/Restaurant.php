@@ -1,13 +1,13 @@
 <?php 
 namespace Qwik\Module\Restaurant;
 
-use Qwik\Cms\Module\Module;
+use Qwik\Cms\Module\Instance;
 
 
 /**
  * Gestion d'une carte de restaurant
  */
-class Restaurant extends Module{
+class Restaurant extends Instance{
 
     /**
      * @return array Envoi des variables pour le template

@@ -10,15 +10,19 @@
 namespace Qwik\Module\File;
 
 
-use Qwik\Cms\Module\Info;
-//TODO : implements ServiceProvider
-class ModuleProvider extends \Qwik\Cms\Module\Controller{
-    /**
-     * @param Info $info
-     * @return Gallery
-     */
-    protected function getModule(Info $info){
-        return new File($info);
+use Silex\Application;
+use Silex\ServiceProviderInterface;
+
+class ModuleProvider implements ServiceProviderInterface
+{
+    public function register(Application $app)
+    {
+        $app['qwik.module.file'] = $app->share(function ($app) {
+            return new Module($app);
+        });
     }
 
+    public function boot(Application $app)
+    {
+    }
 }

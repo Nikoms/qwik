@@ -16,7 +16,3 @@ files:
   css:
    - /qwik/module/gallery/fancybox/jquery.fancybox.css
    - /qwik/module/gallery/gallery.css
-
-
-register:
-  - Qwik\Module\Gallery\Provider\FileProvider

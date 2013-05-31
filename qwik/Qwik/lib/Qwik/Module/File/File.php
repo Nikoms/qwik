@@ -1,7 +1,7 @@
 <?php 
 namespace Qwik\Module\File;
 
-use Qwik\Cms\Module\Module;
+use Qwik\Cms\Module\Instance;
 use Qwik\Component\Locale\Locale;
 use Qwik\Module\File\Type\Content;
 use Qwik\Module\File\Type\Twig;
@@ -10,7 +10,7 @@ use Qwik\Module\File\Type\Twig;
 /**
  * Module "File" qui permet des gérer l'affichage de fichier(s)
  */
-class File extends Module{
+class File extends Instance{
 
 
     /**

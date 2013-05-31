@@ -9,6 +9,7 @@
 
 namespace Qwik\Cms\Module;
 
+use Assetic\Asset\AssetCollection;
 use Qwik\Cms\Page\Page;
 use Silex\Application;
 use Symfony\Component\Yaml\Yaml;
@@ -43,12 +44,23 @@ class ModuleService {
      * Register tous les providers des modules
      */
     public function registerProviders(){
+        $this->app->register(new RenderProvider());
         foreach(array_keys($this->getList()) as $moduleName){
-            $provider = $this->getProvider($moduleName);
-            foreach($provider->getConfig()->get('config.register', array()) as $serviceProvider){
-                $this->app->register(new $serviceProvider());
+            $modulePath = $this->app['qwik.env']->get('modules.' . $moduleName, false);
+            if($modulePath === false){
+                throw new \Exception('Module '.$moduleName.' not found');
             }
+            $className = $modulePath . '\ModuleProvider';
+            $this->app->register(new $className());
         }
+    }
+
+    /**
+     * @param $moduleName
+     * @return mixed
+     */
+    public function getServiceProviderModule($moduleName){
+        return $this->app['qwik.module.'.$moduleName];
     }
 
     /**
@@ -74,45 +86,28 @@ class ModuleService {
     }
 
     /**
-     * @param string $moduleName
-     * @return mixed
-     * @throws \Exception
+     * @param Info $info
+     * @return string
      */
-    public function getProvider($moduleName){
-
-        if(isset($this->modules[$moduleName])){
-            return $this->modules[$moduleName];
-        }
-
-
-        $modulePath = $this->app['qwik.env']->get('modules.' . $moduleName, false);
-        if($modulePath === false){
-            throw new \Exception('Module '.$moduleName.' not found');
-        }
-
-        $className = $modulePath . '\ModuleProvider';
-        $this->modules[$moduleName] = new $className($this->app);
-        return $this->modules[$moduleName];
-    }
-
     public function render(Info $info){
-        return $this->getProvider($info->getName())->render($info);
+        return $this->app['qwik.module.render']->render($this->getServiceProviderModule($info->getName()),$info);
     }
 
 
     /**
      * @param Page $page
      * @param $type
-     * @return array
+     * @return AssetCollection
      */
     public function getAssets(Page $page, $type){
-        $files = array();
+        $assetCollection = new AssetCollection();
         foreach($page->getZones() as $zone){
             foreach($zone->getModules() as $info){
-                $provider = $this->getProvider($info->getName());
-                $files = array_merge($files, $provider->getConfig()->getAssets($type));
+                foreach($this->getServiceProviderModule($info->getName())->getAssets($type) as $asset){
+                    $assetCollection->add($asset);
+                }
             }
         }
-        return array_unique($files);
+        return $assetCollection;
     }
 }

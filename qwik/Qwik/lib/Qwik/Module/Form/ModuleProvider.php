@@ -10,46 +10,33 @@
 namespace Qwik\Module\Form;
 
 
-use Qwik\Cms\Module\Info;
 use Silex\Application;
+use Silex\Provider\FormServiceProvider;
+use Silex\Provider\ValidatorServiceProvider;
+use Silex\ServiceProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
-//TODO : implements ServiceProvider
 
-class ModuleProvider extends \Qwik\Cms\Module\Controller{
+class ModuleProvider implements ServiceProviderInterface
+{
+    public function register(Application $app)
+    {
 
-    public function __construct(Application $app){
-        parent::__construct($app);
+        //TODO: mettre ca ailleurs? Parce que ca marche pas dans le share on le boot
+        $app->register(new FormServiceProvider());
+        $app->register(new ValidatorServiceProvider());
+
+        //Si je mets ca dans le share, je n'ai plus les traductions (tester: cliquer sur envoyer directement et on voit "form.error")
         $app['translator']->addResource('yaml', __DIR__.'/translation/fr.yml', 'fr');
         $app['translator']->addResource('yaml', __DIR__.'/translation/en.yml', 'en');
         $app['translator']->addResource('yaml', __DIR__.'/translation/nl.yml', 'nl');
+
+        $app['qwik.module.form'] = $app->share(function ($app) {
+            return new Module($app);
+        });
     }
 
-    /**
-     * Renvoi le module et prépare les traductions
-     * @param Info $info
-     * @return \Qwik\Cms\Module\Module|Form
-     */
-    protected function getModule(Info $info){
-        $form = new Form($info);
-
-        $this->addFieldsTranslations($form);
-        return $form;
+    public function boot(Application $app)
+    {
     }
 
-    /**
-     * Ajout des traductions du formulaire
-     * @param Form $form
-     */
-    private function addFieldsTranslations(Form $form){
-        $app = $this->getApplication();
-        $translations = array();
-        //Traductions des champs
-        foreach($form->getFields() as $field){
-            $translations[$field->getName()] = $app['qwik.locale']->getValue($field->getLabel());
-        }
-
-        //Ajout des traductions des champs
-        $app['translator']->addResource('array',$translations, $app['qwik.locale']->get());
-
-    }
 }
