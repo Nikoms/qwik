@@ -15,16 +15,20 @@ use Qwik\Cms\Module\Info;
 use Qwik\Cms\Module\Instance;
 use Silex\Application;
 
-class Module implements IModule{
+class Module implements IModule
+{
 
-    public function getInstance(Info $info){
+    public function getInstance(Info $info)
+    {
         return new Instance($info);
     }
+
     /**
      * @param $type
      * @return array
      */
-    public function getAssets($type){
+    public function getAssets($type)
+    {
         return array();
     }
 

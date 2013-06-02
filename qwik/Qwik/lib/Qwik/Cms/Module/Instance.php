@@ -5,7 +5,8 @@ namespace Qwik\Cms\Module;
  * Class Bundle
  * @package Qwik\Cms\Module
  */
-class Instance {
+class Instance
+{
 
 
     /**
@@ -13,7 +14,8 @@ class Instance {
      */
     private $info;
 
-    public function __construct(Info $info){
+    public function __construct(Info $info)
+    {
         $this->setInfo($info);
     }
 
@@ -32,7 +34,6 @@ class Instance {
     {
         return $this->info;
     }
-
 
 
 }

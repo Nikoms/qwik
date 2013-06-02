@@ -3,18 +3,21 @@ namespace Qwik\Module\File\Type;
 
 use Silex\Application;
 
-class Content implements File{
+class Content implements File
+{
 
     /**
      * @var string
      */
     private $html;
 
-    public function __construct($html){
+    public function __construct($html)
+    {
         $this->setHtml($html);
     }
 
-    public function render(Application $application){
+    public function render(Application $application)
+    {
         return $this->getHtml();
     }
 

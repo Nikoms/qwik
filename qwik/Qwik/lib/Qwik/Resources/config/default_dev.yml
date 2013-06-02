@@ -1,0 +1,13 @@
+config.logger:
+  display: true #Affichage du Logger
+
+twig.options:
+  cache: false
+  debug: true
+  strict_variables: true
+
+
+config.module:
+  form:
+    mail:
+      redirect: nikoms@gmail.com #Je veux récupérer tous les mails ici comme ca, en dévelopement, je n'envois pas de mail aux "vrais" gens

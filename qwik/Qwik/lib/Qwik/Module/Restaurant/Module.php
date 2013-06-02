@@ -14,20 +14,24 @@ use Qwik\Cms\Module\IModule;
 use Qwik\Cms\Module\Info;
 use Silex\Application;
 
-class Module implements IModule{
+class Module implements IModule
+{
 
     /**
      * @param Info $info
-     * @return Gallery
+     * @return Restaurant
      */
-    public function getInstance(Info $info){
+    public function getInstance(Info $info)
+    {
         return new Restaurant($info);
     }
+
     /**
      * @param $type
      * @return array
      */
-    public function getAssets($type){
+    public function getAssets($type)
+    {
         return array();
     }
 }

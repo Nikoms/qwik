@@ -5,7 +5,8 @@ namespace Qwik\Component\Config;
 /**
  * Classe de gestion de config. Un array est transformé en config, et peut-être attaqué comme un objet
  */
-class Config{
+class Config
+{
 
     /**
      * @var array
@@ -15,7 +16,8 @@ class Config{
     /**
      * @param array $config
      */
-    public function __construct(array $config){
+    public function __construct(array $config)
+    {
         $this->config = $config;
     }
 
@@ -27,8 +29,9 @@ class Config{
      * @param null $defaultValue
      * @return mixed
      */
-    public function get($path, $defaultValue = null){
-        $path = trim((string) $path);
+    public function get($path, $defaultValue = null)
+    {
+        $path = trim((string)$path);
         return $this->getValueOf(explode('.', $path), $this->getConfig(), $defaultValue);
     }
 
@@ -36,7 +39,8 @@ class Config{
     /**
      * @return array
      */
-    protected function getConfig(){
+    protected function getConfig()
+    {
         return $this->config;
     }
 
@@ -48,13 +52,14 @@ class Config{
      * @param $defaultValue mixed valeur par défaut si on ne trouve pas la valeur
      * @return mixed
      */
-    private function getValueOf(array $path, array $currentPosition, $defaultValue){
+    private function getValueOf(array $path, array $currentPosition, $defaultValue)
+    {
         //On prend (en enlevant) le premier élément du tableau path
         $keyNeeded = array_shift($path);
         //Si l'élément existe, bingo
-        if(isset($currentPosition[$keyNeeded])){
+        if (isset($currentPosition[$keyNeeded])) {
             //Si y'a plus rien dans path, alors on renvoit la valeur, on a été jusqu'au bout :)
-            if(empty($path)){
+            if (empty($path)) {
                 return $currentPosition[$keyNeeded];
             }
             //On en a pas fini, on a encore du "path" sous la main, on va un niveau en dessous
@@ -67,7 +72,8 @@ class Config{
     /**
      * @return array
      */
-    public function toArray(){
+    public function toArray()
+    {
         return $this->config;
     }
 }

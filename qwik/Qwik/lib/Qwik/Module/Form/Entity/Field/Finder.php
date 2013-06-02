@@ -10,7 +10,8 @@
 namespace Qwik\Module\Form\Entity\Field;
 
 
-class Finder {
+class Finder
+{
 
 
     /**
@@ -18,9 +19,10 @@ class Finder {
      * @param $name
      * @return Base|Date|Email|Text|TextArea
      */
-    static public function getField($infos, $name){
+    static public function getField($infos, $name)
+    {
         $field = new Base($infos);
-        switch($infos['type']){
+        switch ($infos['type']) {
             case 'text':
                 $field = new Text($infos);
                 break;

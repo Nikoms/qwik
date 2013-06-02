@@ -1,0 +1,40 @@
+config.logger:
+  active: true
+  display: false
+  save_path: %site_path%/logs
+
+
+config.template:
+  cache: %site_path%/cache/templates
+  debug: false
+  strict: false
+
+
+twig.options:
+  cache: %site_path%/cache/templates
+  debug: false
+  strict_variables: false
+  autoescape: false
+
+twig.path:
+   - %site_path%/resources/views
+   - %site_path%/resources/includes
+   - %kernel_path%/Module
+   - %kernel_path%/Resources/views
+
+
+config.module:
+  file:
+    path: Qwik\Module\File
+  form:
+    path: Qwik\Module\Form
+    mail:
+      redirect: false #redirection des mails toujours vers la même boite (pour debug, mettre un email)
+  gallery:
+    path: Qwik\Module\Gallery
+  gmaps:
+    path: Qwik\Module\Gmaps
+  html:
+    path: Qwik\Module\Html
+  restaurant:
+    path: Qwik\Module\Restaurant

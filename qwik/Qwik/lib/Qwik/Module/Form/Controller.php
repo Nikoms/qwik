@@ -14,18 +14,18 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class Controller implements ControllerProviderInterface{
+class Controller implements ControllerProviderInterface
+{
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
 
 
-        $controllers->post('/{_locale}/post', function($_locale) use ($app) {
+        $controllers->post('/{_locale}/post', function ($_locale) use ($app) {
             //Changement de la langue quand c'est possible...
-            $app['locale'] = $app['qwik.locale']->changeIfPossible($_locale);
             $app['translator']->setLocale($app['locale']);
 
-            try{
+            try {
 
                 $request = Request::createFromGlobals();
                 $form = new Form($app['site']->findModule($_POST['_page'], $_POST['_zone'], $_POST['_uniqId']));
@@ -43,19 +43,20 @@ class Controller implements ControllerProviderInterface{
 
                     if ($postedForm->isValid()) {
 
-                        $mailSender = new MailSender($app['qwik.locale'], $app['translator'], $app['qwik.env']);
+                        $mailSender = new MailSender($app['qwik.locale'], $app['translator']);
+                        $mailSender->setForceEmailTo(isset($app['config.module']['form']['mail']['redirect']) ? $app['config.module']['form']['mail']['redirect'] : '');
                         //On envoi le mail
-                        if($mailSender->sendForm($form, $postedForm->getData())){
+                        if ($mailSender->sendForm($form, $postedForm->getData())) {
                             $return['valid'] = true;
-                        }else{
+                        } else {
                             //Erreur non prévue
                             $return['message'] = $app['translator']->trans('form.unexpectedError');
                         }
-                    }else{
+                    } else {
                         $return['errors'] = array();
-                        foreach($postedForm->all() as $child){
+                        foreach ($postedForm->all() as $child) {
                             $errors = $child->getErrors();
-                            foreach($errors as $error){
+                            foreach ($errors as $error) {
                                 $return['errors'][$child->getName()] = $error->getMessage();
                             }
                         }
@@ -65,12 +66,12 @@ class Controller implements ControllerProviderInterface{
 
                 //On renvoi le resultat en json
                 return json_encode($return);
-            }catch(\Exception $ex){
+            } catch (\Exception $ex) {
                 //Erreur non prévue
                 return json_encode(array('message' => $ex->getMessage(), 'valid' => false));
             }
 
-        })->bind('module_form_send')->assert('_locale','[a-z]{2}');
+        })->bind('module_form_send')->assert('_locale', '[a-z]{2}');
 
         return $controllers;
     }

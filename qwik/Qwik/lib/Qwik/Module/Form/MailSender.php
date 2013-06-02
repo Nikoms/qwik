@@ -11,11 +11,11 @@ namespace Qwik\Module\Form;
 
 
 use Qwik\Component\Locale\Locale;
-use Qwik\Environment\Environment;
 use Qwik\Module\Form\Entity\Field\Email;
 use Symfony\Component\Translation\Translator;
 
-class MailSender {
+class MailSender
+{
 
     /**
      * @var \Qwik\Component\Locale\Locale
@@ -27,18 +27,25 @@ class MailSender {
      */
     private $translator;
 
-    /**
-     * @var \Qwik\Environment\Environment
-     */
-    private $env;
+    private $forceEmailTo;
 
-    public function __construct(Locale $locale, Translator $translator, Environment $env){
+
+    public function __construct(Locale $locale, Translator $translator)
+    {
         $this->locale = $locale;
         $this->translator = $translator;
-        $this->env = $env;
     }
 
-    public function sendForm(Form $form, $datas){
+    /**
+     * @param $forceEmailTo
+     */
+    public function setForceEmailTo($forceEmailTo)
+    {
+        $this->forceEmailTo = $forceEmailTo;
+    }
+
+    public function sendForm(Form $form, $datas)
+    {
 
         $mailLocale = $form->getInfo()->getConfig()->get('config.language', $this->locale->get());
 
@@ -49,21 +56,20 @@ class MailSender {
         $replyTo = $emailFrom = $form->getInfo()->getConfig()->get('config.email');
 
         $fields = $form->getFields();
-        foreach($datas as $name => $value){
-            if(!isset($fields[$name])){
+        foreach ($datas as $name => $value) {
+            if (!isset($fields[$name])) {
                 continue;
             }
             $field = $fields[$name];
 
             //Si j'ai un Field de dont le type est "Email", alors on va dire que c'est le "reply to" :)
-            if($field instanceof Email){
+            if ($field instanceof Email) {
                 $replyTo = $value;
             }
-            $body.= '- ' . $this->locale->getValue($field->getLabel(), $mailLocale) . ":\n" . $field->valueToString($value) . "\n\n";
+            $body .= '- ' . $this->locale->getValue($field->getLabel(), $mailLocale) . ":\n" . $field->valueToString($value) . "\n\n";
         }
 
-
-        $to = $this->env->get('module.form.mail.redirect', $form->getInfo()->getConfig()->get('config.email'));
+        $to = !empty($this->forceEmailTo) ? $this->forceEmailTo : $form->getInfo()->getConfig()->get('config.email');
 
         // Create the message
         $message = \Swift_Message::newInstance()

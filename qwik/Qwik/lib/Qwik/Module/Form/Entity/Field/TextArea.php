@@ -5,5 +5,6 @@ namespace Qwik\Module\Form\Entity\Field;
 /**
  * Champ text area
  */
-class TextArea extends Base{
+class TextArea extends Base
+{
 }

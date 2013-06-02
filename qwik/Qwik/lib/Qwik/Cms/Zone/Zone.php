@@ -3,14 +3,14 @@
 namespace Qwik\Cms\Zone;
 
 use Qwik\Cms\Module\Info;
-use Qwik\Cms\Module\Module;
 use Qwik\Cms\Module\ModuleManager;
 use Qwik\Cms\Page\Page;
 
 /**
  * Une zone dans une page qui contient des modules
  */
-class Zone {
+class Zone
+{
 
     /**
      * @var array Tableau de la config de la zone
@@ -21,7 +21,7 @@ class Zone {
      */
     private $page;
     /**
-     * @var Module[] Tableau de module se retrouvant dans la zone
+     * @var Info[] Tableau de module se retrouvant dans la zone
      */
     private $modules;
 
@@ -33,62 +33,70 @@ class Zone {
     /**
      *
      */
-    public function __construct(){
-		$this->config = array();
-	}
+    public function __construct()
+    {
+        $this->config = array();
+    }
 
     /**
      * @param array $config
      */
-    public function setConfig(array $config){
-		$this->config = $config;
-	}
+    public function setConfig(array $config)
+    {
+        $this->config = $config;
+    }
 
     /**
      * @return array
      */
-    public function getConfig(){
-		return $this->config;
-	}
+    public function getConfig()
+    {
+        return $this->config;
+    }
 
     /**
      * @param \Qwik\Cms\Page\Page $page
      */
-    public function setPage(Page $page){
-		$this->page = $page;
-	}
+    public function setPage(Page $page)
+    {
+        $this->page = $page;
+    }
 
     /**
      * @return \Qwik\Cms\Page\Page
      */
-    public function getPage(){
-		return $this->page;
-	}
+    public function getPage()
+    {
+        return $this->page;
+    }
 
     /**
      * @param $name string
      */
-    public function setName($name){
-		$this->name = (string) $name;
-	}
+    public function setName($name)
+    {
+        $this->name = (string)$name;
+    }
 
     /**
      * @return string
      */
-    public function getName(){
-		return $this->name;
-	}
+    public function getName()
+    {
+        return $this->name;
+    }
 
     /**
      * @return Info[] Tableau des modules
      */
-    public function getModules(){
-		if(is_null($this->modules)){
+    public function getModules()
+    {
+        if (is_null($this->modules)) {
             $moduleManager = new ModuleManager();
             $this->modules = $moduleManager->getByZone($this);
-		}
-		return $this->modules;
-	}
+        }
+        return $this->modules;
+    }
 
 
 //    /**

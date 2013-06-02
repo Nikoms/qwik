@@ -2,17 +2,15 @@
 
 namespace Qwik\Cms\Module;
 
-use Qwik\Cms\AppManager;
 use Qwik\Component\Config\Loader;
-use Qwik\Component\Locale\Language;
-use Qwik\Component\Template\TemplateProxy;
 use Qwik\Cms\Zone\Zone;
 
 /**
  * Class Module
  * @package Qwik\Cms\Module
  */
-class Info {
+class Info
+{
 
     /**
      * Zone dans laquelle appartient le module
@@ -26,11 +24,6 @@ class Info {
     private $config;
 
     /**
-     * Config générale du module
-     * @var ModuleConfig
-     */
-    private $moduleConfig;
-    /**
      * Id unique du module
      * @var string
      */
@@ -40,57 +33,65 @@ class Info {
     /**
      *
      */
-    public function __construct(){
+    public function __construct()
+    {
     }
 
     /**
      * @param Config $config
      */
-    public function setConfig(Config $config){
-		$this->config = $config;
-	}
+    public function setConfig(Config $config)
+    {
+        $this->config = $config;
+    }
 
     /**
      * @return Config
      */
-    public function getConfig(){
+    public function getConfig()
+    {
         return $this->config;
-	}
+    }
 
 
     /**
      * @param Zone $zone
      */
-    public function setZone(Zone $zone){
-		$this->zone = $zone;
-	}
+    public function setZone(Zone $zone)
+    {
+        $this->zone = $zone;
+    }
 
     /**
      * @return Zone
      */
-    public function getZone(){
-		return $this->zone;
-	}
+    public function getZone()
+    {
+        return $this->zone;
+    }
 
     /**
      * Nom de la classe en cours, sans namespace
      * @return string
      */
-    public function getName(){
+    public function getName()
+    {
         return $this->getConfig()->get('module');
-	}
+    }
 
     /**
      * @param $uniqId string
      */
-    public function setUniqId($uniqId){
-		$this->uniqId = trim((string) $uniqId);
-	}
+    public function setUniqId($uniqId)
+    {
+        $this->uniqId = trim((string)$uniqId);
+    }
 
     /**
      * @return string
      */
-    public function getUniqId(){
-		return $this->uniqId;
-	}
+    public function getUniqId()
+    {
+        return $this->uniqId;
+    }
 }

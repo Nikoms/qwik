@@ -4,7 +4,8 @@ namespace Qwik\Module\File\Type;
 
 use Silex\Application;
 
-interface File{
+interface File
+{
     /**
      * @param Application $application
      * @return string

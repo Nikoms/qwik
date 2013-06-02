@@ -7,7 +7,8 @@ use Qwik\Cms\Module\Config;
 use Qwik\Cms\Page\Page;
 use Silex\Application;
 
-class ZoneGenerator{
+class ZoneGenerator
+{
 
     private $zones;
     /**
@@ -15,7 +16,8 @@ class ZoneGenerator{
      */
     protected $app;
 
-    public function __construct(Application $app){
+    public function __construct(Application $app)
+    {
         $this->app = $app;
         $this->zones = array();
     }
@@ -25,7 +27,8 @@ class ZoneGenerator{
      * @param $zoneName
      * @return string
      */
-    public function render(Page $page, $zoneName){
+    public function render(Page $page, $zoneName)
+    {
         return $this->app['twig']->render('zone.twig', array('this' => $page->getZone($zoneName)));
     }
 }

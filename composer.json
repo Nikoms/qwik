@@ -10,6 +10,7 @@
         "symfony/form": "2.2.*",
         "symfony/twig-bridge": "2.2.*",
         "symfony/validator": "2.2.*",
-        "kriswallsmith/assetic": "v1.1.0"
+        "kriswallsmith/assetic": "v1.1.0",
+        "igorw/config-service-provider": "v1.2.1"
     }
 }

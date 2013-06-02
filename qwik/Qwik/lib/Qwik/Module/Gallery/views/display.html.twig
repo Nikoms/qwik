@@ -8,7 +8,7 @@
     {% set style = 'float: left;' %}
 {% elseif position == 'right' %}
     {% set style = 'float: right;' %}
-{% endif  %}
+{% endif %}
 
 <div class="qwik-gallery" style="{{ style }}">
     {% set i = 0 %}
@@ -21,9 +21,9 @@
               title="{% if this.hasSubtitle() %}{{ file | toTitle }}{% endif %}"><!--
               --><img alt="{{ file | toTitle }}"
                       src="{{ asset('/' ~ this.getThumbnailPath() ~ '/' ~ file) }}"
-                      height="{{ this.getInfo().getConfig().get('config.thumbnail').height}}"
-                      width="{{ this.getInfo().getConfig().get('config.thumbnail').width}}" /><!--
-        --></a>{% set i = i + 1 %}{% if (i%imagesPerLine == 0) %}<br />{% endif %}<!--
+                      height="{{ this.getInfo().getConfig().get('config.thumbnail').height }}"
+                      width="{{ this.getInfo().getConfig().get('config.thumbnail').width }}"/><!--
+        --></a>{% set i = i + 1 %}{% if (i%imagesPerLine == 0) %}<br/>{% endif %}<!--
 -->{% endfor %}
     {% endfor %}
 </div>

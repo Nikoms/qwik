@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Qwik\Module\Form;
 
 use Qwik\Cms\Module\Instance;
@@ -10,17 +10,19 @@ use Silex\Application;
 /**
  * Module "Formulaire"
  */
-class Form extends Instance{
+class Form extends Instance
+{
 
 
     /**
      * @param FormFactory $formFactory
      * @return \Symfony\Component\Form\Form
      */
-    public function getForm(FormFactory $formFactory){
+    public function getForm(FormFactory $formFactory)
+    {
         $form = $formFactory->createBuilder('form');
 
-        foreach($this->getFields() as $field){
+        foreach ($this->getFields() as $field) {
             $field->addToForm($form);
         }
 
@@ -31,10 +33,11 @@ class Form extends Instance{
     /**
      * @return Entity\Field\Base[]
      */
-    public function getFields(){
+    public function getFields()
+    {
         $fields = array();
-        foreach($this->getInfo()->getConfig()->get('config.fields') as $name => $fieldInfos){
-            $fieldName = $this->getInfo()->getUniqId().'_'.$name;
+        foreach ($this->getInfo()->getConfig()->get('config.fields') as $name => $fieldInfos) {
+            $fieldName = $this->getInfo()->getUniqId() . '_' . $name;
             $field = Finder::getField($fieldInfos, $fieldName);
             $fields[$fieldName] = $field;
         }

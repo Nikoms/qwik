@@ -5,14 +5,14 @@ namespace Qwik\Cms\Page;
 use Qwik\Cms\Zone\Zone;
 use Qwik\Cms\Zone\ZoneManager;
 use Qwik\Component\Config\Config;
-use Qwik\Component\Locale\Language;
 use Qwik\Cms\Site\Site;
 
 
 /**
  * Classe représentant une page d'un site
  */
-class Page {
+class Page
+{
 
     /**
      * Configuration de la page
@@ -46,83 +46,95 @@ class Page {
      * @var Zone[]
      */
     private $zones;
-	
-	public function __construct(){
-		$this->config = array();
+
+    public function __construct()
+    {
+        $this->config = array();
         $this->assets = array();
-	}
+    }
 
     /**
      * @param Config $config
      */
-    public function setConfig(Config $config){
-		$this->config = $config;
-	}
+    public function setConfig(Config $config)
+    {
+        $this->config = $config;
+    }
 
     /**
      * @return Config
      */
-    public function getConfig(){
-		return $this->config;
-	}
-	/**
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * @param $isHidden bool
      */
-    public function setIsHidden($isHidden){
-		$this->isHidden = (bool) $isHidden;
-	}
+    public function setIsHidden($isHidden)
+    {
+        $this->isHidden = (bool)$isHidden;
+    }
 
     /**
      * @return bool
      */
-    public function isHidden(){
-		return $this->isHidden;
-	}
+    public function isHidden()
+    {
+        return $this->isHidden;
+    }
 
     /**
      * @param \Qwik\Cms\Site\Site $site
      */
-    public function setSite(Site $site){
-		$this->site = $site;
-	}
+    public function setSite(Site $site)
+    {
+        $this->site = $site;
+    }
 
     /**
      * @return \Qwik\Cms\Site\Site
      */
-    public function getSite(){
-		return $this->site;
-	}
+    public function getSite()
+    {
+        return $this->site;
+    }
 
     /**
      * @return string
      */
-    public function getUrl(){
-		return $this->url;
-	}
+    public function getUrl()
+    {
+        return $this->url;
+    }
 
     /**
      * @param $url string
      */
-    public function setUrl($url){
-		$this->url = trim((string) $url);
-	}
+    public function setUrl($url)
+    {
+        $this->url = trim((string)$url);
+    }
 
     /**
      * Retourne le nom du template de la page.
      * @return mixed
      * @throws \Exception Si pas de template
      */
-    public function getTemplate(){
-        return $this->getConfig()->get('template','');
-	}
+    public function getTemplate()
+    {
+        return $this->getConfig()->get('template', '');
+    }
 
     /**
      * Renvoi le titre de la page
      * @return string
      */
-    public function getTitle(){
-		return $this->getConfig()->get('title','');
-	}
+    public function getTitle()
+    {
+        return $this->getConfig()->get('title', '');
+    }
 
     /**
      * Retourne la zone en fonction de son nom
@@ -131,26 +143,28 @@ class Page {
      * @return \Qwik\Cms\Zone\Zone
      * @throws \Exception Si la zone n'a pas été trouvée
      */
-    public function getZone($zoneName){
+    public function getZone($zoneName)
+    {
 
         //Récup des zones
         $zones = $this->getZones();
 
         //Pas de zone trouvée
-        if(!isset($zones[$zoneName])){
-            throw new \Exception('Impossible de trouver la zone "'.$zoneName.'"');
+        if (!isset($zones[$zoneName])) {
+            throw new \Exception('Impossible de trouver la zone "' . $zoneName . '"');
         }
 
         return $zones[$zoneName];
-	}
+    }
 
 
     /**
      * @return \Qwik\Cms\Zone\Zone[]
      */
-    public function getZones(){
+    public function getZones()
+    {
 
-        if($this->zones === null){
+        if ($this->zones === null) {
             $zoneManager = new ZoneManager();
             $this->zones = $zoneManager->getByPage($this);
         }

@@ -26,9 +26,9 @@ class ModuleProvider implements ServiceProviderInterface
         $app->register(new ValidatorServiceProvider());
 
         //Si je mets ca dans le share, je n'ai plus les traductions (tester: cliquer sur envoyer directement et on voit "form.error")
-        $app['translator']->addResource('yaml', __DIR__.'/translation/fr.yml', 'fr');
-        $app['translator']->addResource('yaml', __DIR__.'/translation/en.yml', 'en');
-        $app['translator']->addResource('yaml', __DIR__.'/translation/nl.yml', 'nl');
+        $app['translator']->addResource('yaml', __DIR__ . '/translation/fr.yml', 'fr');
+        $app['translator']->addResource('yaml', __DIR__ . '/translation/en.yml', 'en');
+        $app['translator']->addResource('yaml', __DIR__ . '/translation/nl.yml', 'nl');
 
         $app['qwik.module.form'] = $app->share(function ($app) {
             return new Module($app);

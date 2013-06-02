@@ -13,7 +13,8 @@ namespace Qwik\Module\File;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 
-class Controller implements ControllerProviderInterface {
+class Controller implements ControllerProviderInterface
+{
     public function connect(Application $app)
     {
         return $app['controllers_factory'];

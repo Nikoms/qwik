@@ -15,13 +15,15 @@ use Qwik\Cms\Module\IModule;
 use Silex\Application;
 use Qwik\Cms\Module\Info;
 
-class Module implements IModule{
+class Module implements IModule
+{
 
     /**
      * @param Info $info
      * @return Gallery
      */
-    public function getInstance(Info $info){
+    public function getInstance(Info $info)
+    {
         return new Gallery($info);
     }
 
@@ -29,7 +31,8 @@ class Module implements IModule{
      * @param $type
      * @return mixed
      */
-    public function getAssets($type){
+    public function getAssets($type)
+    {
         $collections = array(
             'javascript' => array(
                 new FileAsset('/qwik/module/gallery/fancybox/jquery.fancybox.pack.js'),
@@ -42,7 +45,6 @@ class Module implements IModule{
         );
         return $collections[$type];
     }
-
 
 
 }

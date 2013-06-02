@@ -12,7 +12,9 @@ namespace Qwik\Cms\Module;
 
 use Qwik\Cms\Page\Page;
 
-interface IModule {
+interface IModule
+{
     public function getInstance(Info $info);
+
     public function getAssets($type);
 }

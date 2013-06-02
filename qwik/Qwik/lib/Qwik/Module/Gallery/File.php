@@ -17,23 +17,27 @@ use Imagine\Gd\Imagine as ImagineGd;
 use Qwik\Cms\Site\Site;
 use Silex\Application;
 
-class File {
+class File
+{
     private $www;
     private $site;
 
-    public function __construct($www, Site $site){
+    public function __construct($www, Site $site)
+    {
         $this->www = $www;
         $this->site = $site;
     }
 
-    public function getOriginalPath($path){
+    public function getOriginalPath($path)
+    {
         return $this->www . '/' . $this->site->getRealUploadPath() . '/' . $path;
     }
 
-    public function getFiles($path){
+    public function getFiles($path)
+    {
 
 
-        if(!is_dir($this->getOriginalPath($path))){
+        if (!is_dir($this->getOriginalPath($path))) {
             return array();
         }
 
@@ -41,7 +45,7 @@ class File {
         foreach (scandir($this->getOriginalPath($path)) as $file) {
             if (!is_dir($file) && $file != "." && $file != "..") {
                 //On met bien un "/" et pas un directory_separator, car c'est destiné pour le html
-                $return[] = $path . '/' .$file;
+                $return[] = $path . '/' . $file;
             }
         }
         return $return;
@@ -55,12 +59,13 @@ class File {
      * @param $quality
      * @return string
      */
-    public function createThumb($url, $width, $height, $quality){
+    public function createThumb($url, $width, $height, $quality)
+    {
 
         //Si j'ai pas imagick, alors je prends GD (GD = Problème de mémoire pour les grosses images)
-        if (TRUE !== extension_loaded('imagick')){
+        if (TRUE !== extension_loaded('imagick')) {
             $imagine = new ImagineGd();
-        }else{
+        } else {
             $imagine = new ImagineMagick();
         }
 
@@ -80,12 +85,12 @@ class File {
 
 
         //Creation du path du thumbnail
-        if(!is_dir($thumbPath)){
+        if (!is_dir($thumbPath)) {
             mkdir($thumbPath, 0777, true);
         }
 
         //On sauve où les thumbnail ?!
-        $thumbnailFilePath = $thumbPath. DIRECTORY_SEPARATOR . pathinfo($url, PATHINFO_BASENAME);
+        $thumbnailFilePath = $thumbPath . DIRECTORY_SEPARATOR . pathinfo($url, PATHINFO_BASENAME);
 
         //sauvegarde en fichier
         $thumbnail->save($thumbnailFilePath, array('quality' => $quality));

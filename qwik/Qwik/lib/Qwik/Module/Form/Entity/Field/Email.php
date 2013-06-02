@@ -7,9 +7,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Champ E-mail
  */
 
-class Email extends Base{
+class Email extends Base
+{
 
-	public function getConstraints(){
+    public function getConstraints()
+    {
         $constraints = parent::getConstraints();
         $constraints[] = new Assert\Email();
         return $constraints;

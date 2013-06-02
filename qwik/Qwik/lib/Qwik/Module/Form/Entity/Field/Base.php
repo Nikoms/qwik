@@ -12,7 +12,8 @@ namespace Qwik\Module\Form\Entity\Field;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class Base {
+class Base
+{
 
     /**
      * @var array
@@ -24,7 +25,8 @@ class Base {
      */
     private $name;
 
-    public function __construct(array $infos){
+    public function __construct(array $infos)
+    {
         $this->setInfos($infos);
     }
 
@@ -45,7 +47,6 @@ class Base {
     }
 
 
-
     /**
      * @param array $infos
      */
@@ -57,14 +58,17 @@ class Base {
     /**
      * @return string
      */
-    public function getType(){
+    public function getType()
+    {
         $infos = $this->getInfos();
         return $infos['type'];
     }
+
     /**
      * @return bool
      */
-    public function isRequired(){
+    public function isRequired()
+    {
         $infos = $this->getInfos();
         return !empty($infos['config']['required']);
     }
@@ -72,14 +76,16 @@ class Base {
     /**
      * @return array
      */
-    public function getConfig(){
-        return !empty($infos['config']) ? (array) $infos['config'] : array();
+    public function getConfig()
+    {
+        return !empty($infos['config']) ? (array)$infos['config'] : array();
     }
 
     /**
      * @return string|array
      */
-    public function getLabel(){
+    public function getLabel()
+    {
         $infos = $this->getInfos();
         return $infos['label'];
     }
@@ -92,10 +98,11 @@ class Base {
         return $this->infos;
     }
 
-    public function getConstraints(){
+    public function getConstraints()
+    {
         $infos = $this->getInfos();
         $return = array();
-        if(!empty($infos['config']['required'])){
+        if (!empty($infos['config']['required'])) {
             $return[] = new Assert\NotBlank();
         }
         return $return;
@@ -105,18 +112,20 @@ class Base {
      * @param $value
      * @return mixed
      */
-    public function valueToString($value){
+    public function valueToString($value)
+    {
         return $value;
     }
 
     /**
      * @param FormBuilder $form
      */
-    public function addToForm(FormBuilder $form){
+    public function addToForm(FormBuilder $form)
+    {
 
         $config = array(
             'label' => $this->getName(),
-            'required'  => $this->isRequired(),
+            'required' => $this->isRequired(),
             'constraints' => $this->getConstraints()
         );
         $form->add($this->getName(), $this->getType(), array_merge($config, $this->getConfig()));

@@ -14,7 +14,8 @@ use Qwik\Cms\Page\Page;
 use Silex\Application;
 use Symfony\Component\Yaml\Yaml;
 
-class ModuleService {
+class ModuleService
+{
 
     /**
      * @var \Silex\Application
@@ -30,26 +31,21 @@ class ModuleService {
      */
     private $modules;
 
-    public function __construct(Application $app){
+    public function __construct(Application $app)
+    {
         $this->app = $app;
         $this->controllers = array();
         $this->modules = array();
     }
 
-    public function getList(){
-        return $this->app['qwik.env']->get('modules', array());
-    }
-
     /**
      * Register tous les providers des modules
      */
-    public function registerProviders(){
+    public function registerProviders()
+    {
         $this->app->register(new RenderProvider());
-        foreach(array_keys($this->getList()) as $moduleName){
-            $modulePath = $this->app['qwik.env']->get('modules.' . $moduleName, false);
-            if($modulePath === false){
-                throw new \Exception('Module '.$moduleName.' not found');
-            }
+        foreach ($this->app['config.module'] as $moduleConfig) {
+            $modulePath = $moduleConfig['path'];
             $className = $modulePath . '\ModuleProvider';
             $this->app->register(new $className());
         }
@@ -59,8 +55,9 @@ class ModuleService {
      * @param $moduleName
      * @return mixed
      */
-    public function getServiceProviderModule($moduleName){
-        return $this->app['qwik.module.'.$moduleName];
+    public function getServiceProviderModule($moduleName)
+    {
+        return $this->app['qwik.module.' . $moduleName];
     }
 
     /**
@@ -68,17 +65,18 @@ class ModuleService {
      * @return mixed
      * @throws \Exception
      */
-    public function getController($moduleName){
+    public function getController($moduleName)
+    {
 
-        if(isset($this->controllers[$moduleName])){
+        if (isset($this->controllers[$moduleName])) {
             return $this->controllers[$moduleName];
         }
 
-
-        $modulePath = $this->app['qwik.env']->get('modules.' . $moduleName, false);
-        if($modulePath === false){
-            throw new \Exception('Module '.$moduleName.' not found');
+        if (!isset($this->app['config.module'][$moduleName])) {
+            throw new \Exception('Module ' . $moduleName . ' not found');
         }
+
+        $modulePath = $this->app['config.module'][$moduleName]['path'];
 
         $className = $modulePath . '\Controller';
         $this->controllers[$moduleName] = new $className();
@@ -89,8 +87,9 @@ class ModuleService {
      * @param Info $info
      * @return string
      */
-    public function render(Info $info){
-        return $this->app['qwik.module.render']->render($this->getServiceProviderModule($info->getName()),$info);
+    public function render(Info $info)
+    {
+        return $this->app['qwik.module.render']->render($this->getServiceProviderModule($info->getName()), $info);
     }
 
 
@@ -99,11 +98,12 @@ class ModuleService {
      * @param $type
      * @return AssetCollection
      */
-    public function getAssets(Page $page, $type){
+    public function getAssets(Page $page, $type)
+    {
         $assetCollection = new AssetCollection();
-        foreach($page->getZones() as $zone){
-            foreach($zone->getModules() as $info){
-                foreach($this->getServiceProviderModule($info->getName())->getAssets($type) as $asset){
+        foreach ($page->getZones() as $zone) {
+            foreach ($zone->getModules() as $info) {
+                foreach ($this->getServiceProviderModule($info->getName())->getAssets($type) as $asset) {
                     $assetCollection->add($asset);
                 }
             }

@@ -1,33 +1,35 @@
 {% if children.plats|length > 0 %}
-	<ul class="qwik-restaurant-plats">
-	{% for plat in children.plats %}
-		<li class="qwik-restaurant-plat">
-            <p class="qwik-restaurant-text">
+    <ul class="qwik-restaurant-plats">
+        {% for plat in children.plats %}
+            <li class="qwik-restaurant-plat">
+                <p class="qwik-restaurant-text">
                 <span class="qwik-restaurant-title qwik-restaurant-background">
                     {% if plat.title is defined %}{{ plat.title| translate }}{% endif %}
-                    {% if (plat.title is defined and plat.description is defined) %}<br />{% endif %}
-                    {% if plat.description is defined %}<span class="qwik-restaurant-description">{{ plat.description | translate }}</span>{% endif %}
+                    {% if (plat.title is defined and plat.description is defined) %}<br/>{% endif %}
+                    {% if plat.description is defined %}<span
+                            class="qwik-restaurant-description">{{ plat.description | translate }}</span>{% endif %}
                 </span>
 
-            </p>
-            <span class="qwik-restaurant-price qwik-restaurant-background">{{ plat.price }} {{ money }}</span>
-		</li>
-	{% endfor %}
-	</ul>
+                </p>
+                <span class="qwik-restaurant-price qwik-restaurant-background">{{ plat.price }} {{ money }}</span>
+            </li>
+        {% endfor %}
+    </ul>
     <div class="qwik-restaurant-plats-after"></div>
 {% endif %}
 
 {% if children.menu|length > 0 %}
     {% set level = level + 1 %}
-	<ul class="qwik-restaurant-menu">
-	{% for m in children.menu %}
-		<li>
-		 	<p class="qwik-restaurant-level qwik-restaurant-level{{ level }}{% if m.class is defined %} {{ m.class }}{% endif %}">{{ m.title | translate }}</p>
-            <p class="qwik-restaurant-level-description">{% if m.description is defined %} {{ m.description }}{% endif %}</p>
-		    {% include "Restaurant/views/tree.html.twig" with {'children' : m.children, 'level' : level}%}
-	    </li>
-	{% endfor %}
-	</ul>
+    <ul class="qwik-restaurant-menu">
+        {% for m in children.menu %}
+            <li>
+                <p class="qwik-restaurant-level qwik-restaurant-level{{ level }}{% if m.class is defined %} {{ m.class }}{% endif %}">{{ m.title | translate }}</p>
+
+                <p class="qwik-restaurant-level-description">{% if m.description is defined %} {{ m.description }}{% endif %}</p>
+                {% include "Restaurant/views/tree.html.twig" with {'children' : m.children, 'level' : level} %}
+            </li>
+        {% endfor %}
+    </ul>
 {% endif %}
 
 

@@ -3,7 +3,8 @@ namespace Qwik\Module\File\Type;
 
 use Silex\Application;
 
-class Twig implements File{
+class Twig implements File
+{
 
 
     /**
@@ -11,11 +12,13 @@ class Twig implements File{
      */
     private $twigPath;
 
-    public function __construct($twigPath){
+    public function __construct($twigPath)
+    {
         $this->setTwigPath($twigPath);
     }
 
-    public function render(Application $application){
+    public function render(Application $application)
+    {
         return $application['twig']->render($this->getTwigPath(), array(
             'this' => $this,
         ));
@@ -36,8 +39,6 @@ class Twig implements File{
     {
         return $this->twigPath;
     }
-
-
 
 
 }

@@ -10,22 +10,34 @@
 namespace Qwik\Module\Gmaps;
 
 
+use Assetic\Asset\FileAsset;
 use Qwik\Cms\Module\IModule;
 use Qwik\Cms\Module\Info;
 use Qwik\Cms\Module\Instance;
 use Silex\Application;
 
-class Module implements IModule{
+class Module implements IModule
+{
 
-    public function getInstance(Info $info){
+    public function getInstance(Info $info)
+    {
         return new Instance($info);
     }
+
     /**
      * @param $type
      * @return array
      */
-    public function getAssets($type){
-        return array();
+    public function getAssets($type)
+    {
+        $collections = array(
+            'javascript' => array(
+                new FileAsset('/qwik/module/gmaps/gmaps.js'),
+            ),
+            'css' => array(
+                new FileAsset('/qwik/module/gmaps/gmaps.css'),
+            )
+        );
+        return $collections[$type];
     }
-
 }
