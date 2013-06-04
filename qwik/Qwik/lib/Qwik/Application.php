@@ -77,6 +77,13 @@ class Application
         $app->register(new ConfigServiceProvider($dir . 'default.yml', $replacement));
         $app->register(new ConfigServiceProvider($dir . 'default_' . $app['qwik.config'] . '.yml', $replacement));
 
+        $dirOfSite = $app['site']->getPath() . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
+        if(file_exists($dirOfSite . 'default.yml')){
+            $app->register(new ConfigServiceProvider($dirOfSite . 'default.yml', $replacement));
+        }
+        if(file_exists($dirOfSite . 'default_' . $app['qwik.config'] . '.yml')){
+            $app->register(new ConfigServiceProvider($dirOfSite . 'default_' . $app['qwik.config'] . '.yml', $replacement));
+        }
 
         $app->register(new UrlGeneratorServiceProvider());
         //Modules & zones

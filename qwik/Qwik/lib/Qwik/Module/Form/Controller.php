@@ -42,9 +42,10 @@ class Controller implements ControllerProviderInterface
                     $postedForm->bind($request);
 
                     if ($postedForm->isValid()) {
-
+                        //TODO: Utiliser le module, car sinon la config n'est pas init!
+                        $app['qwik.module.form'];
                         $mailSender = new MailSender($app['qwik.locale'], $app['translator']);
-                        $mailSender->setForceEmailTo(isset($app['config.module']['form']['mail']['redirect']) ? $app['config.module']['form']['mail']['redirect'] : '');
+                        $mailSender->setForceEmailTo(isset($app['qwik.module.form.config']['redirect']) ? $app['qwik.module.form.config']['redirect'] : '');
                         //On envoi le mail
                         if ($mailSender->sendForm($form, $postedForm->getData())) {
                             $return['valid'] = true;

@@ -44,7 +44,7 @@ class ModuleService
     public function registerProviders()
     {
         $this->app->register(new RenderProvider());
-        foreach ($this->app['config.module'] as $moduleConfig) {
+        foreach ($this->app['qwik.modules'] as $moduleConfig) {
             $modulePath = $moduleConfig['path'];
             $className = $modulePath . '\ModuleProvider';
             $this->app->register(new $className());
@@ -72,11 +72,11 @@ class ModuleService
             return $this->controllers[$moduleName];
         }
 
-        if (!isset($this->app['config.module'][$moduleName])) {
+        if (!isset($this->app['qwik.modules'][$moduleName])) {
             throw new \Exception('Module ' . $moduleName . ' not found');
         }
 
-        $modulePath = $this->app['config.module'][$moduleName]['path'];
+        $modulePath = $this->app['qwik.modules'][$moduleName]['path'];
 
         $className = $modulePath . '\Controller';
         $this->controllers[$moduleName] = new $className();

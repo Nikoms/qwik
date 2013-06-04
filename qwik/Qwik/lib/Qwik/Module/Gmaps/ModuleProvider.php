@@ -10,7 +10,6 @@
 namespace Qwik\Module\Gmaps;
 
 
-//TODO : implements ServiceProvider
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 

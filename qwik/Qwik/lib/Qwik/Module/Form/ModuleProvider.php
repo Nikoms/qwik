@@ -20,6 +20,9 @@ class ModuleProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
+        $app['qwik.module.form.default_config'] = array(
+            'redirect'   => false, #Redirection des mails sortant. Utile en dévelopement, pour ne pas envoyer de mails aux "vrais" gens
+        );
 
         //TODO: mettre ca ailleurs? Parce que ca marche pas dans le share on le boot
         $app->register(new FormServiceProvider());
@@ -31,6 +34,13 @@ class ModuleProvider implements ServiceProviderInterface
         $app['translator']->addResource('yaml', __DIR__ . '/translation/nl.yml', 'nl');
 
         $app['qwik.module.form'] = $app->share(function ($app) {
+
+            if(isset($app['qwik.module.form.config'])){
+                $app['qwik.module.form.config'] = array_merge($app['qwik.module.form.default_config'], $app['qwik.module.form.config']);
+            }else{
+                $app['qwik.module.form.config'] = $app['qwik.module.form.default_config'];
+            }
+
             return new Module($app);
         });
     }

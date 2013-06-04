@@ -23,13 +23,11 @@ twig.path:
    - %kernel_path%/Resources/views
 
 
-config.module:
+qwik.modules:
   file:
     path: Qwik\Module\File
   form:
     path: Qwik\Module\Form
-    mail:
-      redirect: false #redirection des mails toujours vers la même boite (pour debug, mettre un email)
   gallery:
     path: Qwik\Module\Gallery
   gmaps:

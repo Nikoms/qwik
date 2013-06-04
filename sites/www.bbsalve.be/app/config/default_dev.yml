@@ -1,0 +1,3 @@
+qwik.module.form.config:
+  redirect: nikoms@gmail.com #Je veux récupérer tous les mails ici comme ca, en dévelopement, je n'envois pas de mail aux "vrais" gens
+

@@ -110,7 +110,7 @@ class Page implements ControllerProviderInterface
      */
     private function addModulesRoutes(Application $app)
     {
-        foreach (array_keys($app['config.module']) as $moduleName) {
+        foreach (array_keys($app['qwik.modules']) as $moduleName) {
             $controller = $app['qwik.module']->getController($moduleName);
             $app->mount('/module/' . $moduleName . '/', $controller);
         }

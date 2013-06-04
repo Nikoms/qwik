@@ -10,7 +10,6 @@
 namespace Qwik\Module\Html;
 
 
-//TODO : implements ServiceProvider
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
