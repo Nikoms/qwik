@@ -40,6 +40,12 @@ class Module implements IModule
         return $form;
     }
 
+    /**
+     * @return MailSender
+     */
+    public function getMailSender(){
+        return new MailSender($this->app['qwik.locale'], $this->app['translator']);
+    }
 
     /**
      * Ajout des traductions du formulaire

@@ -13,6 +13,7 @@ namespace Qwik;
 use Qwik\Cms\Module\ModuleServiceProvider;
 use Qwik\Cms\Site\SiteManager;
 use Qwik\Component\Controller\Admin;
+use Qwik\Component\Controller\Module;
 use Qwik\Component\Controller\Page;
 use Qwik\Component\Locale\LocaleServiceProvider;
 use Qwik\Component\Template\ZoneGeneratorServiceProvider;
@@ -40,9 +41,17 @@ class Application
     public function init()
     {
         $silex = $this->getSilex();
+        $this->loadQwikConfig($silex);
         //Ajout du site
         $siteManager = new SiteManager();
-        $silex['site'] = $siteManager->getByRequest(Request::createFromGlobals()->getHost(), $silex['qwik.www']);
+
+        $domain = $this->getProperDomain(Request::createFromGlobals()->getHost());
+        $path = $silex['qwik.path']['sites'] . $domain;
+        $silex['site'] = $siteManager->createWithDomain($domain, $path);
+
+        if(!$silex['site']->exists()){
+            $silex['site'] = $siteManager->createWithDomain('default', $path);
+        }
 
         $this->registerLessProvider($silex);
 
@@ -57,7 +66,24 @@ class Application
         $silex->mount('/', new Page());
         //Mount de l'admin
         $silex->mount('/admin/', new Admin());
+        //Mount du module
+        $module = new Module();
+        $module->connect($silex);
 
+    }
+
+    /**
+     *
+     */
+    private function loadQwikConfig(\Silex\Application $app){
+
+        $replacement = array(
+            'kernel_path' => __DIR__,
+            'www_path' => $app['qwik.www'],
+        );
+
+        $dir = __DIR__ . '/Resources/config/';
+        $app->register(new ConfigServiceProvider($dir . 'qwik.yml', $replacement));
     }
 
     /**
@@ -66,23 +92,21 @@ class Application
     private function registerLessProvider(\Silex\Application $app)
     {
 
-
         $replacement = array(
             'site_path' => $app['site']->getPath(),
+            'site_domain' => $app['site']->getDomain(),
             'kernel_path' => __DIR__,
         );
 
-        $dir = __DIR__ . '/Resources/config/';
 
-        $app->register(new ConfigServiceProvider($dir . 'default.yml', $replacement));
-        $app->register(new ConfigServiceProvider($dir . 'default_' . $app['qwik.config'] . '.yml', $replacement));
+        $app->register(new ConfigServiceProvider($app['qwik.path']['default_config'] . 'default.yml', $replacement));
+        $app->register(new ConfigServiceProvider($app['qwik.path']['default_config'] . 'default_' . $app['qwik.config'] . '.yml', $replacement));
 
-        $dirOfSite = $app['site']->getPath() . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
-        if(file_exists($dirOfSite . 'default.yml')){
-            $app->register(new ConfigServiceProvider($dirOfSite . 'default.yml', $replacement));
+        if(file_exists($app['qwik.path']['site']['config'] . 'default.yml')){
+            $app->register(new ConfigServiceProvider($app['qwik.path']['site']['config'] . 'default.yml', $replacement));
         }
-        if(file_exists($dirOfSite . 'default_' . $app['qwik.config'] . '.yml')){
-            $app->register(new ConfigServiceProvider($dirOfSite . 'default_' . $app['qwik.config'] . '.yml', $replacement));
+        if(file_exists($app['qwik.path']['site']['config'] . 'default_' . $app['qwik.config'] . '.yml')){
+            $app->register(new ConfigServiceProvider($app['qwik.path']['site']['config'] . 'default_' . $app['qwik.config'] . '.yml', $replacement));
         }
 
         $app->register(new UrlGeneratorServiceProvider());
@@ -108,7 +132,6 @@ class Application
     {
         return $this->silex;
     }
-
 
     private function addTemplateManager()
     {
@@ -140,11 +163,15 @@ class Application
 
     }
 
+
     /**
-     *
+     * Récupération du nom de domain cleané (sans local. s'il y en avait un)
+     * @param string $host Nom de domaine (peut avoir un local.) devant
+     * @return string
      */
-    public function run()
+    private function getProperDomain($host)
     {
-        $this->getSilex()->run();
+        return (strpos($host, 'local.') === 0) ? substr($host, 6) : $host;
     }
+
 }

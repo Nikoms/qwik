@@ -17,13 +17,17 @@ use Qwik\Cms\Module\Info;
 class Module implements IModule
 {
 
+    private $app;
+    public function __construct(Application $app){
+           $this->app = $app;
+    }
     /**
      * @param Info $info
      * @return File
      */
     public function getInstance(Info $info)
     {
-        return new File($info);
+        return new File($info, $this->app['qwik.module.file.config']['ressource_path']);
     }
 
     /**

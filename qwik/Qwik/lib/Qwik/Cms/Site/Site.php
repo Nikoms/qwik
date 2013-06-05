@@ -8,6 +8,7 @@ use Qwik\Cms\Module\Info;
 use Qwik\Cms\Page\Page;
 
 
+use Qwik\Cms\Page\PageManager;
 use Qwik\Component\Config\Loader;
 
 /**
@@ -66,25 +67,6 @@ class Site
 
 
     /**
-     * @return string Chemin virtuel vers "getRealUploadPath". Ceci juste afin d'avoir un path plus beau qu'un path avec "denouveau" le nom de domaine
-     */
-    public function getVirtualUploadPath()
-    {
-        //TODO: Donner la possibilité de mettre ceci dans la config
-        //q comme qwik!
-        return 'q/';
-    }
-
-    /**
-     * @return string Chemin où se trouve les fichiers publiques du site (upload, fichier css/js, etc...)
-     */
-    public function getRealUploadPath()
-    {
-        //TODO: Donner la possibilité de mettre ceci dans la config
-        return 'pissette/' . $this->getDomain() . '/';
-    }
-
-    /**
      * @return string
      */
     public function getPath()
@@ -134,7 +116,7 @@ class Site
     public function getPages()
     {
         if (empty($this->pages)) {
-            $pageManager = new \Qwik\Cms\Page\PageManager();
+            $pageManager = new PageManager();
             $this->pages = $pageManager->findAll($this);
         }
         return $this->pages;

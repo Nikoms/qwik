@@ -50,9 +50,6 @@ class Page implements ControllerProviderInterface
             ->assert('_locale', '[a-z]{2}');
 
 
-        //Ajout des routes des modules
-        $this->addModulesRoutes($app);
-
 
         return $controllers;
     }
@@ -72,10 +69,12 @@ class Page implements ControllerProviderInterface
     /**
      * Arrivée sur le site, j'attends une redirection vers la première page
      * @param Application $app
+     * @param null|string $_locale Locale choisie (ou pas)
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function root(Application $app)
+    public function root(Application $app, $_locale = null)
     {
+        $app['locale'] = $_locale !== null ? $_locale :Request::createFromGlobals()->getPreferredLanguage($app['site']->getLanguages());
         return Page::getFirstPageRedirect($app);
     }
 
@@ -104,15 +103,4 @@ class Page implements ControllerProviderInterface
         );
     }
 
-
-    /**
-     * @param Application $app
-     */
-    private function addModulesRoutes(Application $app)
-    {
-        foreach (array_keys($app['qwik.modules']) as $moduleName) {
-            $controller = $app['qwik.module']->getController($moduleName);
-            $app->mount('/module/' . $moduleName . '/', $controller);
-        }
-    }
 }

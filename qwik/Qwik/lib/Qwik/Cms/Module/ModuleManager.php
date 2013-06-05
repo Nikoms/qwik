@@ -27,6 +27,7 @@ class ModuleManager
                 $info = new Info();
                 //Si c'est pas un array alors, c'est une string qui mène vers le yml de la config
                 if (!is_array($config)) {
+                    //TODO qwik.path['site']['path']
                     $filePath = $zone->getPage()->getSite()->getPath() . DIRECTORY_SEPARATOR . 'site' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $config);
                     $config = Yaml::parse($filePath);
                 }

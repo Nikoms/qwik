@@ -17,6 +17,11 @@ class ModuleProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
+        $app['qwik.module.file.config'] = array(
+            'ressource_path'   => $app['site']->getPath() . DIRECTORY_SEPARATOR .'resources' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR,
+        );
+
+
         $app['qwik.module.file'] = $app->share(function ($app) {
             return new Module($app);
         });

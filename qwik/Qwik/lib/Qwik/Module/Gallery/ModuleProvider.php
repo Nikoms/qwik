@@ -22,7 +22,7 @@ class ModuleProvider implements ServiceProviderInterface
         });
 
         $app['qwik.module.gallery.file'] = $app->share(function ($app) {
-            return new File($app['qwik.www'], $app['site']);
+            return new File($app['qwik.www'], $app['qwik.path']['upload']['real']);
         });
     }
 

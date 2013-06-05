@@ -3,13 +3,6 @@ config.logger:
   display: false
   save_path: %site_path%/logs
 
-
-config.template:
-  cache: %site_path%/cache/templates
-  debug: false
-  strict: false
-
-
 twig.options:
   cache: %site_path%/cache/templates
   debug: false
@@ -21,7 +14,6 @@ twig.path:
    - %site_path%/resources/includes
    - %kernel_path%/Module
    - %kernel_path%/Resources/views
-
 
 qwik.modules:
   file:
@@ -36,3 +28,12 @@ qwik.modules:
     path: Qwik\Module\Html
   restaurant:
     path: Qwik\Module\Restaurant
+
+qwik.path:
+  upload:
+    virtual: /q/
+    real: /pissette/%site_domain%/
+  site:
+    config : %site_path%/app/config/
+#    pages: %site_path%/site/pages/
+#    errors: %site_path%/site/errors/

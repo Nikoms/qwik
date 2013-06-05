@@ -27,18 +27,6 @@ class Render
     }
 
 
-//    /**
-//     * @return Config
-//     */
-//    public function getConfig()
-//    {
-//        //On va calculer le path de la config du module
-//        $pathOfConfig = $this->getDirName() . DIRECTORY_SEPARATOR . 'config';
-//        //Transformation de l'array en objet
-//        return new Config(Loader::getInstance()->getPathConfig($pathOfConfig));
-//    }
-//
-
     /**
      * @param $moduleProvider
      * @param $info

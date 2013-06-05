@@ -1,0 +1,3 @@
+qwik.path:
+  sites: %www_path%/../sites/
+  default_config: %kernel_path%/Resources/config/

@@ -1,6 +1,7 @@
 <?php
 namespace Qwik\Module\File;
 
+use Qwik\Cms\Module\Info;
 use Qwik\Cms\Module\Instance;
 use Qwik\Component\Locale\Locale;
 use Qwik\Module\File\Type\Content;
@@ -12,10 +13,22 @@ use Qwik\Module\File\Type\Twig;
  */
 class File extends Instance
 {
-
+    private $ressourcePath;
 
     /**
-     * @return array Tableau des fichiers à afficher
+     * @param Info $info
+     * @param string $ressourcePath
+     */
+    public function __construct(Info $info, $ressourcePath)
+    {
+        parent::__construct($info);
+        $this->ressourcePath = $ressourcePath;
+    }
+
+    /**
+     * Tableau des fichiers à afficher
+     * @param Locale $locale
+     * @return array
      */
     public function getFiles(Locale $locale)
     {
@@ -87,7 +100,7 @@ class File extends Instance
         $file = str_replace('{language}', $language, $file);
 
 
-        $filePath = $this->getPath() . str_replace('/', DIRECTORY_SEPARATOR, $file);
+        $filePath = $this->ressourcePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
         //Si le fichier existe, ok on le renvoi
         if (file_exists($filePath)) {
             return $filePath;
@@ -98,13 +111,6 @@ class File extends Instance
 
     }
 
-    /**
-     * Path où on va chercher les fichiers
-     */
-    private function getPath()
-    {
-        return $this->getInfo()->getZone()->getPage()->getSite()->getPath() . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR;
-    }
 
     /**
      * @param string $file Chemin du fichier
@@ -128,7 +134,7 @@ class File extends Instance
                 return $phpToString($this);
                 break;
             case 'twig':
-                return new Twig(str_replace($this->getPath(), '', $file));
+                return new Twig(str_replace($this->ressourcePath, '', $file));
                 break;
             default:
                 return new Content(file_get_contents($file));

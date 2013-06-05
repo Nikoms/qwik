@@ -51,13 +51,6 @@ class Gallery extends Instance
         return $this->getInfo()->getConfig()->get('config.subTitle', false);
     }
 
-    /**
-     * @return string
-     */
-    public function getVirtualUploadPath()
-    {
-        return $this->getInfo()->getZone()->getPage()->getSite()->getVirtualUploadPath();
-    }
 
     /**
      * @return string Path du thumbnail à générer
@@ -65,9 +58,7 @@ class Gallery extends Instance
     public function getThumbnailPath()
     {
         $infos = $this->getInfo()->getConfig()->get('config.thumbnail', array());
-        return
-            $this->getVirtualUploadPath()
-            . self::getThumbnailPathFor($infos['width'], $infos['height'], $infos['quality']);
+        return self::getThumbnailPathFor($infos['width'], $infos['height'], $infos['quality']);
     }
 
 }

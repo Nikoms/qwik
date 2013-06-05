@@ -14,13 +14,13 @@
     {% set i = 0 %}
     {% for path in this.getPaths() %}
         {% for file in app['qwik.module.gallery.file'].getFiles(path) %}<!--
-	    --><a href="{{ asset('/' ~ this.getVirtualUploadPath() ~ file) }}"
+	    --><a href="{{ asset(app['qwik.path']['upload']['virtual'] ~ file) }}"
               data-fancybox-group="{{ this.getInfo().getUniqId() }}"
               class="fancybox"
               target="_blank"
               title="{% if this.hasSubtitle() %}{{ file | toTitle }}{% endif %}"><!--
               --><img alt="{{ file | toTitle }}"
-                      src="{{ asset('/' ~ this.getThumbnailPath() ~ '/' ~ file) }}"
+                      src="{{ asset(app['qwik.path']['upload']['virtual'] ~ this.getThumbnailPath() ~ '/' ~ file) }}"
                       height="{{ this.getInfo().getConfig().get('config.thumbnail').height }}"
                       width="{{ this.getInfo().getConfig().get('config.thumbnail').width }}"/><!--
         --></a>{% set i = i + 1 %}{% if (i%imagesPerLine == 0) %}<br/>{% endif %}<!--

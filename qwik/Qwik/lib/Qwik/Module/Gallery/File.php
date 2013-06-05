@@ -20,17 +20,17 @@ use Silex\Application;
 class File
 {
     private $www;
-    private $site;
+    private $realPath;
 
-    public function __construct($www, Site $site)
+    public function __construct($www, $realPath)
     {
         $this->www = $www;
-        $this->site = $site;
+        $this->realPath = $realPath;
     }
 
     public function getOriginalPath($path)
     {
-        return $this->www . '/' . $this->site->getRealUploadPath() . '/' . $path;
+        return $this->www . $this->realPath . $path;
     }
 
     public function getFiles($path)
@@ -79,7 +79,7 @@ class File
             . str_replace('/',
                 DIRECTORY_SEPARATOR,
                 //Path vers le dossier du site + dossier spécial pour les thumbnails
-                $this->site->getRealUploadPath() . Gallery::getThumbnailPathFor($width, $height, $quality))
+                $this->realPath . Gallery::getThumbnailPathFor($width, $height, $quality))
             . DIRECTORY_SEPARATOR
             . pathinfo($url, PATHINFO_DIRNAME);
 
