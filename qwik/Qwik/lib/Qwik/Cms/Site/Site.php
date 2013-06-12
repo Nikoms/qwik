@@ -164,7 +164,7 @@ class Site
      */
     private function initConfig()
     {
-        $this->config = Loader::getInstance()->getPathConfig($this->getPath() . '/site');
+        $this->config = Loader::getInstance()->getPathConfig($this->getPath() . '/structure');
         return $this;
     }
 
