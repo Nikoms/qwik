@@ -2,6 +2,7 @@
 
 namespace Qwik\Cms\Module;
 
+use Qwik\Component\Config\Config;
 use Qwik\Component\Config\Loader;
 use Qwik\Cms\Zone\Zone;
 

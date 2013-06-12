@@ -3,7 +3,6 @@
 namespace Qwik\Cms\Zone;
 
 use Qwik\Cms\Module\Info;
-use Qwik\Cms\Module\ModuleManager;
 use Qwik\Cms\Page\Page;
 
 /**
@@ -84,18 +83,6 @@ class Zone
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @return Info[] Tableau des modules
-     */
-    public function getModules()
-    {
-        if (is_null($this->modules)) {
-            $moduleManager = new ModuleManager();
-            $this->modules = $moduleManager->getByZone($this);
-        }
-        return $this->modules;
     }
 
 }

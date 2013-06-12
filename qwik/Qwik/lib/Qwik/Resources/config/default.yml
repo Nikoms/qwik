@@ -35,5 +35,6 @@ qwik.path:
     real: /pissette/%site_domain%/
   site:
     config : %site_path%/app/config/
-#    pages: %site_path%/site/pages/
-#    errors: %site_path%/site/errors/
+    structure : %site_path%/structure/
+    pages: %site_path%/structure/pages/
+    errors: %site_path%/structure/errors/

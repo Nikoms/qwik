@@ -11,6 +11,9 @@ namespace Qwik\Cms\Module;
 
 use Assetic\Asset\AssetCollection;
 use Qwik\Cms\Page\Page;
+use Qwik\Cms\Zone\Zone;
+use Qwik\Component\Config\Config;
+use Qwik\Component\Log\Logger;
 use Silex\Application;
 use Symfony\Component\Yaml\Yaml;
 
@@ -102,12 +105,45 @@ class ModuleService
     {
         $assetCollection = new AssetCollection();
         foreach ($page->getZones() as $zone) {
-            foreach ($zone->getModules() as $info) {
+            foreach ($this->getByZone($zone) as $info) {
                 foreach ($this->getServiceProviderModule($info->getName())->getAssets($type) as $asset) {
                     $assetCollection->add($asset);
                 }
             }
         }
         return $assetCollection;
+    }
+
+
+    /**
+     * @param Zone $zone
+     * @return Info[]
+     */
+    public function getByZone(Zone $zone)
+    {
+        $infos = array();
+
+        foreach ($zone->getConfig() as $key => $config) {
+            try {
+                $info = new Info();
+                //Si c'est pas un array alors, c'est une string qui mène vers le yml de la config
+                if (!is_array($config)) {
+                    $filePath =  str_replace('/', DIRECTORY_SEPARATOR, $this->app['qwik.path']['site']['structure'] . $config);
+                    $config = Yaml::parse($filePath);
+                }
+                $info->setConfig(new Config($config));
+                //$loader = new Loader();
+                //$allConfig = $loader->getFileConfig($this->getConfigPath() . 'config.yml');
+                $info->setZone($zone);
+                //Le nom du module est un cast entre le nom de la zone + _ + la clé du module. Ceci afin que chaque module soit unique
+                $info->setUniqId($zone->getName() . '_' . $key);
+                $infos[] = $info;
+            } catch (\Exception $ex) {
+                Logger::getInstance()->error($ex->getMessage(), $ex);
+                //Si on a une exception, on va au suivant
+                continue;
+            }
+        }
+        return $infos;
     }
 }

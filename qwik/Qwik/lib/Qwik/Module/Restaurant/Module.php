@@ -10,6 +10,7 @@
 namespace Qwik\Module\Restaurant;
 
 
+use Assetic\Asset\FileAsset;
 use Qwik\Cms\Module\IModule;
 use Qwik\Cms\Module\Info;
 use Silex\Application;
@@ -32,6 +33,12 @@ class Module implements IModule
      */
     public function getAssets($type)
     {
-        return array();
+        $collections = array(
+            'javascript' => array(),
+            'css' => array(
+                new FileAsset('/qwik/module/restaurant/carte.css'),
+            )
+        );
+        return $collections[$type];
     }
 }

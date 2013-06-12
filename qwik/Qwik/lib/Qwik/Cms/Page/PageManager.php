@@ -111,7 +111,7 @@ class PageManager
         //Check si on a pas déjà le site en cache, car on fait bcp d'appel à cette méthode
         if (empty(self::$pages[$site->getPath()])) {
             //TODO qwik.path['site']['pages']
-            $pagesPath = $site->getPath() . DIRECTORY_SEPARATOR . 'site' . DIRECTORY_SEPARATOR . 'pages';
+            $pagesPath = $site->getPath() . DIRECTORY_SEPARATOR . 'structure' . DIRECTORY_SEPARATOR . 'pages';
             //Check si on a le dossier "pages" avec le nouveau système 1 fichier par page
             if (is_dir($pagesPath)) {
                 self::$pages[$site->getPath()] = $this->getPagesByPath($pagesPath);
