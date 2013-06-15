@@ -146,4 +146,28 @@ class ModuleService
         }
         return $infos;
     }
+
+
+
+    /**
+     * Renvoi un module en fonction des paramètres
+     * @param $pageUrl
+     * @param $zoneName
+     * @param $uniqId
+     * @return Info
+     * @throws \Exception
+     */
+    public function findModule($pageUrl, $zoneName, $uniqId)
+    {
+        $page = $this->app['qwik.page.service']->getOneByUrl($pageUrl);
+        if (is_null($page)) {
+            throw new \Exception('Page ' . $pageUrl . ' introuvable');
+        }
+        foreach ($this->getByZone($page->getZone($zoneName)) as $module) {
+            if ($module->getUniqId() == $uniqId) {
+                return $module;
+            }
+        }
+        throw new \Exception('Impossible de trouver le module');
+    }
 }

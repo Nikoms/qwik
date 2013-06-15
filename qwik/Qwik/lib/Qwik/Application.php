@@ -11,6 +11,7 @@ namespace Qwik;
 
 
 use Qwik\Cms\Module\ModuleServiceProvider;
+use Qwik\Cms\Page\PageServiceProvider;
 use Qwik\Cms\Site\SiteManager;
 use Qwik\Component\Controller\Admin;
 use Qwik\Component\Controller\Module;
@@ -21,6 +22,7 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Igorw\Silex\ConfigServiceProvider;
+use Symfony\Component\HttpFoundation\Response;
 
 class Application
 {
@@ -70,6 +72,19 @@ class Application
         $module = new Module();
         $module->connect($silex);
 
+        //TODO 404 and co à prendre... Voir PageManager pour le moment, et déplacer les logiques dans PageService
+        $silex->error(function (\Exception $e, $code) {
+            switch ($code) {
+                case 404:
+                    $message = 'The requested page could not be found.';
+                    break;
+                default:
+                    $message = 'We are sorry, but something went terribly wrong.';
+            }
+
+            return $message;
+        });
+
     }
 
     /**
@@ -113,6 +128,7 @@ class Application
         //Modules & zones
         $app->register(new ModuleServiceProvider());
         $app->register(new ZoneGeneratorServiceProvider());
+        $app->register(new PageServiceProvider());
         //Traductions
         $app->register(new LocaleServiceProvider());
     }

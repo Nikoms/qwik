@@ -10,7 +10,6 @@
 namespace Qwik\Component\Controller;
 
 
-use Qwik\Cms\Page\PageManager;
 use Qwik\Cms\Page\PageNotFoundException;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
@@ -38,8 +37,7 @@ class Page implements ControllerProviderInterface
 
         //$page est nécessaire
         $callBackPage = function ($page, Request $request) use ($app) {
-            $pageManager = new PageManager();
-            return $pageManager->findOneByUrl($app['site'], $request->attributes->get('pageName'));
+            return $app['qwik.page.service']->getOneByUrl($request->attributes->get('pageName'));
         };
 
 
@@ -61,8 +59,10 @@ class Page implements ControllerProviderInterface
      */
     static public function getFirstPageRedirect(Application $app)
     {
-        $pageManager = new PageManager();
-        $firstPage = $pageManager->findFirst($app['site']);
+        $firstPage = $app['qwik.page.service']->getFirst($app['site']);
+        if($firstPage === null){
+            return null;
+        }
         return $app->redirect($app['url_generator']->generate('page', array('_locale' => $app['locale'], 'pageName' => $firstPage->getUrl())));
     }
 
@@ -75,7 +75,11 @@ class Page implements ControllerProviderInterface
     public function root(Application $app, $_locale = null)
     {
         $app['locale'] = $_locale !== null ? $_locale :Request::createFromGlobals()->getPreferredLanguage($app['site']->getLanguages());
-        return Page::getFirstPageRedirect($app);
+        $page = Page::getFirstPageRedirect($app);
+        if($page === null){
+            $app->abort(404);
+        }
+        return $page;
     }
 
     /**
@@ -94,7 +98,7 @@ class Page implements ControllerProviderInterface
 
         //Si pas de page, alors 404
         if (!$page) {
-            throw new PageNotFoundException();
+            $app->abort(404);
         }
         return $app['twig']->render('templates/' . $page->getTemplate() . '/display.html.twig',
             array(

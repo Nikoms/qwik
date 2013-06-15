@@ -8,7 +8,6 @@ use Qwik\Cms\Module\Info;
 use Qwik\Cms\Page\Page;
 
 
-use Qwik\Cms\Page\PageManager;
 use Qwik\Component\Config\Loader;
 
 /**
@@ -109,30 +108,6 @@ class Site
         return isset($config['general']['title']) ? $config['general']['title'] : '';
     }
 
-
-    /**
-     * @return \Qwik\Cms\Page\Page[] Les pages du sites
-     */
-    public function getPages()
-    {
-        if (empty($this->pages)) {
-            $pageManager = new PageManager();
-            $this->pages = $pageManager->findAll($this);
-        }
-        return $this->pages;
-    }
-
-    /**
-     * @param $url
-     * @return null|Page
-     */
-    public function getPage($url)
-    {
-        $url = (string)$url;
-        $pages = $this->getPages();
-        return isset($pages[$url]) ? $pages[$url] : null;
-    }
-
     /**
      * @return bool Indique si le site existe. Il faut pour cela que le fichier "general" dans config existe
      */
@@ -179,26 +154,5 @@ class Site
         return (isset($config['general']['google']) && isset($config['general']['google']['analytics'])) ? (string)$config['general']['google']['analytics'] : '';
     }
 
-    /**
-     * Renvoi un module en fonction des paramètres
-     * @param $pageUrl
-     * @param $zoneName
-     * @param $uniqId
-     * @return Info
-     * @throws \Exception
-     */
-    public function findModule($pageUrl, $zoneName, $uniqId)
-    {
-        $page = $this->getPage($pageUrl);
-        if (is_null($page)) {
-            throw new \Exception('Page ' . $pageUrl . ' introuvable');
-        }
-        foreach ($page->getZone($zoneName)->getModules() as $module) {
-            if ($module->getUniqId() == $uniqId) {
-                return $module;
-            }
-        }
-        throw new \Exception('Impossible de trouver le module');
-    }
 
 }

@@ -28,7 +28,7 @@ class Controller implements ControllerProviderInterface
             try {
 
                 $request = Request::createFromGlobals();
-                $form = new Form($app['site']->findModule($_POST['_page'], $_POST['_zone'], $_POST['_uniqId']));
+                $form = new Form($app['qwik.module']->findModule($_POST['_page'], $_POST['_zone'], $_POST['_uniqId']));
                 $postedForm = $form->getForm($app['form.factory']);
 
                 //Message par défaut
