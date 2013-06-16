@@ -27,21 +27,26 @@ class PageService {
      */
     private $path;
 
+    /**
+     * @var string
+     */
+    private $errorPath;
 
     /**
      * @var Page[] liste des pages pour chaque path de site
      */
     private $pages;
 
-
     /**
      * @param Site $site
      * @param string $path
+     * @param string $errorPath
      */
-    public function __construct(Site $site, $path)
+    public function __construct(Site $site, $path, $errorPath)
     {
         $this->site = $site;
         $this->path = $path; //$app['qwik.path']['site']['pages'];
+        $this->errorPath = $errorPath; //$app['qwik.path']['site']['errors'];
         $this->pages =  array();
     }
 
@@ -152,5 +157,33 @@ class PageService {
     }
 
 
+    /**
+     * Récupération d'une page en fonction d'une erreur (ex: 404)
+     * @param \Exception $exception
+     * @param $code
+     * @return null|Page
+     */
+    public function getErrorPage(\Exception $exception, $code)
+    {
+        $errors = $this->getPagesErrorConfig();
+        //Si on trouve pas d'erreur avec ce code, alors on met default
+        $code = empty($errors[$code]) ? 'default' : $code;
+
+        //Si on trouve toujours pas le code, on renvoi nll
+        if (empty($errors[$code])) {
+            return null;
+        }
+        return $this->getBuildPage('error_' . $code, $errors[$code]);
+    }
+
+
+    /**
+     * Renvoi un tableau de config (array) des pages d'erreur
+     * @return array
+     */
+    private function getPagesErrorConfig()
+    {
+        return $this->getPagesInPath(str_replace('/', DIRECTORY_SEPARATOR, $this->errorPath));
+    }
 
 }

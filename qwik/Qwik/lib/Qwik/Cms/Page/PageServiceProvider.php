@@ -18,7 +18,7 @@ class PageServiceProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
         $app['qwik.page.service'] = $app->share(function ($app) {
-            return new PageService($app['site'], $app['qwik.path']['site']['pages']);
+            return new PageService($app['site'], $app['qwik.path']['site']['pages'], $app['qwik.path']['site']['errors']);
         });
     }
 

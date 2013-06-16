@@ -1,6 +1,3 @@
 {% for moduleInfo in app['qwik.module'].getByZone(this) %}
     {{ app['qwik.module'].render(moduleInfo) }}
-    {#    {% set module = app.qwik_module.getModule(this, moduleKey, moduleConfig) %}
-        {{ app.twig.render(module.getTemplatePath(), module.getTemplateVars()|merge({module:module})) }}
-    #}
 {% endfor %}

@@ -6,11 +6,16 @@
 </head>
 <body>
 {% block body %}{% endblock %}
-{% for asset in app['qwik.module'].getAssets(page, 'javascript') %}
-    <script src="{{ asset(asset.getSourceRoot()) ~ '/' ~ asset.getSourcePath() }}"></script>
-{% endfor %}
+{% block javascript %}
+    {% for asset in app['qwik.module'].getAssets(page, 'javascript') %}
+        <script src="{{ asset(asset.getSourceRoot()) ~ '/' ~ asset.getSourcePath() }}"></script>
+    {% endfor %}
+{% endblock %}
 
-
+{#
+//TODO : Utiliser google comme un module
+{{ app['qwik.module'].renderQwik("html",{"content":"ok"}) }}
+#}
 
 {#inclusion de Google Analytics en fin de page #}
 {% if page.getSite().getGoogleAnalytics() != '' %}

@@ -72,19 +72,6 @@ class Application
         $module = new Module();
         $module->connect($silex);
 
-        //TODO 404 and co à prendre... Voir PageManager pour le moment, et déplacer les logiques dans PageService
-        $silex->error(function (\Exception $e, $code) {
-            switch ($code) {
-                case 404:
-                    $message = 'The requested page could not be found.';
-                    break;
-                default:
-                    $message = 'We are sorry, but something went terribly wrong.';
-            }
-
-            return $message;
-        });
-
     }
 
     /**

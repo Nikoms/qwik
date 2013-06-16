@@ -1,6 +1,9 @@
 
 template: basic
-title: 404
+title:
+  fr: Impossible de trouver la page
+  nl: Pagina niet gevonden
+  en: Page not found
 zones:
   zone1:
     text:

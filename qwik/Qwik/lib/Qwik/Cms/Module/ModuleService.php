@@ -95,6 +95,25 @@ class ModuleService
         return $this->app['qwik.module.render']->render($this->getServiceProviderModule($info->getName()), $info);
     }
 
+    /**
+     * Affichage rapide d'un module
+     * @param $moduleName
+     * @param array $config
+     * @return string
+     */
+    public function renderQwik($moduleName, array $config){
+        $info = new Info();
+        $info->setConfig(
+            new Config(
+                array(
+                    'module' => $moduleName,
+                    'config' => $config
+                )
+            )
+        );
+        return $this->render($info);
+    }
+
 
     /**
      * @param Page $page

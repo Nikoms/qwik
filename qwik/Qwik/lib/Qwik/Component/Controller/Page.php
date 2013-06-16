@@ -20,6 +20,21 @@ class Page implements ControllerProviderInterface
 
 
     /**
+     * Ajout des pages d'erreur (404 et autres)
+     * @param Application $app
+     */
+    private function connectErrors(Application $app){
+        $app->error(function (\Exception $ex, $code) use ($app){
+            $page = $app['qwik.page.service']->getErrorPage($ex, $code);
+            return $app['twig']->render('templates/' . $page->getTemplate() . '/display.html.twig',
+                array(
+                    'page' => $page
+                )
+            );
+        });
+
+    }
+    /**
      * @param Application $app
      * @return \Silex\ControllerCollection
      */
@@ -27,6 +42,7 @@ class Page implements ControllerProviderInterface
     {
         $controllers = $app['controllers_factory'];
 
+        $this->connectErrors($app);
 
         //Arrivée sur le site, j'attends une redirection vers la première page
         $app->get('/', array($this, 'root'))->bind('root');
