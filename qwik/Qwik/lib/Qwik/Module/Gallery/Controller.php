@@ -27,7 +27,6 @@ class Controller implements ControllerProviderInterface
         }));
 
         //Ajout de l'url pour les thumbnails
-        //TODO: Utiliser $controllers->get et pas $app->get, mais ca nécessite un petit refactoring car $controllers commence par /module/gallery
         //Ex: /q/cache/gallery/120/80/85/images/bureau/Desert.jpg. {url} => images/bureau/Desert.jpg
         $app->get($app['qwik.path']['upload']['virtual'] . Gallery::WWW_THUMBNAIL_PATH . '/{url}', function ($width, $height, $quality, $url) use ($app) {
 
@@ -41,8 +40,7 @@ class Controller implements ControllerProviderInterface
                 $stream = function () use ($thumbnailFilePath) {
                     readfile($thumbnailFilePath);
                 };
-                //TODO content-type à changer en fonction du type de l'image
-                return $app->stream($stream, 200, array('Content-Type' => 'image/png'));
+                return $app->stream($stream, 200, array('Content-Type' => mime_content_type($thumbnailFilePath)));
             } else {
                 $app->abort(404, 'The image was not found.');
             }
