@@ -11,7 +11,7 @@ zones:
       config:
         file: contact.html
     maps:
-      module: gmaps
+      module: google.maps
       config:
         map:
           position: bottom #hide, top, bottom, left, right

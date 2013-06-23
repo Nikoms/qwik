@@ -11,11 +11,10 @@ namespace Qwik\Module\Gallery;
 
 
 use Assetic\Asset\FileAsset;
-use Qwik\Cms\Module\IModule;
 use Silex\Application;
 use Qwik\Cms\Module\Info;
 
-class Module implements IModule
+class Module extends \Qwik\Cms\Module\Module
 {
 
     /**

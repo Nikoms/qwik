@@ -11,11 +11,10 @@ namespace Qwik\Module\Restaurant;
 
 
 use Assetic\Asset\FileAsset;
-use Qwik\Cms\Module\IModule;
 use Qwik\Cms\Module\Info;
 use Silex\Application;
 
-class Module implements IModule
+class Module extends \Qwik\Cms\Module\Module
 {
 
     /**

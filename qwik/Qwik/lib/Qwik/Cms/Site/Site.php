@@ -8,6 +8,7 @@ use Qwik\Cms\Module\Info;
 use Qwik\Cms\Page\Page;
 
 
+use Qwik\Component\Config\Config;
 use Qwik\Component\Config\Loader;
 
 /**
@@ -17,7 +18,7 @@ class Site
 {
 
     /**
-     * @var array Tableau de config
+     * @var Config Tableau de config
      */
     private $config;
     /**
@@ -38,7 +39,7 @@ class Site
 
 
     /**
-     * @return array Tableau de la config
+     * @return Config Tableau de la config
      */
     public function getConfig()
     {
@@ -95,8 +96,8 @@ class Site
      */
     public function getLanguages()
     {
-        $config = $this->getConfig();
-        return isset($config['general']['languages']['available']) ? $config['general']['languages']['available'] : array();
+        return $this->getConfig()->get('genral.languages.available', array());
+//        return isset($config['general']['languages']['available']) ? $config['general']['languages']['available'] : array();
     }
 
     /**
@@ -104,8 +105,7 @@ class Site
      */
     public function getTitle()
     {
-        $config = $this->getConfig();
-        return isset($config['general']['title']) ? $config['general']['title'] : '';
+        return $this->getConfig()->get('general.title','');
     }
 
     /**
@@ -113,8 +113,7 @@ class Site
      */
     public function exists()
     {
-        $config = $this->getConfig();
-        return isset($config['general']);
+        return (bool) $this->getConfig()->get('general', false);
     }
 
     /**
@@ -139,20 +138,7 @@ class Site
      */
     private function initConfig()
     {
-        $this->config = Loader::getInstance()->getPathConfig($this->getPath() . '/structure');
+        $this->config = new Config(Loader::getInstance()->getPathConfig($this->getPath() . '/structure'));
         return $this;
     }
-
-
-    /**
-     * @return string Renvoi quel est le code pour google analytics. Renvoi vide si aucun code n'est prévu
-     */
-    //TODO: devrait être ailleurs (utiliser le pattern Decorator? :))
-    public function getGoogleAnalytics()
-    {
-        $config = $this->getConfig();
-        return (isset($config['general']['google']) && isset($config['general']['google']['analytics'])) ? (string)$config['general']['google']['analytics'] : '';
-    }
-
-
 }

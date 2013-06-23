@@ -22,12 +22,14 @@ qwik.modules:
     path: Qwik\Module\Form
   gallery:
     path: Qwik\Module\Gallery
-  gmaps:
-    path: Qwik\Module\Gmaps
+  google.maps:
+    path: Qwik\Module\GoogleMaps
   html:
     path: Qwik\Module\Html
   restaurant:
     path: Qwik\Module\Restaurant
+  google.analytics:
+    path: Qwik\Module\GoogleAnalytics
 
 qwik.path:
   upload:

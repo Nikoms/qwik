@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Qwik\Module\Gmaps;
+namespace Qwik\Module\GoogleAnalytics;
 
 
 use Silex\Application;
@@ -17,7 +17,7 @@ class ModuleProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
-        $app['qwik.module.gmaps'] = $app->share(function ($app) {
+        $app['qwik.module.google.analytics'] = $app->share(function ($app) {
             return new Module($app);
         });
     }

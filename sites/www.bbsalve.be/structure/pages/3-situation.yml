@@ -14,7 +14,7 @@ meta:
 zones:
   zone1:
     maps:
-      module: gmaps
+      module: google.maps
       config:
         key: 1234
         map:

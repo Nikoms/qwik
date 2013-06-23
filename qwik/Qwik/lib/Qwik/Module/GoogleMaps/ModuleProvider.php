@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Qwik\Module\Gallery;
+namespace Qwik\Module\GoogleMaps;
 
 
 use Silex\Application;
@@ -17,21 +17,13 @@ class ModuleProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
-        $app['qwik.module.gallery'] = $app->share(function ($app) {
+        $app['qwik.module.google.maps'] = $app->share(function ($app) {
             return new Module($app);
         });
-
-        $app['qwik.module.gallery.file'] = $app->share(function ($app) {
-            return new File($app['qwik.www'], $app['qwik.path']['upload']['real']);
-        });
-
-
-
     }
 
     public function boot(Application $app)
     {
     }
-
 
 }

@@ -60,6 +60,7 @@ class Application
         //Registration des providers des modules
         $silex['qwik.module']->registerProviders();
 
+        //You need to register the form provider first, twig provider after that.
         //Template après tout, car la plupart des providers seront utilisés dans le twigServiceProvider. Il faut donc déjà les loader
         $this->addTemplateManager();
 

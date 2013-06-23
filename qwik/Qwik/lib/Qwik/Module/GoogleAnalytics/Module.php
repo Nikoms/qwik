@@ -7,7 +7,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Qwik\Module\Html;
+namespace Qwik\Module\GoogleAnalytics;
+
 
 class Module extends \Qwik\Cms\Module\Module
 {

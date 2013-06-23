@@ -9,15 +9,19 @@
 
 namespace Qwik\Module\File;
 
-
-use Qwik\Cms\Module\IModule;
 use Silex\Application;
 use Qwik\Cms\Module\Info;
 
-class Module implements IModule
+class Module extends \Qwik\Cms\Module\Module
 {
-
+    /**
+     * @var \Silex\Application
+     */
     private $app;
+
+    /**
+     * @param Application $app
+     */
     public function __construct(Application $app){
            $this->app = $app;
     }
@@ -29,14 +33,4 @@ class Module implements IModule
     {
         return new File($info, $this->app['qwik.module.file.config']['ressource_path']);
     }
-
-    /**
-     * @param $type
-     * @return array
-     */
-    public function getAssets($type)
-    {
-        return array();
-    }
-
 }

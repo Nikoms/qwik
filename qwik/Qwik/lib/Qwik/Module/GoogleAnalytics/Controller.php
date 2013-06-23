@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Qwik\Module\Gmaps;
+namespace Qwik\Module\GoogleAnalytics;
 
 
 use Silex\Application;

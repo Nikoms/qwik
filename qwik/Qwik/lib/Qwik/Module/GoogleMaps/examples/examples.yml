@@ -3,7 +3,7 @@ situation:
   zones:
     zone1:
       maps:
-        module: gmaps
+        module: google.maps
         config:
           map:
             position: bottom #hide, top, bottom, left, right
@@ -29,7 +29,7 @@ contact:
   zones:
     zone1:
       maps:
-        module: gmaps
+        module: google.maps
         config:
           map:
             position: bottom #hide, top, bottom, left, right

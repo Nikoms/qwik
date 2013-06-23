@@ -7,22 +7,14 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Qwik\Module\Gmaps;
+namespace Qwik\Module\GoogleMaps;
 
 
 use Assetic\Asset\FileAsset;
-use Qwik\Cms\Module\IModule;
-use Qwik\Cms\Module\Info;
-use Qwik\Cms\Module\Instance;
 use Silex\Application;
 
-class Module implements IModule
+class Module extends \Qwik\Cms\Module\Module
 {
-
-    public function getInstance(Info $info)
-    {
-        return new Instance($info);
-    }
 
     /**
      * @param $type
@@ -32,10 +24,10 @@ class Module implements IModule
     {
         $collections = array(
             'javascript' => array(
-                new FileAsset('/qwik/module/gmaps/gmaps.js'),
+                new FileAsset('/qwik/module/google/maps/gmaps.js'),
             ),
             'css' => array(
-                new FileAsset('/qwik/module/gmaps/gmaps.css'),
+                new FileAsset('/qwik/module/google/maps/gmaps.css'),
             )
         );
         return $collections[$type];
